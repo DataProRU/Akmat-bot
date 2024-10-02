@@ -37,18 +37,17 @@ async def post_register(username: str = Form(...), password: str = Form(...), db
 # Login page
 @app.get("/login", response_class=HTMLResponse)
 async def get_login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request, "error": None})
 
 
-@app.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: sqlite3.Connection = Depends(get_db)):
+@app.post("/login", response_class=HTMLResponse)
+async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(),  db: sqlite3.Connection = Depends(get_db)):
     cursor = db.execute("SELECT * FROM users WHERE username = ?", (form_data.username,))
     user = cursor.fetchone()
     if user and verify_password(form_data.password, user[2]):
         token = create_access_token({"sub": form_data.username})
-        # Redirect to the /welcome page, passing the token in the URL
         return RedirectResponse(url=f"/welcome?token={token}", status_code=status.HTTP_303_SEE_OTHER)
-    raise HTTPException(status_code=400, detail="Invalid username or password")
+    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
 
 # Welcome page
