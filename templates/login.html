@@ -2,16 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0; /* Светлый фон страницы */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .form-wrapper {
+            max-width: 400px;
+            width: 100%;
+            padding: 30px;
+            background-color: #fff; /* Белый фон для формы */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень для формы */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #aaa;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #4CAF50; /* Цвет рамки при фокусе */
+        }
+
+        input[type="text"]:focus + label,
+        input[type="password"]:focus + label {
+            top: -15px;
+            left: 10px;
+            color: #495057;
+            font-size: 12px;
+        }
+
+        button {
+            cursor: pointer;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50; /* Цвет кнопки */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45A049;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <label>Username:</label>
-        <input type="text" name="username"><br><br>
-        <label>Password:</label>
-        <input type="password" name="password"><br><br>
-        <button type="submit">Login</button>
-    </form>
+    <div class="form-wrapper">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <input type="text" name="username" required placeholder=" ">
+                <label>Username</label>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" required placeholder=" ">
+                <label>Password</label>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
 </html>
