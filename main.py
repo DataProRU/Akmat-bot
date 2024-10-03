@@ -52,7 +52,6 @@ async def login(
     if user and verify_password(form_data.password, user[2]):
         # Создаем токен
         token = create_access_token({"sub": form_data.username})
-
         # Перенаправляем на страницу welcome и сохраняем токен в cookies
         response = RedirectResponse(url="/welcome", status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="token", value=token, httponly=True)  # Устанавливаем токен в cookies
