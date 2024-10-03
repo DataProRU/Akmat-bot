@@ -10,23 +10,29 @@
             min-height: 100vh;
             align-items: center;
             justify-content: center;
-            background-color: #f0f0f0; /* Light background for the page */
+            background: linear-gradient(135deg, #00aaff, #f06); /* Стильный градиент */
             font-family: 'Arial', sans-serif;
+            margin: 0;
         }
 
         .form-wrapper {
             max-width: 400px;
             width: 100%;
             padding: 30px;
-            background-color: #fff; /* White background for the form */
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for the form */
+            background-color: rgba(255, 255, 255, 0.9); /* Прозрачный фон */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Мягкая тень */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-wrapper:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Эффект при наведении */
         }
 
         h2 {
             text-align: center;
             color: #333;
+            font-size: 28px;
             margin-bottom: 20px;
         }
 
@@ -36,49 +42,50 @@
         }
 
         label {
-            color: #aaa;
+            color: #666;
             font-size: 16px;
             margin-bottom: 5px;
-            display: block; /* Display label as a block */
+            display: block;
         }
 
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 12px 10px;
+            padding: 12px 15px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
             background-color: #f9f9f9;
             outline: none;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s ease;
         }
 
         input[type="text"]:focus,
         input[type="password"]:focus {
-            border-color: #4CAF50; /* Border color on focus */
+            border-color: #00aaff; /* Цвет границы при фокусе */
         }
 
         #password-strength {
             margin-top: 5px;
             font-size: 14px;
+            color: #888;
         }
 
         button {
             cursor: pointer;
             width: 100%;
             padding: 12px;
-            background-color: #4CAF50; /* Button color */
+            background-color: #00aaff; /* Основной цвет кнопки */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         button:hover {
-            background-color: #45A049;
+            background-color: #008fcc;
         }
 
         button:active {
@@ -90,6 +97,11 @@
             text-align: center;
             display: none;
         }
+
+        p {
+            color: red;
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -99,15 +111,15 @@
     <form action="/login" method="post">
         <div class="form-group">
             <label>Username</label>
-            <input type="text" name="username" required placeholder=" ">
+            <input type="text" name="username" required placeholder="Enter your username">
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input type="password" id="password" name="password" required placeholder=" ">
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
             <div id="password-strength"></div>
         </div>
         {% if error %}
-                <p style="color:red;">{{ error }}</p>
+                <p>{{ error }}</p>
         {% endif %}
         <button type="submit">Login</button>
     </form>
