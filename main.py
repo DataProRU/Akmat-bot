@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.responses import HTMLResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 from auth import verify_password, get_password_hash, create_access_token, decode_access_token
 from schemas import UserCreate
@@ -10,8 +10,6 @@ from fastapi import Form
 from fastapi.responses import RedirectResponse
 
 app = FastAPI()
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 templates = Jinja2Templates(directory="templates")
 
 
@@ -41,28 +39,48 @@ async def get_login(request: Request):
 
 
 @app.post("/login", response_class=HTMLResponse)
-async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(),  db: sqlite3.Connection = Depends(get_db)):
+async def login(
+        request: Request,
+        form_data: OAuth2PasswordRequestForm = Depends(),
+        db: sqlite3.Connection = Depends(get_db)
+):
+    # Проверяем, существует ли пользователь в базе данных
     cursor = db.execute("SELECT * FROM users WHERE username = ?", (form_data.username,))
     user = cursor.fetchone()
+
+    # Если пользователь найден и пароль верный
     if user and verify_password(form_data.password, user[2]):
+        # Создаем токен
         token = create_access_token({"sub": form_data.username})
-        return RedirectResponse(url=f"/welcome?token={token}", status_code=status.HTTP_303_SEE_OTHER)
+
+        # Перенаправляем на страницу welcome и сохраняем токен в cookies
+        response = RedirectResponse(url="/welcome", status_code=status.HTTP_303_SEE_OTHER)
+        response.set_cookie(key="token", value=token, httponly=True)  # Устанавливаем токен в cookies
+        return response
+
+    # Если имя пользователя или пароль неверны, показываем ошибку
     return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
 
 # Welcome page
-@app.get("/welcome", response_class=HTMLResponse)
-async def welcome(request: Request, token: str = None, db: sqlite3.Connection = Depends(get_db)):
-    # Extract token from query parameters if it's not passed in headers
-    if token is None:
-        token = request.query_params.get("token")
+# Функция для извлечения токена из cookies
+def get_token_from_cookie(request: Request):
+    token = request.cookies.get("token")
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token is missing in cookies")
+    return token
 
+@app.get("/welcome", response_class=HTMLResponse)
+async def welcome(request: Request, db: sqlite3.Connection = Depends(get_db),
+                  token: str = Depends(get_token_from_cookie)):
+    # Декодирование токена
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
     username = payload.get("sub")
     if username:
-        # Pass the username to the template
+        # Передача имени пользователя в шаблон
         return templates.TemplateResponse("welcome.html", {"request": request, "username": username})
+
     raise HTTPException(status_code=400, detail="User not found")
