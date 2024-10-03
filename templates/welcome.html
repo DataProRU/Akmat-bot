@@ -47,7 +47,9 @@
     <div class="button-container">
         <button>На подтверждение</button>
         <button>Доходы</button>
-        <button>Доступ</button>
+        {% if role == 'admin' %}
+         <button>Доступ</button>
+        {% endif %}
         <button>Справочник</button>
     </div>
 </body>
