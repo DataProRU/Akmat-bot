@@ -20,7 +20,7 @@ async def get_register(request: Request):
 
 
 @app.post("/register")
-async def post_register(username: str = Form(...), password: str = Form(...), db: sqlite3.Connection = Depends(get_db)):
+async def post_register( request: Request, username: str = Form(...), password: str = Form(...), db: sqlite3.Connection = Depends(get_db)):
     user = UserCreate(username=username, password=password)
     try:
         db.execute(
@@ -28,9 +28,9 @@ async def post_register(username: str = Form(...), password: str = Form(...), db
             (user.username, get_password_hash(user.password))
         )
         db.commit()
-        return {"message": "User registered successfully"}
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     except sqlite3.IntegrityError:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        return templates.TemplateResponse("register.html", {"request": request, "error": "Username already registered"})
 
 # Login page
 @app.get("/login", response_class=HTMLResponse)

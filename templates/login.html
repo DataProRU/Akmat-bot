@@ -106,11 +106,9 @@
             <input type="password" id="password" name="password" required placeholder=" ">
             <div id="password-strength"></div>
         </div>
-        <div id="error-message">
-            {% if error %}
+        {% if error %}
                 <p style="color:red;">{{ error }}</p>
-            {% endif %}
-        </div>
+        {% endif %}
         <button type="submit">Login</button>
     </form>
 </div>
