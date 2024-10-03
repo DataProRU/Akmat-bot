@@ -75,7 +75,7 @@ async def welcome(request: Request, db: sqlite3.Connection = Depends(get_db),
     # Декодирование токена
     payload = decode_access_token(token)
     if not payload:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        return templates.TemplateResponse("invalid_token.html", {"request": request})
 
     username = payload.get("sub")
     if username:
