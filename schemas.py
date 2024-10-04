@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from fastapi import Form
 
+
 class UserCreate(BaseModel):
     username: str
     password: str
@@ -14,6 +15,7 @@ class UserCreate(BaseModel):
         role: str = Form(...),
     ):
         return cls(username=username, password=password, role=role)
+
 
 class UserLogin(BaseModel):
     username: str

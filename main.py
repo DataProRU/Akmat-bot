@@ -4,77 +4,79 @@ from fastapi.templating import Jinja2Templates
 from auth import verify_password, get_password_hash, create_access_token, decode_access_token
 from schemas import UserCreate
 from database import get_db
-import sqlite3
 from fastapi.security import OAuth2PasswordRequestForm
+import databases
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-# Registration page
-@app.get("/register", response_class=HTMLResponse)
-async def get_register(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
-
-# Add the missing '@' symbol here
-@app.post("/register")
-async def post_register(
-    request: Request,
-    username: str = Form(...),
-    password: str = Form(...),
-    role: str = Form(),
-    db: sqlite3.Connection = Depends(get_db)
-):
-    user = UserCreate(username=username, password=password, role=role)
-    try:
-        db.execute(
-            "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-            (user.username, get_password_hash(user.password), user.role)
-        )
-        db.commit()
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
-    except sqlite3.IntegrityError:
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Username already registered"})
-
-# Login page
-@app.get("/login", response_class=HTMLResponse)
-async def get_login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "error": None})
-
-
-
-@app.post("/login", response_class=HTMLResponse)
-async def login(
-        request: Request,
-        form_data: OAuth2PasswordRequestForm = Depends(),
-        db: sqlite3.Connection = Depends(get_db)
-):
-    cursor = db.execute("SELECT * FROM users WHERE username = ?", (form_data.username,))
-    user = cursor.fetchone()
-
-    if user and verify_password(form_data.password, user[2]):
-        token = create_access_token({"sub": form_data.username, "role": user[3]})  # Include role in token
-        response = RedirectResponse(url="/welcome", status_code=status.HTTP_303_SEE_OTHER)
-        response.set_cookie(key="token", value=token, httponly=True)
-        return response
-
-    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
-
-# Welcome page
+# Функция для получения токена из cookie
 def get_token_from_cookie(request: Request):
     token = request.cookies.get("token")
     if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token is missing in cookies")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token is missing"
+        )
     return token
 
+# Функция для получения текущего пользователя из токена
 def get_current_user(token: str):
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
     return payload
 
+# Роут для страницы регистрации
+@app.get("/register", response_class=HTMLResponse)
+async def get_register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+# Роут для обработки регистрации
+@app.post("/register")
+async def post_register(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+    role: str = Form(),
+    db: databases.Database = Depends(get_db)
+):
+    user = UserCreate(username=username, password=password, role=role)
+    try:
+        query = "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)"
+        values = {"username": user.username, "password": get_password_hash(user.password), "role": user.role}
+        await db.execute(query=query, values=values)
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+    except Exception as e:
+        return templates.TemplateResponse("register.html", {"request": request, "error": str(e)})
+
+# Роут для страницы логина
+@app.get("/login", response_class=HTMLResponse)
+async def get_login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+
+# Роут для обработки логина
+@app.post("/login", response_class=HTMLResponse)
+async def login(
+        request: Request,
+        form_data: OAuth2PasswordRequestForm = Depends(),
+        db: databases.Database = Depends(get_db)
+):
+    query = "SELECT * FROM users WHERE username = :username"
+    user = await db.fetch_one(query=query, values={"username": form_data.username})
+
+    if user and verify_password(form_data.password, user["password"]):
+        token = create_access_token({"sub": form_data.username, "role": user["role"]})  # Включаем роль в токен
+        response = RedirectResponse(url="/welcome", status_code=status.HTTP_303_SEE_OTHER)
+        response.set_cookie(key="token", value=token, httponly=True)
+        return response
+
+    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
+
+# Роут для приветственной страницы
 @app.get("/welcome", response_class=HTMLResponse)
-async def welcome(request: Request, token: str = Depends(get_token_from_cookie)):
-    payload = get_current_user(token)
+async def welcome(request: Request):
+    token = get_token_from_cookie(request)  # Получаем токен из cookie
+    payload = get_current_user(token)  # Декодируем токен
     username = payload.get("sub")
     role = payload.get("role")
     return templates.TemplateResponse("welcome.html", {"request": request, "username": username, "role": role})
