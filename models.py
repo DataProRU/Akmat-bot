@@ -17,3 +17,6 @@ class UserCreate(User):
     username: str
     password: str
     role: str
+
+class UpdateUserRole(BaseModel):
+    role: str

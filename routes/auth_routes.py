@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends, Form, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 import databases
@@ -48,3 +48,19 @@ async def welcome(request: Request):
     username = payload.get("sub")
     role = payload.get("role")
     return templates.TemplateResponse("welcome.html", {"request": request, "username": username, "role": role})
+
+@router.get("/confirm", response_class=HTMLResponse)
+async def confirm(request: Request):
+    token = get_token_from_cookie(request)
+    payload = get_current_user(token)
+    username = payload.get("sub")
+    role = payload.get("role")
+    return templates.TemplateResponse("confirm.html", {"request": request, "username": username, "role": role})
+
+@router.get("/access", response_class=HTMLResponse)
+async def confirm(request: Request):
+    token = get_token_from_cookie(request)
+    payload = get_current_user(token)
+    username = payload.get("sub")
+    role = payload.get("role")
+    return templates.TemplateResponse("access.html", {"request": request, "username": username, "role": role})
