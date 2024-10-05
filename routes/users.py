@@ -24,8 +24,10 @@ async def get_users(request: Request):
         return templates.TemplateResponse("not_access.html", {"request": request})
     if exp <= 0:
         return templates.TemplateResponse("invalid_token.html", {"request": request})
-    all_users = users.select()  # Предположим, что 'users' - это таблица с данными
+    await database.connect()
+    all_users = users.select()
     users_data = await database.fetch_all(all_users)
+    await  database.disconnect()
     return templates.TemplateResponse("access.html", {"request": request, "users": users_data})
 
 # Обновление роли пользователя

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script>
+        const buttonOpen = document.querySelector('.add-entry-btn');
+const formAdd = document.querySelector('#add-form-container');
+const buttonClose = document.querySelector('.close-form-btn');
+
+//открыть форму для добавления записи
+buttonOpen.addEventListener('click', () => {
+    formAdd.classList.add('open');
+});
+
+//закрыть форму для добавлеиия записи
+buttonClose.addEventListener('click', () => {
+    formAdd.classList.remove('open');
+})
+
+var arrayOrders = [["15.11.2024", 2859, 3, "-вид3-", "-виз1-", "-инструктор3-", 8, 3633, 67453, "-вид2-", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],
+["15.11.2024", 2859, 3, "-вид3-", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "Коммент"],]
+var tableBody = document.querySelector('#table-body')
+const butttonAddOrder = document.querySelector('#submit')
+
+function newOrder() {
+    var date = document.getElementById('date').value;
+    var flight = document.getElementById('flight').value;
+    var typeOfRoute = document.getElementById('type-of-route').value;
+    var typeOfTechnique = document.getElementById('type-of-technique').value;
+    var instructor = document.getElementById('instructor').value;
+    var discount = document.getElementById('discount').value;
+    var prepayment = document.getElementById('prepayment').value;
+    var price = document.getElementById('price').value;
+    var dtypeOfPayment = document.getElementById('type-of-payment').value;
+    var source = document.getElementById('source').value;
+    var comment = document.getElementById('comment').value;
+    return [date, flight, typeOfRoute, typeOfTechnique, instructor, discount, prepayment, price, dtypeOfPayment, source, comment];
+
+}
+
+fillTable(tableBody, arrayOrders);
+
+//функция отрисовки таблицы
+function fillTable(tableBody, arrayOrder) {
+    for (var i = 0; i < arrayOrder.length; i++) {
+        var tr = document.createElement('tr');
+        tr.classList.add('trow');
+        for (var j = 0; j < arrayOrder[i].length; j++) {
+            var td = document.createElement('td');
+            td.innerHTML = arrayOrder[i][j];
+            td.classList.add('tcol');
+            tr.appendChild(td);
+        }
+        tableBody.appendChild(tr);
+    }
+}
+
+butttonAddOrder.addEventListener('click', () => {
+    arrayOrders.push(newOrder());
+    console.log(arrayOrders);
+    //arrayOrders.push([order.date, order.flight, order.typeOfRoute, order.typeOfTechnique, order.instructor, order.discount, order.prepayment, order.price, order.dtypeOfPayment, order.source, order.comment])
+    fillTable(tableBody, arrayOrders);
+})
+
+const resizers = document.querySelectorAll('.resizer');
+
+resizers.forEach(resizer => {
+    resizer.addEventListener('mousedown', initDrag);
+
+    function initDrag(e) {
+        const th = e.target.parentElement;
+        const startX = e.pageX;
+        const startWidth = th.offsetWidth;
+
+        function doDrag(e) {
+            th.style.width = (startWidth + e.pageX - startX) + 'px';
+        }
+
+        function stopDrag() {
+            window.removeEventListener('mousemove', doDrag);
+            window.removeEventListener('mouseup', stopDrag);
+            localStorage.setItem(th.innerText, th.style.width); // Сохраняем размер в локальное хранилище
+        }
+
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('mouseup', stopDrag);
+    }
+});
+
+// Восстанавливаем размеры из локального хранилища
+const headers = document.querySelectorAll('th');
+headers.forEach(header => {
+    const savedWidth = localStorage.getItem(header.innerText);
+    if (savedWidth) {
+        header.style.width = savedWidth;
+    }
+});
+
+    </script>
+</head>
+
+<body>
+    <header class="header-container">
+        <section class="header-title">
+            <img class="logo-img" src="static/img/extrim.png" alt="логотип">
+            <nav class="nav-container">
+                <div class="add-entry-btn tooltip">✚
+                    <span class="tooltip-text">Добавить запись</span>
+                </div>
+                <form action="" class="form-filter">
+                    <select name="" id="" class="nav-select">
+                        <option value="">Выбор дня</option>
+                        <option value="">1</option>
+                        <option value="">2</option>
+                        <option value="">3</option>
+                        <option value="">4</option>
+                        <option value="">5</option>
+                        <option value="">6</option>
+                        <option value="">7</option>
+                        <option value="">8</option>
+                        <option value="">9</option>
+                        <option value="">10</option>
+                        <option value="">11</option>
+                        <option value="">12</option>
+                        <option value="">13</option>
+                    </select>
+
+                    <select name="" id="" class="nav-select">
+                        <option value="">Выбор месяца</option>
+                        <option value="">Январь</option>
+                        <option value="">Февраль</option>
+                        <option value="">Март</option>
+                        <option value="">Апрель</option>
+                        <option value="">Май</option>
+                        <option value="">Июнь</option>
+                        <option value="">Июль</option>
+                        <option value="">Август</option>
+                        <option value="">Сентябрь</option>
+                        <option value="">Октябрь</option>
+                        <option value="">Ноябрь</option>
+                        <option value="">Декабрь</option>
+                    </select>
+
+                    <select name="" id="" class="nav-select">
+                        <option value="">Выбор года</option>
+                        <option value="">Январь</option>
+                        <option value="">Февраль</option>
+                        <option value="">Март</option>
+                        <option value="">Апрель</option>
+                        <option value="">Май</option>
+                        <option value="">Июнь</option>
+                        <option value="">Июль</option>
+                        <option value="">Август</option>
+                        <option value="">Сентябрь</option>
+                        <option value="">Октябрь</option>
+                        <option value="">Ноябрь</option>
+                        <option value="">Декабрь</option>
+                    </select>
+                    <div class="reset-filter tooltip">
+                        <input class="reset-filter-btn" type="reset" value=""><!--✖-->
+                        <span class="tooltip-text">Сбросить фильтры</span>
+                    </div>
+                </form>
+            </nav>
+        </section>
+        <section class="content-container">
+            <table class="table-data" id="table-data">
+                <thead>
+                    <tr class="trow-head">
+                        <th class="trow-head-data">Дата<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Номер рейса<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Вид маршрута<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Вид техники<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Инструктор<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Скидка<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Предоплата<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Стоимость<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Вид оплаты<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Источник<div class="resizer"></div>
+                        </th>
+                        <th class="trow-head-data">Примечание<div class="resizer"></div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="table-body" id="table-body">
+
+                </tbody>
+            </table>
+        </section>
+        <div id="add-form-container">
+
+            <div class="form-header">
+                <h2>Новая запись</h2>
+                <button class="close-form-btn">✖</button>
+            </div>
+
+            <form action="" class="add-entry-form">
+
+                <label for="date">Выбор даты</label>
+                <input type="date" id="date">
+
+                <label for="flight">Номер рейса</label>
+                <input type="text" id="flight">
+
+                <label for="type-of-route">Вид маршрута</label>
+                <select name="" id="type-of-route">
+                    <option selected disabled hidden></option>
+                    <option value="">--вид1--</option>
+                    <option value="">--вид2--</option>
+                    <option value="">--вид3--</option>
+                </select>
+
+                <label for="type-of-technique">Вид техники</label>
+                <select name="" id="type-of-technique">
+                    <option selected disabled hidden></option>
+                    <option value="">--вид1--</option>
+                    <option value="">--вид2--</option>
+                    <option value="">--вид3--</option>
+                </select>
+
+                <label for="instructor">Инструктор</label>
+                <select name="" id="instructor">
+                    <option selected disabled hidden></option>
+                    <option value="">--инструктор1--</option>
+                    <option value="">--инструктор2--</option>
+                    <option value="">--инструктор3--</option>
+                </select>
+
+                <label for="discount">Скидка</label>
+                <input type="text" id="discount">
+
+                <label for="prepayment">Предоплата</label>
+                <input type="text" id="prepayment">
+
+                <label for="price">Стоимость</label>
+                <input type="text" id="price">
+
+                <label for="type-of-payment">Вид оплаты</label>
+                <select name="" id="type-of-payment">
+                    <option selected disabled hidden></option>
+                    <option value="">--вид1--</option>
+                    <option value="">--вид2--</option>
+                    <option value="">--вид3--</option>
+                </select>
+
+                <label for="source">Источник</label>
+                <select name="" id="source">
+                    <option selected disabled hidden></option>
+                    <option value="">--источник1--</option>
+                    <option value="">--источник2--</option>
+                    <option value="">--источник3--</option>
+                </select>
+
+                <label for="comment">Комментарий</label>
+                <textarea name="" id="comment"></textarea>
+
+                <div class="form-btns">
+                    <input type="reset">
+                    <input type="submit" id="submit" value="Добавить">
+                </div>
+            </form>
+        </div>
+    </header>
+</body>
+
+</html>

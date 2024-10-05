@@ -58,9 +58,18 @@ async def confirm(request: Request):
     return templates.TemplateResponse("confirm.html", {"request": request, "username": username, "role": role})
 
 @router.get("/access", response_class=HTMLResponse)
-async def confirm(request: Request):
+async def access(request: Request):
     token = get_token_from_cookie(request)
     payload = get_current_user(token)
     username = payload.get("sub")
     role = payload.get("role")
     return templates.TemplateResponse("access.html", {"request": request, "username": username, "role": role})
+
+@router.get("/income", response_class=HTMLResponse)
+async def income(request: Request):
+    token = get_token_from_cookie(request)
+    payload = get_current_user(token)
+    username = payload.get("sub")
+    role = payload.get("role")
+    return templates.TemplateResponse("income.html", {"request": request, "username": username, "role": role})
+
