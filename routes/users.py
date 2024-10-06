@@ -29,14 +29,18 @@ async def get_users(request: Request):
 @router.put("/users/{user_id}")
 async def update_user_role(user_id: int, role_update: UpdateUserRole):
     query = users.update().where(users.c.id == user_id).values(role=role_update.role)
+    await database.connect()
     await database.execute(query)
+    await  database.disconnect()
     return {"message": "User role updated"}
 
 # Удаление пользователя
 @router.delete("/users/{user_id}")
 async def delete_user(user_id: int):
+    await database.connect()
     query = users.delete().where(users.c.id == user_id)
     await database.execute(query)
+    await  database.disconnect()
     return {"message": "User deleted"}
 
 # Подключение к базе данных при старте/остановке приложения
