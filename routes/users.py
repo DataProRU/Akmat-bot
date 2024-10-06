@@ -8,10 +8,6 @@ from dependencies import get_token_from_cookie, get_current_user
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# Получение всех пользователей
-
-def verify_token(token: str) -> bool:
-    return token == "valid_token"
 
 @router.get("/users/")
 async def get_users(request: Request):
@@ -19,7 +15,6 @@ async def get_users(request: Request):
     payload = get_current_user(token)
     role = payload.get("role")
     exp = payload.get("exp")
-    print(exp)
     if role != "admin":
         return templates.TemplateResponse("not_access.html", {"request": request})
     if exp <= 0:
