@@ -3,15 +3,18 @@ import sqlalchemy
 import asyncio
 
 # Define the database URL
-DATABASE_URL = "postgresql://ershov:pipe@host.docker.internal/my_test_db"
+#DATABASE_URL = "postgresql://ershov:pipe@host.docker.internal/my_test_db"
+#DATABASE_URL = "postgresql://ershov:pipe@localhost/my_test_db"
+DATABASE_URL = "postgresql://db_admin:Lp4yAP0BOKrk@46.254.16.222/eq_rental"
+
 
 # Create the database connection
 database = databases.Database(DATABASE_URL)
 metadata = sqlalchemy.MetaData()
 
 # Define the users table schema using SQLAlchemy
-users = sqlalchemy.Table(
-    "users",
+web_users = sqlalchemy.Table(
+    "web_users",
     metadata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, autoincrement=True),
     sqlalchemy.Column("username", sqlalchemy.String, unique=True, nullable=False),
