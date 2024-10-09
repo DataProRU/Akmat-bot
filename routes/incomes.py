@@ -4,6 +4,7 @@ from database import Session
 from models import FlightTechniques, Techniques, Flights, Routes, Users, PaymentTypes, Sources
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
+from dependencies import get_token_from_cookie, get_current_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -24,8 +25,12 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
         session.close()
 
 # Маршрут для отображения данных на HTML странице с пагинацией
-@router.get("/incomes", response_class=HTMLResponse)
+@router.get("/income", response_class=HTMLResponse)
 async def index(request: Request, page: int = Query(1, ge=1), per_page: int = Query(10, ge=1, le=100)):
+    token = get_token_from_cookie(request)
+    payload = get_current_user(token)
+    username = payload.get("sub")
+    role = payload.get("role")
     flights_techniques, techniques, flights, routes, users, payment_types, sources = get_flight_techniques(page, per_page)
     data = []
     for flight_technique in flights_techniques:
@@ -49,7 +54,11 @@ async def index(request: Request, page: int = Query(1, ge=1), per_page: int = Qu
             })
     return templates.TemplateResponse("income.html", {"request": request, "data": data, "page": page, "per_page": per_page})
 @router.get("/api/flight_techniques")
-async def flight_techniques_api(page: int = Query(1, ge=1), per_page: int = Query(10, ge=1, le=100)):
+async def flight_techniques_api(request: Request, page: int = Query(1, ge=1), per_page: int = Query(10, ge=1, le=100)):
+    token = get_token_from_cookie(request)
+    payload = get_current_user(token)
+    username = payload.get("sub")
+    role = payload.get("role")
     flights_techniques, techniques, flights, routes, users, payment_types, sources = get_flight_techniques(page, per_page)
     data = []
     for flight_technique in flights_techniques:
