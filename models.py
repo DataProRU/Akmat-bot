@@ -1,8 +1,19 @@
 from pydantic import BaseModel
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, Numeric, Boolean, Text, DateTime, SmallInteger
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    Numeric,
+    Boolean,
+    Text,
+    DateTime,
+    SmallInteger,
+)
 from sqlalchemy import BigInteger
+
 Base = declarative_base()
+
 
 class UserInDB(BaseModel):
     username: str
@@ -21,22 +32,25 @@ class UserCreate(User):
     password: str
     role: str
 
+
 class UpdateUserRole(BaseModel):
     role: str
 
 
 class Sources(Base):
-    __tablename__ = 'sources'
+    __tablename__ = "sources"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
 
 class PaymentTypes(Base):
-    __tablename__ = 'payment_types'
+    __tablename__ = "payment_types"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class Users(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     tg = Column(Text)
     full_name = Column(Text)
@@ -54,24 +68,28 @@ class Users(Base):
     penalty = Column(Boolean)
     is_investor = Column(Boolean)
 
+
 class Routes(Base):
-    __tablename__ = 'routes'
+    __tablename__ = "routes"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class Flights(Base):
-    __tablename__ = 'flights'
+    __tablename__ = "flights"
     id = Column(Integer, primary_key=True)
     flight_number = Column(SmallInteger)
     instructor_id = Column(Integer)
 
+
 class Techniques(Base):
-    __tablename__ = 'techniques'
+    __tablename__ = "techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class FlightTechniques(Base):
-    __tablename__ = 'flight_techniques'
+    __tablename__ = "flight_techniques"
     id = Column(Integer, primary_key=True)
     flight_id = Column(Integer)
     technique_id = Column(Integer)

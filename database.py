@@ -14,12 +14,15 @@ web_users = sqlalchemy.Table(
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, autoincrement=True),
     sqlalchemy.Column("username", sqlalchemy.String, unique=True, nullable=False),
     sqlalchemy.Column("password", sqlalchemy.String, nullable=False),
-    sqlalchemy.Column("role", sqlalchemy.String, nullable=False, server_default="user")  # Add role with default value
+    sqlalchemy.Column(
+        "role", sqlalchemy.String, nullable=False, server_default="user"
+    ),  # Add role with default value
 )
 
 engine = sqlalchemy.create_engine(DATABASE_URL)
 metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
+
 
 async def get_db():
     await database.connect()
@@ -28,11 +31,13 @@ async def get_db():
     finally:
         await database.disconnect()
 
+
 async def main():
     await database.connect()
     print("Connected to the database!")
     await database.disconnect()
     print("Disconnected from the database!")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
