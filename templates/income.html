@@ -96,7 +96,25 @@
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
-
+        {% for item in data %}
+        <tr class="trow">
+            <td class="tcol">{{ item.created_at }}</td>
+            <td class="tcol tcol-num">{{ item.flight_number }}</td>
+            <td class="tcol">{{ item.flight_name }}</td>
+            <td class="tcol">{{ item.technique_name }}</td>
+            <td class="tcol">{{ item.user_name }}</td>
+            <td class="tcol tcol-num">{{ item.discount }}</td>
+            <td class="tcol tcol-num">{{ item.prepayment }}</td>
+            <td class="tcol tcol-num">{{ item.price }}</td>
+            <td class="tcol">{{ item.payment_type }}</td>
+            <td class="tcol">{{ item.source }}</td>
+            <td class="tcol">{{ item.note }}</td>
+            <td class="tcol tcol-filter">
+                <button class="tcol-filter-edit"></button>
+                <button class="tcol-filter-delete"></button>
+            </td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 </section>

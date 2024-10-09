@@ -43,48 +43,47 @@ function newOrder() {
 
 };
 
-fillTable(tableBody, arrayOrders);
+//fillTable(tableBody, arrayOrders);
 
 //функция отрисовки таблицы
-function fillTable(tableBody, arrayOrder) {
-    for (var i = 0; i < arrayOrder.length; i++) {
-        var tr = document.createElement('tr');
-        tr.classList.add('trow');
-        for (var j = 0; j < arrayOrder[i].length; j++) {
-            var td = document.createElement('td');
-            td.innerHTML = arrayOrder[i][j];
-            td.classList.add('tcol');
-            if (j === 1 || j === 5 || j === 6 || j === 7) {
-                td.classList.add('tcol-num');
-            }
-            tr.appendChild(td);
-        }
+//function fillTable(tableBody, arrayOrder) {
+//    for (var i = 0; i < arrayOrder.length; i++) {
+//      var tr = document.createElement('tr');
+//      tr.classList.add('trow');
+//    for (var j = 0; j < arrayOrder[i].length; j++) {
+//      var td = document.createElement('td');
+//    td.innerHTML = arrayOrder[i][j];
+//  td.classList.add('tcol');
+//if (j === 1 || j === 5 || j === 6 || j === 7) {
+//                td.classList.add('tcol-num');
+//          }
+//        tr.appendChild(td);
+//  }
 
-        var td = document.createElement('td');
-        td.classList.add('tcol');
-        td.classList.add('tcol-filter');
+//var td = document.createElement('td');
+//        td.classList.add('tcol');
+//      td.classList.add('tcol-filter');
 
-        const tdEdit = document.createElement('button');
-        tdEdit.classList.add('tcol-filter-edit');
-        td.appendChild(tdEdit);
+//        const tdEdit = document.createElement('button');
+//      tdEdit.classList.add('tcol-filter-edit');
+//    td.appendChild(tdEdit);
 
-        const tdDelete = document.createElement('button');
-        tdDelete.classList.add('tcol-filter-delete');
-        td.appendChild(tdDelete);
+//        const tdDelete = document.createElement('button');
+//      tdDelete.classList.add('tcol-filter-delete');
+//    td.appendChild(tdDelete);
 
-        tr.appendChild(td);
+//        tr.appendChild(td);
 
-        tableBody.appendChild(tr);
-    }
-};
+//        tableBody.appendChild(tr);
+//  }
+//};
 
 butttonAddOrder.addEventListener('click', (event) => {
     formAdd.classList.remove('open');
     arrayOrders.push(newOrder());
     event.preventDefault();
-    //arrayOrders.push([order.date, order.flight, order.typeOfRoute, order.typeOfTechnique, order.instructor, order.discount, order.prepayment, order.price, order.dtypeOfPayment, order.source, order.comment])
     tableBody.innerHTML = '';
-    fillTable(tableBody, arrayOrders);
+    //fillTable(tableBody, arrayOrders);
     document.querySelector('.add-entry-form').reset();
 });
 
