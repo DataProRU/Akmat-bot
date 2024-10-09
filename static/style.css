@@ -1,7 +1,7 @@
 /*font*/
 @font-face {
     font-family: "Noto Sans";
-    src: url("/static/font/NotoSans-VariableFont_wdth.ttf");
+    src: url("/font/NotoSans-VariableFont_wdth.ttf");
 }
 
 html {
