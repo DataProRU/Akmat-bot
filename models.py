@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, Numeric, Boolean, Text, DateTime, SmallInteger
-import sqlalchemy
+from sqlalchemy import BigInteger
 Base = declarative_base()
 
 class UserInDB(BaseModel):
@@ -38,7 +38,21 @@ class PaymentTypes(Base):
 class Users(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
+    tg = Column(Text)
     full_name = Column(Text)
+    is_manager = Column(Boolean)
+    is_instructor = Column(Boolean)
+    is_assistant = Column(Boolean)
+    send_button = Column(Boolean)
+    deposit_income = Column(Boolean)
+    enter_operation = Column(Boolean)
+    view_salary = Column(Boolean)
+    contribute_expense = Column(Boolean)
+    is_director = Column(Boolean)
+    chat_id = Column(BigInteger)
+    comission = Column(Boolean)
+    penalty = Column(Boolean)
+    is_investor = Column(Boolean)
 
 class Routes(Base):
     __tablename__ = 'routes'
@@ -69,6 +83,7 @@ class FlightTechniques(Base):
     transfer = Column(Numeric)
     note = Column(Text)
     created_at = Column(DateTime)
+
 
 class FlightTechniqueUpdate(BaseModel):
     flight_id: int

@@ -177,6 +177,52 @@
     </div>
 </div>
 
+<table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Telegram Nickname</th>
+                <th>Full Name</th>
+                <th>Is Manager</th>
+                <th>Is Instructor</th>
+                <th>Is Assistant</th>
+                <th>Send Buttons</th>
+                <th>Deposit Income</th>
+                <th>Enter Operation</th>
+                <th>View Salary</th>
+                <th>Contribute Expense</th>
+                <th>Is Director</th>
+                <th>Chat ID</th>
+                <th>Commission</th>
+                <th>Penalty</th>
+                <th>Is Investor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Цикл по списку пользователей -->
+            {% for user in users_tg %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.tg }}</td>
+                <td>{{ user.full_name }}</td>
+                <td>{{ 'Yes' if user.is_manager else 'No' }}</td>
+                <td>{{ 'Yes' if user.is_instructor else 'No' }}</td>
+                <td>{{ 'Yes' if user.is_assistant else 'No' }}</td>
+                <td>{{ 'Yes' if user.send_button else 'No' }}</td>
+                <td>{{ 'Yes' if user.deposit_income else 'No' }}</td>
+                <td>{{ 'Yes' if user.enter_operation else 'No' }}</td>
+                <td>{{ 'Yes' if user.view_salary else 'No' }}</td>
+                <td>{{ 'Yes' if user.contribute_expense else 'No' }}</td>
+                <td>{{ 'Yes' if user.is_director else 'No' }}</td>
+                <td>{{ user.chat_id }}</td>
+                <td>{{ 'Yes' if user.comission else 'No' }}</td>
+                <td>{{ 'Yes' if user.penalty else 'No' }}</td>
+                <td>{{ 'Yes' if user.is_investor else 'No' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 <script>
     // Функция для загрузки пользователей
     async function loadUsers() {

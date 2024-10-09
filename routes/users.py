@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Request
-from database import web_users, database
-from models import UpdateUserRole
+from database import web_users, database, Session
+from models import UpdateUserRole, Users
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
 from dependencies import get_token_from_cookie, get_current_user
 
 router = APIRouter()
@@ -26,10 +25,34 @@ async def get_users(request: Request):
     await database.connect()
     query = web_users.select()
     users_data = await database.fetch_all(query)
+    session = Session()
+    users_tg = session.query(Users).all()
+
+    # Формируем список словарей с данными пользователей
+    users_tg_data = []
+    for user in users_tg:
+        users_tg_data.append({
+            "id": user.id,
+            "tg": user.tg,
+            "full_name": user.full_name,
+            "is_manager": user.is_manager,
+            "is_instructor": user.is_instructor,
+            "is_assistant": user.is_assistant,
+            "send_button": user.send_button,
+            "deposit_income": user.deposit_income,
+            "enter_operation": user.enter_operation,
+            "view_salary": user.view_salary,
+            "contribute_expense": user.contribute_expense,
+            "is_director": user.is_director,
+            "chat_id": user.chat_id,
+            "comission": user.comission,
+            "penalty": user.penalty,
+            "is_investor": user.is_investor,
+        })
     await database.disconnect()
 
     # Возвращаем HTML-шаблон с данными пользователей
-    return templates.TemplateResponse("access.html", {"request": request, "users": users_data})
+    return templates.TemplateResponse("access.html", {"request": request, "users": users_data, "users_tg": users_tg_data})
 
 # Обновление роли пользователя
 @router.put("/users/{user_id}")
