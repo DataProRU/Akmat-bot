@@ -3,7 +3,7 @@ import sqlalchemy
 import asyncio
 
 # Define the database URL
-DATABASE_URL = "postgresql://ershov:pipe@localhost/my_test_db"
+DATABASE_URL = "postgresql://ershov:pipe@host.docker.internal/my_test_db"
 
 # Create the database connection
 database = databases.Database(DATABASE_URL)
