@@ -86,14 +86,11 @@ async def flight_techniques_api(request: Request, page: int = Query(1, ge=1), pe
 async def update_flight_technique(flight_technique_id: int, data: FlightTechniqueUpdate):
     session = Session()
     try:
-        # Найдем запись по id
         flight_technique = session.query(FlightTechniques).filter(FlightTechniques.id == flight_technique_id).first()
 
-        # Если запись не найдена, возвращаем ошибку
         if not flight_technique:
             raise HTTPException(status_code=404, detail="Flight technique not found")
 
-        # Обновляем поля записи
         flight_technique.flight_id = data.flight_id
         flight_technique.technique_id = data.technique_id
         flight_technique.discount = data.discount
@@ -120,11 +117,9 @@ async def delete_flight_technique(flight_technique_id: int):
         # Найдем запись по id
         flight_technique = session.query(FlightTechniques).filter(FlightTechniques.id == flight_technique_id).first()
 
-        # Если запись не найдена, возвращаем ошибку
         if not flight_technique:
             raise HTTPException(status_code=404, detail="Flight technique not found")
 
-        # Удаляем запись из базы данных
         session.delete(flight_technique)
         session.commit()
 
