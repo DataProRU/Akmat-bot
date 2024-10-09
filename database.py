@@ -1,18 +1,13 @@
 import databases
 import sqlalchemy
 import asyncio
+from sqlalchemy.orm import sessionmaker
 
-# Define the database URL
-#DATABASE_URL = "postgresql://ershov:pipe@host.docker.internal/my_test_db"
-#DATABASE_URL = "postgresql://ershov:pipe@localhost/my_test_db"
 DATABASE_URL = "postgresql://db_admin:Lp4yAP0BOKrk@46.254.16.222/eq_rental"
 
-
-# Create the database connection
 database = databases.Database(DATABASE_URL)
 metadata = sqlalchemy.MetaData()
 
-# Define the users table schema using SQLAlchemy
 web_users = sqlalchemy.Table(
     "web_users",
     metadata,
@@ -22,11 +17,10 @@ web_users = sqlalchemy.Table(
     sqlalchemy.Column("role", sqlalchemy.String, nullable=False, server_default="user")  # Add role with default value
 )
 
-# Create the engine and use SQLAlchemy to create the table(s)
 engine = sqlalchemy.create_engine(DATABASE_URL)
 metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
 
-# Function to handle asynchronous database connection
 async def get_db():
     await database.connect()
     try:
@@ -34,14 +28,11 @@ async def get_db():
     finally:
         await database.disconnect()
 
-# Main function to manage database connection and table creation
 async def main():
-    # No need to manually create the table with raw SQL if using SQLAlchemy's metadata.create_all()
-    await database.connect()  # Connect to the database
+    await database.connect()
     print("Connected to the database!")
-    await database.disconnect()  # Disconnect from the database
+    await database.disconnect()
     print("Disconnected from the database!")
 
-# Running the asynchronous main function
 if __name__ == "__main__":
     asyncio.run(main())
