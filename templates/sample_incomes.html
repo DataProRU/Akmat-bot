@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Techniques</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flight Techniques</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Created At</th>
+                <th>Flight Number</th>
+                <th>Flight Name</th>
+                <th>Technique Name</th>
+                <th>User Name</th>
+                <th>Discount</th>
+                <th>Prepayment</th>
+                <th>Price</th>
+                <th>Payment Type</th>
+                <th>Source</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.created_at }}</td>
+                <td>{{ item.flight_number }}</td>
+                <td>{{ item.flight_name }}</td>
+                <td>{{ item.technique_name }}</td>
+                <td>{{ item.user_name }}</td>
+                <td>{{ item.discount }}</td>
+                <td>{{ item.prepayment }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.payment_type }}</td>
+                <td>{{ item.source }}</td>
+                <td>{{ item.note }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Пагинация -->
+    <div>
+        {% if page > 1 %}
+            <a href="/?page={{ page - 1 }}&per_page={{ per_page }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }}</span>
+        <a href="/?page={{ page + 1 }}&per_page={{ per_page }}">Next</a>
+    </div>
+</body>
+</html>
