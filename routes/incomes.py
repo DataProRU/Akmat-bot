@@ -1,7 +1,7 @@
-from fastapi import  Query, Request
+from fastapi import  Query, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from database import Session
-from models import FlightTechniques, Techniques, Flights, Routes, Users, PaymentTypes, Sources
+from models import FlightTechniques, Techniques, Flights, Routes, Users, PaymentTypes, Sources, FlightTechniqueUpdate
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
@@ -81,3 +81,56 @@ async def flight_techniques_api(request: Request, page: int = Query(1, ge=1), pe
                 'note': flight_technique.note
             })
     return data
+
+@router.put("/flight_techniques/{flight_technique_id}")
+async def update_flight_technique(flight_technique_id: int, data: FlightTechniqueUpdate):
+    session = Session()
+    try:
+        # Найдем запись по id
+        flight_technique = session.query(FlightTechniques).filter(FlightTechniques.id == flight_technique_id).first()
+
+        # Если запись не найдена, возвращаем ошибку
+        if not flight_technique:
+            raise HTTPException(status_code=404, detail="Flight technique not found")
+
+        # Обновляем поля записи
+        flight_technique.flight_id = data.flight_id
+        flight_technique.technique_id = data.technique_id
+        flight_technique.discount = data.discount
+        flight_technique.prepayment = data.prepayment
+        flight_technique.price = data.price
+        flight_technique.payment_type_id = data.payment_type_id
+        flight_technique.source_id = data.source_id
+        flight_technique.transfer = data.transfer
+        flight_technique.note = data.note
+
+        session.commit()
+
+        return {"message": "Flight technique updated successfully"}
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail="An error occurred while updating flight technique")
+    finally:
+        session.close()
+
+@router.delete("/flight_techniques/{flight_technique_id}")
+async def delete_flight_technique(flight_technique_id: int):
+    session = Session()
+    try:
+        # Найдем запись по id
+        flight_technique = session.query(FlightTechniques).filter(FlightTechniques.id == flight_technique_id).first()
+
+        # Если запись не найдена, возвращаем ошибку
+        if not flight_technique:
+            raise HTTPException(status_code=404, detail="Flight technique not found")
+
+        # Удаляем запись из базы данных
+        session.delete(flight_technique)
+        session.commit()
+
+        return {"message": "Flight technique deleted successfully"}
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail="An error occurred while deleting flight technique")
+    finally:
+        session.close()

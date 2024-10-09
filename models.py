@@ -69,3 +69,14 @@ class FlightTechniques(Base):
     transfer = Column(Numeric)
     note = Column(Text)
     created_at = Column(DateTime)
+
+class FlightTechniqueUpdate(BaseModel):
+    flight_id: int
+    technique_id: int
+    discount: float
+    prepayment: bool
+    price: float
+    payment_type_id: int
+    source_id: int
+    transfer: float
+    note: str
