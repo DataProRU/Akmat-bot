@@ -117,6 +117,36 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            text-align: center;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="checkbox"] {
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
@@ -178,89 +208,87 @@
 </div>
 
 <h1>Users List</h1>
-   <table id="users_table" class="display">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Telegram</th>
-                <th>Full Name</th>
-                <th>Manager</th>
-                <th>Instructor</th>
-                <th>Assistant</th>
-                <th>Send Button</th>
-                <th>Deposit Income</th>
-                <th>Enter Operation</th>
-                <th>View Salary</th>
-                <th>Contribute Expense</th>
-                <th>Director</th>
-                <th>Chat ID</th>
-                <th>Commission</th>
-                <th>Penalty</th>
-                <th>Investor</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-       <tbody>
-    {% for user in users_tg %}
-    <tr>
-        <td>{{ user.id }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_manager">{{ user.is_manager }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_instructor">{{ user.is_instructor }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_assistant">{{ user.is_assistant }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="send_button">{{ user.send_button }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="deposit_income">{{ user.deposit_income }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="enter_operation">{{ user.enter_operation }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="view_salary">{{ user.view_salary }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="contribute_expense">{{ user.contribute_expense }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_director">{{ user.is_director }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="comission">{{ user.comission }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="penalty">{{ user.penalty }}</td>
-        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_investor">{{ user.is_investor }}</td>
-        <td><button onclick="saveUser({{ user.id }})">Save</button></td>
-    </tr>
-    {% endfor %}
-</tbody>
-    </table>
+<table id="users_table" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Telegram</th>
+            <th>Full Name</th>
+            <th>Manager</th>
+            <th>Instructor</th>
+            <th>Assistant</th>
+            <th>Send Button</th>
+            <th>Deposit Income</th>
+            <th>Enter Operation</th>
+            <th>View Salary</th>
+            <th>Contribute Expense</th>
+            <th>Director</th>
+            <th>Chat ID</th>
+            <th>Commission</th>
+            <th>Penalty</th>
+            <th>Investor</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users_tg %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
+            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_instructor" {% if user.is_instructor %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_assistant" {% if user.is_assistant %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="send_button" {% if user.send_button %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="deposit_income" {% if user.deposit_income %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="enter_operation" {% if user.enter_operation %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="view_salary" {% if user.view_salary %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="contribute_expense" {% if user.contribute_expense %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
+            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}</td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
+            <td><button onclick="saveUser({{ user.id }})">Save</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script>
-    $(document).ready(function() {
-            $('#users_table').DataTable({
-        "paging": false,  // Отключаем пагинацию
-        "searching": false, // Отключаем поиск (если не нужен)
-        "info": false,  // Отключаем информацию о количестве строк
+   $(document).ready(function() {
+    $('#users_table').DataTable({
+        paging: false,
+        searching: false,
+        info: false,
     });
+});
 
-        });
-
-       function saveUser(userId) {
-    // Используем точный поиск строки по ID
+function saveUser(userId) {
     const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
 
-    // Собираем данные для каждого поля по data-user-id и data-field
+    // Собираем данные из полей, включая чекбоксы
     const userData = {
         id: userId,
-        tg: row.find('td[data-field="tg"]').text().trim(),  // Убираем лишние пробелы
+        tg: row.find('td[data-field="tg"]').text().trim(),
         full_name: row.find('td[data-field="full_name"]').text().trim(),
-        is_manager: row.find('td[data-field="is_manager"]').text().trim() === 'true',
-        is_instructor: row.find('td[data-field="is_instructor"]').text().trim() === 'true',
-        is_assistant: row.find('td[data-field="is_assistant"]').text().trim() === 'true',
-        send_button: row.find('td[data-field="send_button"]').text().trim() === 'true',
-        deposit_income: row.find('td[data-field="deposit_income"]').text().trim() === 'true',
-        enter_operation: row.find('td[data-field="enter_operation"]').text().trim() === 'true',
-        view_salary: row.find('td[data-field="view_salary"]').text().trim() === 'true',
-        contribute_expense: row.find('td[data-field="contribute_expense"]').text().trim() === 'true',
-        is_director: row.find('td[data-field="is_director"]').text().trim() === 'true',
+        is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
+        is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
+        is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
+        send_button: row.find('input[data-field="send_button"]').is(':checked'),
+        deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
+        enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
+        view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
+        contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
+        is_director: row.find('input[data-field="is_director"]').is(':checked'),
         chat_id: row.find('td[data-field="chat_id"]').text().trim(),
-        comission: row.find('td[data-field="comission"]').text().trim() === 'true',
-        penalty: row.find('td[data-field="penalty"]').text().trim() === 'true',
-        is_investor: row.find('td[data-field="is_investor"]').text().trim() === 'true',
+        comission: row.find('input[data-field="comission"]').is(':checked'),
+        penalty: row.find('input[data-field="penalty"]').is(':checked'),
+        is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
     };
 
-    // Отправляем AJAX запрос на сервер для обновления данных
+    // Отправляем AJAX запрос для сохранения данных
     $.ajax({
         url: '/update_user_tg/',
         method: 'POST',
