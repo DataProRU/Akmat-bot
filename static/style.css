@@ -42,12 +42,15 @@ p {
 }
 
 .header-title {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
     padding: 15px 55px;
-    margin-bottom: 6px;
     box-shadow: 0px 0px 15px #bbbfc3b7;
 }
 
@@ -58,6 +61,9 @@ p {
 .content-container {
     flex-grow: 1;
     background-color: #f6f9fb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /*end base*/
