@@ -23,110 +23,123 @@
     </table>
 </body>
 </html> -->
+{% extends 'base.html' %}
 
+{% block title %}Управление пользователями{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        td {
-            background-color: #f2f2f2;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #82a045;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .btn-container button {
-            margin-right: 10px;
-        }
-        /* Стиль для модального окна */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 400px;
-            border-radius: 8px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
+{% block nav %}
+<h2>Управление пользователями</h2>
+<div class="btn-container">
+    <button onclick="openModal()">Create User</button>
+    <button onclick="loadUsers()">Refresh List</button>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    td {
+        background-color: #f2f2f2;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #82a045;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn-container button {
+        margin-right: 10px;
+    }
+
+    /* Стиль для модального окна */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 400px;
+        border-radius: 8px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
 
 <div class="container">
-    <h2>User Management</h2>
-    <div class="btn-container">
-        <button onclick="openModal()">Create User</button>
-        <button onclick="loadUsers()">Refresh List</button>
-    </div>
 
     <table>
         <thead>
@@ -138,21 +151,21 @@
             </tr>
         </thead>
         <tbody id="userTable">
-           {% for user in users %}
+            {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>
                     <select onchange="updateUserRole({{ user.id }}, this.value)">
-                       <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
-                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                        <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
+                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
                     </select>
                 </td>
                 <td>
                     <button onclick="deleteUser({{ user.id }})">Delete</button>
                 </td>
             </tr>
-           {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -235,7 +248,7 @@
     }
 
     // Обработка формы создания пользователя
-    document.getElementById('createUserForm').addEventListener('submit', async function(e) {
+    document.getElementById('createUserForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const role = document.getElementById('role').value;
@@ -253,6 +266,4 @@
     // Загружаем пользователей при загрузке страницы
     window.onload = loadUsers;
 </script>
-
-</body>
-</html>
+{% endblock %}

@@ -1,7 +1,7 @@
 /*font*/
 @font-face {
-    font-family: "Noto Sans";
-    src: url("/font/NotoSans-VariableFont_wdth.ttf");
+    font-family: "Commissioner";
+    src: url("font/Commissioner-VariableFont.ttf");
 }
 
 html {
@@ -28,7 +28,7 @@ p {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: "Noto Sans";
+    font-family: "Commissioner", sans-serif;
 
 }
 
@@ -356,6 +356,12 @@ p {
 .form-btn-reset:hover {
     background-color: #a7d2e4;
     transition: 0.3s;
+}
+
+.title-welcome {
+    width: 100%;
+    text-align: center;
+    padding-right: 95px;
 }
 
 @keyframes fadeIn {
