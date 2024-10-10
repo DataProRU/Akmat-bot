@@ -177,53 +177,105 @@
     </div>
 </div>
 
-<table>
+<h1>Users List</h1>
+   <table id="users_table" class="display">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Telegram Nickname</th>
+                <th>Telegram</th>
                 <th>Full Name</th>
-                <th>Is Manager</th>
-                <th>Is Instructor</th>
-                <th>Is Assistant</th>
-                <th>Send Buttons</th>
+                <th>Manager</th>
+                <th>Instructor</th>
+                <th>Assistant</th>
+                <th>Send Button</th>
                 <th>Deposit Income</th>
                 <th>Enter Operation</th>
                 <th>View Salary</th>
                 <th>Contribute Expense</th>
-                <th>Is Director</th>
+                <th>Director</th>
                 <th>Chat ID</th>
                 <th>Commission</th>
                 <th>Penalty</th>
-                <th>Is Investor</th>
+                <th>Investor</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            <!-- Цикл по списку пользователей -->
-            {% for user in users_tg %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.tg }}</td>
-                <td>{{ user.full_name }}</td>
-                <td>{{ 'Yes' if user.is_manager else 'No' }}</td>
-                <td>{{ 'Yes' if user.is_instructor else 'No' }}</td>
-                <td>{{ 'Yes' if user.is_assistant else 'No' }}</td>
-                <td>{{ 'Yes' if user.send_button else 'No' }}</td>
-                <td>{{ 'Yes' if user.deposit_income else 'No' }}</td>
-                <td>{{ 'Yes' if user.enter_operation else 'No' }}</td>
-                <td>{{ 'Yes' if user.view_salary else 'No' }}</td>
-                <td>{{ 'Yes' if user.contribute_expense else 'No' }}</td>
-                <td>{{ 'Yes' if user.is_director else 'No' }}</td>
-                <td>{{ user.chat_id }}</td>
-                <td>{{ 'Yes' if user.comission else 'No' }}</td>
-                <td>{{ 'Yes' if user.penalty else 'No' }}</td>
-                <td>{{ 'Yes' if user.is_investor else 'No' }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+       <tbody>
+    {% for user in users_tg %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_manager">{{ user.is_manager }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_instructor">{{ user.is_instructor }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_assistant">{{ user.is_assistant }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="send_button">{{ user.send_button }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="deposit_income">{{ user.deposit_income }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="enter_operation">{{ user.enter_operation }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="view_salary">{{ user.view_salary }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="contribute_expense">{{ user.contribute_expense }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_director">{{ user.is_director }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="comission">{{ user.comission }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="penalty">{{ user.penalty }}</td>
+        <td contenteditable="true" data-user-id="{{ user.id }}" data-field="is_investor">{{ user.is_investor }}</td>
+        <td><button onclick="saveUser({{ user.id }})">Save</button></td>
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script>
+    $(document).ready(function() {
+            $('#users_table').DataTable({
+        "paging": false,  // Отключаем пагинацию
+        "searching": false, // Отключаем поиск (если не нужен)
+        "info": false,  // Отключаем информацию о количестве строк
+    });
+
+        });
+
+       function saveUser(userId) {
+    // Используем точный поиск строки по ID
+    const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
+
+    // Собираем данные для каждого поля по data-user-id и data-field
+    const userData = {
+        id: userId,
+        tg: row.find('td[data-field="tg"]').text().trim(),  // Убираем лишние пробелы
+        full_name: row.find('td[data-field="full_name"]').text().trim(),
+        is_manager: row.find('td[data-field="is_manager"]').text().trim() === 'true',
+        is_instructor: row.find('td[data-field="is_instructor"]').text().trim() === 'true',
+        is_assistant: row.find('td[data-field="is_assistant"]').text().trim() === 'true',
+        send_button: row.find('td[data-field="send_button"]').text().trim() === 'true',
+        deposit_income: row.find('td[data-field="deposit_income"]').text().trim() === 'true',
+        enter_operation: row.find('td[data-field="enter_operation"]').text().trim() === 'true',
+        view_salary: row.find('td[data-field="view_salary"]').text().trim() === 'true',
+        contribute_expense: row.find('td[data-field="contribute_expense"]').text().trim() === 'true',
+        is_director: row.find('td[data-field="is_director"]').text().trim() === 'true',
+        chat_id: row.find('td[data-field="chat_id"]').text().trim(),
+        comission: row.find('td[data-field="comission"]').text().trim() === 'true',
+        penalty: row.find('td[data-field="penalty"]').text().trim() === 'true',
+        is_investor: row.find('td[data-field="is_investor"]').text().trim() === 'true',
+    };
+
+    // Отправляем AJAX запрос на сервер для обновления данных
+    $.ajax({
+        url: '/update_user_tg/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function(response) {
+            if (response.status === 'success') {
+                alert('User updated successfully');
+            } else {
+                alert('Error updating user');
+            }
+        }
+    });
+}
+
     // Функция для загрузки пользователей
     async function loadUsers() {
         const response = await fetch('/users/');
