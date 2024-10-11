@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, Depends
 from database import web_users, database, Session
 from models import UpdateUserRole, Users
 from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import RedirectResponse
 from fastapi.responses import JSONResponse
+from typing import Optional
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -128,6 +129,7 @@ async def update_user(data: dict):
     session.close()
     return JSONResponse({"status": "error"})
 
+
 # Удаление пользователя
 @router.delete("/users/{user_id}")
 async def delete_user(user_id: int):
@@ -137,7 +139,63 @@ async def delete_user(user_id: int):
     await database.disconnect()
     return {"message": "User deleted"}
 
+@router.get("/users_tg/add")
+async def get_user_form():
+    return {"message": "Страница формы доступна"}
 
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Маршрут для обработки POST запроса
+@router.post("/users_tg/add")
+async def add_user(
+    tg: str = Form(...),
+    full_name: str = Form(...),
+    is_manager: bool = Form(False),
+    is_instructor: bool = Form(False),
+    is_assistant: bool = Form(False),
+    send_button: bool = Form(False),
+    deposit_income: bool = Form(False),
+    enter_operation: bool = Form(False),
+    view_salary: bool = Form(False),
+    contribute_expense: bool = Form(False),
+    is_director: bool = Form(False),
+    chat_id: Optional[int] = Form(None),
+    comission: bool = Form(False),
+    penalty: bool = Form(False),
+    is_investor: bool = Form(False),
+    db: Session = Depends(get_db)  # Создаем сессию базы данных
+):
+    # Создаем нового пользователя без явного указания id (id будет назначен автоматически)
+    user = Users(
+        tg=tg,
+        full_name=full_name,
+        is_manager=is_manager,
+        is_instructor=is_instructor,
+        is_assistant=is_assistant,
+        send_button=send_button,
+        deposit_income=deposit_income,
+        enter_operation=enter_operation,
+        view_salary=view_salary,
+        contribute_expense=contribute_expense,
+        is_director=is_director,
+        chat_id=chat_id,
+        comission=comission,
+        penalty=penalty,
+        is_investor=is_investor
+    )
+
+    # Добавляем пользователя в базу данных
+    db.add(user)
+    db.commit()  # Фиксируем изменения
+    db.refresh(user)  # Обновляем объект user, чтобы получить присвоенный id
+
+    # Возвращаем корректный JSON ответ
+    return {"message": f"add {user.full_name} !", "id": user.id}
 # Подключение к базе данных при старте/остановке приложения
 @router.on_event("startup")
 async def startup():

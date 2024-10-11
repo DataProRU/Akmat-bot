@@ -51,22 +51,22 @@ class PaymentTypes(Base):
 
 class Users(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True)
-    tg = Column(Text)
-    full_name = Column(Text)
-    is_manager = Column(Boolean)
-    is_instructor = Column(Boolean)
-    is_assistant = Column(Boolean)
-    send_button = Column(Boolean)
-    deposit_income = Column(Boolean)
-    enter_operation = Column(Boolean)
-    view_salary = Column(Boolean)
-    contribute_expense = Column(Boolean)
-    is_director = Column(Boolean)
-    chat_id = Column(BigInteger)
-    comission = Column(Boolean)
-    penalty = Column(Boolean)
-    is_investor = Column(Boolean)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    tg = Column(Text, nullable=False)  # Ник в Telegram, не может быть пустым
+    full_name = Column(Text, nullable=False)  # Полное имя, обязательное поле
+    is_manager = Column(Boolean, default=False)  # По умолчанию False
+    is_instructor = Column(Boolean, default=False)  # По умолчанию False
+    is_assistant = Column(Boolean, default=False)  # По умолчанию False
+    send_button = Column(Boolean, default=False)  # По умолчанию False
+    deposit_income = Column(Boolean, default=False)  # По умолчанию False
+    enter_operation = Column(Boolean, default=False)  # По умолчанию False
+    view_salary = Column(Boolean, default=False)  # По умолчанию False
+    contribute_expense = Column(Boolean, default=False)  # По умолчанию False
+    is_director = Column(Boolean, default=False)  # По умолчанию False
+    chat_id = Column(BigInteger, nullable=True)  # Идентификатор чата, может быть пустым
+    comission = Column(Boolean, default=False)  # По умолчанию False
+    penalty = Column(Boolean, default=False)  # По умолчанию False
+    is_investor = Column(Boolean, default=False)  # По умолчанию False
 
 
 class Routes(Base):

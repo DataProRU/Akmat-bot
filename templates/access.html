@@ -64,11 +64,11 @@
             color: white;
         }
         td {
-            background-color: #f2f2f2;
+            background-color: #786c6c;
         }
         button {
             background-color: #4CAF50;
-            color: white;
+            color: black;
             border: none;
             padding: 10px 15px;
             border-radius: 4px;
@@ -206,12 +206,62 @@
         </form>
     </div>
 </div>
+ <!---<button onclick="openModal_tg()">Create User</button>
+<div id="userModal_tg" style="display:none;">
+    <form id="createUserTgForm">
+        <label for="tg">Telegram:</label>
+        <input type="text" id="tg" required>
+        <label for="full_name">Full Name:</label>
+        <input type="text" id="full_name" required>
+        <label for="is_manager">Manager:</label>
+        <input type="checkbox" id="is_manager">
 
+        <label for="is_instructor">Инструктор:</label>
+        <input type="checkbox" id="is_instructor">
+
+        <label for="is_assistant">Асистент:</label>
+        <input type="checkbox" id="is_assistant">
+
+        <label for="send_button">Кнопка отправить:</label>
+        <input type="checkbox" id="send_button">
+
+        <label for="deposit_income">Отправить депозит:</label>
+        <input type="checkbox" id="deposit_income">
+
+        <label for="enter_operation">Enter Operation<</label>
+        <input type="checkbox" id="enter_operation">
+
+        <label for="view_salary">View Salary:</label>
+        <input type="checkbox" id="view_salary">
+
+        <label for="contribute_expense">Contribute Expense:</label>
+        <input type="checkbox" id="contribute_expense">
+
+        <label for="is_director">Director:</label>
+        <input type="checkbox" id="is_director">
+
+        <label for="chat_id">Chat ID:</label>
+        <input type="number" id="chat_id">
+
+        <label for="comission">Commission:</label>
+        <input type="checkbox" id="comission">
+
+        <label for="penalty">Penalty:</label>
+        <input type="checkbox" id="penalty">
+
+        <label for="is_investor">Investor:</label>
+        <input type="checkbox" id="is_investor">
+
+
+
+        <button type="submit">Create User</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+</div>-->
 <h1>Users List</h1>
 <table id="users_table" class="display">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Telegram</th>
             <th>Full Name</th>
             <th>Manager</th>
@@ -236,7 +286,7 @@
             <td>{{ user.id }}</td>
             <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
             <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}"  data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_instructor" {% if user.is_instructor %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_assistant" {% if user.is_assistant %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="send_button" {% if user.send_button %}checked{% endif %}></td>
@@ -254,16 +304,101 @@
         {% endfor %}
     </tbody>
 </table>
+<h1>Добавить нового пользователя</h1>
+    <form action="/users_tg/add" method="POST">
+
+        <label for="tg">Ник в телеграм (tg):</label>
+        <input type="text" id="tg" name="tg" required><br><br>
+
+        <label for="full_name">Имя (full_name):</label>
+        <input type="text" id="full_name" name="full_name" required><br><br>
+
+        <label for="is_manager">Является ли менеджером:</label>
+        <input type="checkbox" id="is_manager" name="is_manager"><br><br>
+
+        <label for="is_instructor">Является ли инструктором:</label>
+        <input type="checkbox" id="is_instructor" name="is_instructor"><br><br>
+
+        <label for="is_assistant">Является ли ассистентом:</label>
+        <input type="checkbox" id="is_assistant" name="is_assistant"><br><br>
+
+        <label for="send_button">Отправить кнопки:</label>
+        <input type="checkbox" id="send_button" name="send_button"><br><br>
+
+        <label for="deposit_income">Внести доход:</label>
+        <input type="checkbox" id="deposit_income" name="deposit_income"><br><br>
+
+        <label for="enter_operation">Внести операции:</label>
+        <input type="checkbox" id="enter_operation" name="enter_operation"><br><br>
+
+        <label for="view_salary">Посмотреть зарплату:</label>
+        <input type="checkbox" id="view_salary" name="view_salary"><br><br>
+
+        <label for="contribute_expense">Внести расход:</label>
+        <input type="checkbox" id="contribute_expense" name="contribute_expense"><br><br>
+
+        <label for="is_director">Является ли директором:</label>
+        <input type="checkbox" id="is_director" name="is_director"><br><br>
+
+        <label for="chat_id">Идентификатор чата сотрудника (chat_id):</label>
+        <input type="number" id="chat_id" name="chat_id"><br><br>
+
+        <label for="comission">Внести комиссию:</label>
+        <input type="checkbox" id="comission" name="comission"><br><br>
+
+        <label for="penalty">Внести штраф:</label>
+        <input type="checkbox" id="penalty" name="penalty"><br><br>
+
+        <label for="is_investor">Является ли инвестором:</label>
+        <input type="checkbox" id="is_investor" name="is_investor"><br><br>
+
+        <input type="submit" value="Добавить пользователя">
+    </form>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script>
-   $(document).ready(function() {
-    $('#users_table').DataTable({
-        paging: false,
-        searching: false,
-        info: false,
+ $(document).ready(function() {
+        $('#users_table').DataTable({
+            paging: false,
+            searching: false,
+            info: false,
+        });
+
+        loadUsers();
+
+        // Form submission for creating new user
+        $('#createUserTgForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const userData = {
+                tg: $('#tg').val().trim(),
+                full_name: $('#full_name').val().trim(),
+                is_manager: $('#is_manager').is(':checked'),
+            };
+
+            $.ajax({
+                url: '/create_user_tg/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userData),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('User created successfully');
+                        closeModal();
+                        loadUsers();
+                    } else {
+                        alert('Error creating user');
+                    }
+                }
+            });
+        });
     });
-});
+   function openModal_tg() {
+       document.getElementById('userModal_tg').style.display = 'block';
+    }
+ function closeModal_tg() {
+    document.getElementById('userModal_tg').style.display = 'none';
+}
 
 function saveUser(userId) {
     const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
