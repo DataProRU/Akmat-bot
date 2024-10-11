@@ -27,8 +27,10 @@ async def post_register(
 
 
 @router.get("/login", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
+
 
 
 @router.post("/login", response_class=HTMLResponse)
