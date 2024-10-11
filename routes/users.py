@@ -10,6 +10,12 @@ from typing import Optional
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.get("/users/")
 async def get_users(request: Request):
@@ -139,16 +145,24 @@ async def delete_user(user_id: int):
     await database.disconnect()
     return {"message": "User deleted"}
 
+@router.post("/delete_user_tg/")
+async def delete_user(data: dict):
+    session = Session()
+    user = session.query(Users).filter(Users.id == data["id"]).first()
+    if user:
+        session.delete(user)
+        session.commit()
+        session.close()
+        return JSONResponse({"status": "success"})
+    session.close()
+    return JSONResponse({"status": "error", "message": "User not found"})
+
+
+
 @router.get("/users_tg/add")
 async def get_user_form():
     return {"message": "Страница формы доступна"}
 
-def get_db():
-    db = Session()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # Маршрут для обработки POST запроса
 @router.post("/users_tg/add")
@@ -193,9 +207,10 @@ async def add_user(
     db.add(user)
     db.commit()  # Фиксируем изменения
     db.refresh(user)  # Обновляем объект user, чтобы получить присвоенный id
+    db.close()
 
     # Возвращаем корректный JSON ответ
-    return {"message": f"add {user.full_name} !", "id": user.id}
+    return RedirectResponse("/users", status_code=303)
 # Подключение к базе данных при старте/остановке приложения
 @router.on_event("startup")
 async def startup():
