@@ -24,30 +24,25 @@ async def get_users(request: Request):
     role = payload.get("role")
     exp = payload.get("exp")
 
-    # Проверка прав доступа
     if role != "admin":
         return templates.TemplateResponse("not_access.html", {"request": request})
     if exp <= 0:
         return templates.TemplateResponse("invalid_token.html", {"request": request})
 
-    # Подключение к базе данных и выбор всех пользователей
     await database.connect()
     query = web_users.select()
     users_data = await database.fetch_all(query)
     session = Session()
 
-    # Формируем список словарей с данными пользователей
     users_tg_data = session.query(Users).all()
     await database.disconnect()
 
-    # Возвращаем HTML-шаблон с данными пользователей
     return templates.TemplateResponse(
         "access.html",
         {"request": request, "users": users_data, "users_tg": users_tg_data},
     )
 
 
-# Обновление роли пользователя
 @router.put("/users/{user_id}")
 async def update_user_role(user_id: int, role_update: UpdateUserRole):
     query = (
@@ -86,7 +81,6 @@ async def update_users(
         if not user:
             return {"error": "User not found"}
 
-        # Обновление полей пользователя
         user.tg = tg
         user.full_name = full_name
         user.is_manager = is_manager
@@ -164,7 +158,6 @@ async def get_user_form():
     return {"message": "Страница формы доступна"}
 
 
-# Маршрут для обработки POST запроса
 @router.post("/users_tg/add")
 async def add_user(
     tg: str = Form(...),
@@ -182,9 +175,8 @@ async def add_user(
     comission: bool = Form(False),
     penalty: bool = Form(False),
     is_investor: bool = Form(False),
-    db: Session = Depends(get_db)  # Создаем сессию базы данных
+    db: Session = Depends(get_db)
 ):
-    # Создаем нового пользователя без явного указания id (id будет назначен автоматически)
     user = Users(
         tg=tg,
         full_name=full_name,
@@ -203,15 +195,13 @@ async def add_user(
         is_investor=is_investor
     )
 
-    # Добавляем пользователя в базу данных
     db.add(user)
-    db.commit()  # Фиксируем изменения
-    db.refresh(user)  # Обновляем объект user, чтобы получить присвоенный id
+    db.commit()
+    db.refresh(user)
     db.close()
 
-    # Возвращаем корректный JSON ответ
     return RedirectResponse("/users", status_code=303)
-# Подключение к базе данных при старте/остановке приложения
+
 @router.on_event("startup")
 async def startup():
     await database.connect()

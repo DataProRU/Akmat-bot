@@ -52,21 +52,21 @@ class PaymentTypes(Base):
 class Users(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    tg = Column(Text, nullable=False)  # Ник в Telegram, не может быть пустым
-    full_name = Column(Text, nullable=False)  # Полное имя, обязательное поле
-    is_manager = Column(Boolean, default=False)  # По умолчанию False
-    is_instructor = Column(Boolean, default=False)  # По умолчанию False
-    is_assistant = Column(Boolean, default=False)  # По умолчанию False
-    send_button = Column(Boolean, default=False)  # По умолчанию False
-    deposit_income = Column(Boolean, default=False)  # По умолчанию False
-    enter_operation = Column(Boolean, default=False)  # По умолчанию False
-    view_salary = Column(Boolean, default=False)  # По умолчанию False
-    contribute_expense = Column(Boolean, default=False)  # По умолчанию False
-    is_director = Column(Boolean, default=False)  # По умолчанию False
-    chat_id = Column(BigInteger, nullable=True)  # Идентификатор чата, может быть пустым
-    comission = Column(Boolean, default=False)  # По умолчанию False
-    penalty = Column(Boolean, default=False)  # По умолчанию False
-    is_investor = Column(Boolean, default=False)  # По умолчанию False
+    tg = Column(Text, nullable=False)
+    full_name = Column(Text, nullable=False)
+    is_manager = Column(Boolean, default=False)
+    is_instructor = Column(Boolean, default=False)
+    is_assistant = Column(Boolean, default=False)
+    send_button = Column(Boolean, default=False)
+    deposit_income = Column(Boolean, default=False)
+    enter_operation = Column(Boolean, default=False)
+    view_salary = Column(Boolean, default=False)
+    contribute_expense = Column(Boolean, default=False)
+    is_director = Column(Boolean, default=False)
+    chat_id = Column(BigInteger, nullable=True)
+    comission = Column(Boolean, default=False)
+    penalty = Column(Boolean, default=False)
+    is_investor = Column(Boolean, default=False)
 
 
 class Routes(Base):

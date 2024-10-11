@@ -10,14 +10,10 @@ from database import get_db
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-
-# Роут для страницы регистрации
 @router.get("/register", response_class=HTMLResponse)
 async def get_register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
-
-# Роут для обработки регистрации
 @router.post("/register")
 async def post_register(
     request: Request,
@@ -29,13 +25,12 @@ async def post_register(
     return await register_user(request, username, password, role, db, templates)
 
 
-# Роут для страницы логина
+
 @router.get("/login", response_class=HTMLResponse)
 async def get_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
 
 
-# Роут для обработки логина
 @router.post("/login", response_class=HTMLResponse)
 async def login(
     request: Request,
@@ -45,7 +40,6 @@ async def login(
     return await login_user(request, form_data, db, templates)
 
 
-# Роут для приветственной страницы
 @router.get("/welcome", response_class=HTMLResponse)
 async def welcome(request: Request):
     token = get_token_from_cookie(request)

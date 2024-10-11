@@ -1,30 +1,3 @@
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users List</title>
-</head>
-<body>
-    <h1>Users</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Role</th>
-        </tr>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.role }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -187,7 +160,6 @@
     </table>
 </div>
 
-<!-- Модальное окно для создания пользователя -->
 <div id="userModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -195,69 +167,24 @@
         <form id="createUserForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+
+            <p>
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" required>
+            </p>
+
             <br><br>
             <label for="role">Role:</label>
             <select id="role" name="role">
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
             </select>
+
             <br><br>
             <button type="submit">Create</button>
         </form>
     </div>
 </div>
- <!---<button onclick="openModal_tg()">Create User</button>
-<div id="userModal_tg" style="display:none;">
-    <form id="createUserTgForm">
-        <label for="tg">Telegram:</label>
-        <input type="text" id="tg" required>
-        <label for="full_name">Full Name:</label>
-        <input type="text" id="full_name" required>
-        <label for="is_manager">Manager:</label>
-        <input type="checkbox" id="is_manager">
-
-        <label for="is_instructor">Инструктор:</label>
-        <input type="checkbox" id="is_instructor">
-
-        <label for="is_assistant">Асистент:</label>
-        <input type="checkbox" id="is_assistant">
-
-        <label for="send_button">Кнопка отправить:</label>
-        <input type="checkbox" id="send_button">
-
-        <label for="deposit_income">Отправить депозит:</label>
-        <input type="checkbox" id="deposit_income">
-
-        <label for="enter_operation">Enter Operation<</label>
-        <input type="checkbox" id="enter_operation">
-
-        <label for="view_salary">View Salary:</label>
-        <input type="checkbox" id="view_salary">
-
-        <label for="contribute_expense">Contribute Expense:</label>
-        <input type="checkbox" id="contribute_expense">
-
-        <label for="is_director">Director:</label>
-        <input type="checkbox" id="is_director">
-
-        <label for="chat_id">Chat ID:</label>
-        <input type="number" id="chat_id">
-
-        <label for="comission">Commission:</label>
-        <input type="checkbox" id="comission">
-
-        <label for="penalty">Penalty:</label>
-        <input type="checkbox" id="penalty">
-
-        <label for="is_investor">Investor:</label>
-        <input type="checkbox" id="is_investor">
-
-
-
-        <button type="submit">Create User</button>
-        <button type="button" onclick="closeModal()">Cancel</button>
-    </form>
-</div>-->
 <h1>Users List</h1>
 <table id="users_table" class="display">
     <thead>
@@ -403,6 +330,35 @@
  function closeModal_tg() {
     document.getElementById('userModal_tg').style.display = 'none';
 }
+
+ document.getElementById('createUserForm').addEventListener('submit', async function(event) {
+    event.preventDefault();  // Останавливаем стандартное поведение формы
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
+
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('role', role);
+
+    try {
+        const response = await fetch('/register', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('User created successfully!');
+        } else {
+            alert(`Error: ${result.detail || 'Failed to create user'}`);
+        }
+    } catch (error) {
+        alert(`Request failed: ${error.message}`);
+    }
+});
 
 function saveUser(userId) {
     const row = $(`tr td:first-child:contains(${userId})`).closest('tr');

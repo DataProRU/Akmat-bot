@@ -45,7 +45,6 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
         session.close()
 
 
-# Маршрут для отображения данных на HTML странице с пагинацией
 @router.get("/income", response_class=HTMLResponse)
 async def index(
     request: Request,
@@ -174,7 +173,6 @@ async def update_flight_technique(
 async def delete_flight_technique(flight_technique_id: int):
     session = Session()
     try:
-        # Найдем запись по id
         flight_technique = (
             session.query(FlightTechniques)
             .filter(FlightTechniques.id == flight_technique_id)
