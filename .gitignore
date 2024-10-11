@@ -6,3 +6,4 @@ venv_name
 # Byte-compiled / optimized / DLL files
 __pycache__/
 idea/
+backup.sql
