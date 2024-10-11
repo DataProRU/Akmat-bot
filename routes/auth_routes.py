@@ -66,21 +66,17 @@ async def welcome(request: Request):
 
 @router.get("/confirm", response_class=HTMLResponse)
 async def confirm(request: Request):
-    # Получаем токен
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
+        return token
 
-    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
     if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+        return payload
 
-    # Извлекаем информацию о пользователе
     username = payload.get("sub")
     role = payload.get("role")
 
-    # Возвращаем HTML-шаблон с данными пользователя
     return templates.TemplateResponse(
         "confirm.html", {"request": request, "username": username, "role": role}
     )
