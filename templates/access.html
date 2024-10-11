@@ -262,6 +262,7 @@
 <table id="users_table" class="display">
     <thead>
         <tr>
+             <th>ID</th>
             <th>Telegram</th>
             <th>Full Name</th>
             <th>Manager</th>
@@ -299,8 +300,10 @@
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
-            <td><button onclick="saveUser({{ user.id }})">Save</button></td>
-            <td><button onclick="deleteUserTG({{ user.id }})">Delete</button></td>
+            <td>
+                <button onclick="saveUser({{ user.id }})">Save</button>
+                <button onclick="deleteUserTG({{ user.id }})">Delete</button>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
