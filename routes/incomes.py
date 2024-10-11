@@ -1,5 +1,5 @@
 from fastapi import Query, Request, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
 from models import (
     FlightTechniques,
@@ -47,14 +47,25 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
 
 @router.get("/income", response_class=HTMLResponse)
 async def index(
-    request: Request,
-    page: int = Query(1, ge=1),
-    per_page: int = Query(10, ge=1, le=100),
+        request: Request,
+        page: int = Query(1, ge=1),
+        per_page: int = Query(10, ge=1, le=100),
 ):
+    # Получаем токен
     token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+
+    # Извлекаем информацию о пользователе
     username = payload.get("sub")
     role = payload.get("role")
+
+    # Получаем данные для отображения на странице
     flights_techniques, techniques, flights, routes, users, payment_types, sources = (
         get_flight_techniques(page, per_page)
     )
@@ -84,11 +95,12 @@ async def index(
                     "note": flight_technique.note,
                 }
             )
+
+    # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
         "income.html",
         {"request": request, "data": data, "page": page, "per_page": per_page},
     )
-
 
 @router.get("/api/flight_techniques")
 async def flight_techniques_api(

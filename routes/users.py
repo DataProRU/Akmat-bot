@@ -19,29 +19,40 @@ def get_db():
 
 @router.get("/users/")
 async def get_users(request: Request):
+    # Получаем токен
     token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+
     role = payload.get("role")
     exp = payload.get("exp")
 
+    # Проверка прав доступа
     if role != "admin":
         return templates.TemplateResponse("not_access.html", {"request": request})
     if exp <= 0:
         return templates.TemplateResponse("invalid_token.html", {"request": request})
 
+    # Подключение к базе данных и выбор всех пользователей
     await database.connect()
     query = web_users.select()
     users_data = await database.fetch_all(query)
     session = Session()
 
+    # Формируем список словарей с данными пользователей
     users_tg_data = session.query(Users).all()
     await database.disconnect()
 
+    # Возвращаем HTML-шаблон с данными пользователей
     return templates.TemplateResponse(
         "access.html",
         {"request": request, "users": users_data, "users_tg": users_tg_data},
     )
-
 
 @router.put("/users/{user_id}")
 async def update_user_role(user_id: int, role_update: UpdateUserRole):

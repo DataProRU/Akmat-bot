@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends, Form, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse,  RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 import databases
@@ -44,10 +44,21 @@ async def login(
 
 @router.get("/welcome", response_class=HTMLResponse)
 async def welcome(request: Request):
+    # Получаем токен
     token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+
+    # Извлекаем информацию о пользователе
     username = payload.get("sub")
     role = payload.get("role")
+
+    # Возвращаем HTML-шаблон с данными пользователя
     return templates.TemplateResponse(
         "welcome.html", {"request": request, "username": username, "role": role}
     )
@@ -55,10 +66,21 @@ async def welcome(request: Request):
 
 @router.get("/confirm", response_class=HTMLResponse)
 async def confirm(request: Request):
+    # Получаем токен
     token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+
+    # Извлекаем информацию о пользователе
     username = payload.get("sub")
     role = payload.get("role")
+
+    # Возвращаем HTML-шаблон с данными пользователя
     return templates.TemplateResponse(
         "confirm.html", {"request": request, "username": username, "role": role}
     )
