@@ -1,96 +1,50 @@
-<!DOCTYPE html>
-<html lang="ru" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добро пожаловать</title>
-    <style>
-        .header-container {
-    width: 100%;
-    height: 100vh;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-.header-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #5a5c5e;
-    padding: 8px;
-    border-radius: 15px;
-    margin-bottom: 10px;
+{% extends 'base.html' %}
 
-}
-.logo-img {
-    max-width: 100px;
-}
-.nav-container {
-    display: flex;
-    width: 500px;
-    justify-content: space-between;
-    align-items: center;
-    height: 30px;
-}
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Центрирование вертикально */
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            margin-bottom: 20px; /* Отступ снизу для заголовка */
-            color: #333;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        button {
-            width: 200px; /* Фиксированная ширина для кнопок */
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .title{
-            text-align: center;
-        }
-        a{
+{% block title %}Добро пожаловать{% endblock %}
+
+{% block nav %}
+<h2 class="title-welcome">Добро пожаловать {{ username }}</h2>
+{% endblock %}
+
+{% block content %}
+<style>
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        width: 200px;
+        /* Фиксированная ширина для кнопок */
+        margin: 10px 0;
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    a {
         color: #fff;
         text-decoration: none;
-        }
-    </style>
-</head>
-<body>
- <header class="header-container">
-        <section class="header-title">
-           <img class="logo-img" src="/static/img/extrim.png" alt="логотип">
-        </section>
-    <h1 class="title">Добро пожаловать {{ username }}</h1>
-    <div class="button-container">
-        <button> <a href="/confirm"> На подтверждение </a> </button>
-        <button> <a href="/income">Доходы</a></button>
-        {% if role == 'admin' %}
-            <button><a href="/users/">Доступ</a></button>
-        {% endif %}
-        <button>Справочник</button>
-    </div>
- </header>
-</body>
-</html>
+    }
+</style>
+
+<div class="button-container">
+    <button> <a href="/confirm"> На подтверждение </a> </button>
+    <button> <a href="/income">Доходы</a></button>
+    {% if role == 'admin' %}
+    <button><a href="/users/">Доступ</a></button>
+    {% endif %}
+    <button>Справочник</button>
+</div>
+{% endblock %}

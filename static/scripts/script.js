@@ -10,19 +10,7 @@ buttonOpen.addEventListener('click', () => {
 //закрыть форму для добавлеиия записи
 buttonClose.addEventListener('click', () => {
     formAdd.classList.remove('open');
-})
-
-var arrayOrders = [["15.11.2024", 2859, "Софийские водопады", "-вид3-", "-инструктор3-", 8, 3633, 67453, "-вид2-", "-источник3-", "Коммент"],
-["15.11.2024", 2859, "Софийские водопады", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Малый маршрут", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Софийские водопады", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Малый маршрут", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Софийские водопады", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Смотровые Дукки", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Софийские водопады", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Пхия", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-["15.11.2024", 2859, "Смотровые Дукки", "-вид1-", "-инструктор3-", 8, 3633, 67453, "--вид2--", "-источник2-", "Коммент"],
-];
+});
 
 var tableBody = document.querySelector('#table-body');
 const butttonAddOrder = document.querySelector('#submit');
@@ -43,47 +31,9 @@ function newOrder() {
 
 };
 
-//fillTable(tableBody, arrayOrders);
-
-//функция отрисовки таблицы
-//function fillTable(tableBody, arrayOrder) {
-//    for (var i = 0; i < arrayOrder.length; i++) {
-//      var tr = document.createElement('tr');
-//      tr.classList.add('trow');
-//    for (var j = 0; j < arrayOrder[i].length; j++) {
-//      var td = document.createElement('td');
-//    td.innerHTML = arrayOrder[i][j];
-//  td.classList.add('tcol');
-//if (j === 1 || j === 5 || j === 6 || j === 7) {
-//                td.classList.add('tcol-num');
-//          }
-//        tr.appendChild(td);
-//  }
-
-//var td = document.createElement('td');
-//        td.classList.add('tcol');
-//      td.classList.add('tcol-filter');
-
-//        const tdEdit = document.createElement('button');
-//      tdEdit.classList.add('tcol-filter-edit');
-//    td.appendChild(tdEdit);
-
-//        const tdDelete = document.createElement('button');
-//      tdDelete.classList.add('tcol-filter-delete');
-//    td.appendChild(tdDelete);
-
-//        tr.appendChild(td);
-
-//        tableBody.appendChild(tr);
-//  }
-//};
-
 butttonAddOrder.addEventListener('click', (event) => {
     formAdd.classList.remove('open');
-    arrayOrders.push(newOrder());
     event.preventDefault();
-    tableBody.innerHTML = '';
-    //fillTable(tableBody, arrayOrders);
     document.querySelector('.add-entry-form').reset();
 });
 

@@ -1,7 +1,7 @@
 /*font*/
 @font-face {
-    font-family: "Noto Sans";
-    src: url("../font/NotoSans-VariableFont_wdth\,wght.ttf");
+    font-family: "Commissioner";
+    src: url("font/Commissioner-VariableFont.ttf");
 }
 
 html {
@@ -28,7 +28,7 @@ p {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: "Noto Sans";
+    font-family: "Commissioner", sans-serif;
 
 }
 
@@ -42,12 +42,15 @@ p {
 }
 
 .header-title {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
     padding: 15px 55px;
-    margin-bottom: 6px;
     box-shadow: 0px 0px 15px #bbbfc3b7;
 }
 
@@ -58,6 +61,9 @@ p {
 .content-container {
     flex-grow: 1;
     background-color: #f6f9fb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /*end base*/
@@ -356,6 +362,12 @@ p {
 .form-btn-reset:hover {
     background-color: #a7d2e4;
     transition: 0.3s;
+}
+
+.title-welcome {
+    width: 100%;
+    text-align: center;
+    padding-right: 95px;
 }
 
 @keyframes fadeIn {
