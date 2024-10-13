@@ -117,7 +117,9 @@
         {% endfor %}
     </tbody>
 </table>
+
 </section>
+
 
 <section id="add-form-container">
 
@@ -235,4 +237,24 @@
         </div>
     </form>
 </section>
+<div class="pagination">
+    <ul class="pagination-list">
+        {% if page > 1 %}
+        <li><a href="?page=1">&laquo; Первая</a></li>
+        <li><a href="?page={{ page - 1 }}">&lsaquo; Предыдущая</a></li>
+        {% endif %}
+
+        {% for p in range((page - 2) if page > 2 else 1, (page + 2) if page < total_pages - 1 else total_pages + 1) %}
+        <li class="{% if p == page %}active{% endif %}">
+            <a href="?page={{ p }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page < total_pages %}
+        <li><a href="?page={{ page + 1 }}">Следующая &rsaquo;</a></li>
+        <li><a href="?page={{ total_pages }}">Последняя &raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+
 {% endblock %}
