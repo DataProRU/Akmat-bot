@@ -127,7 +127,7 @@ async def index(
         },
     )
 
-def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 10):
+def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30):
     session = Session()
     try:
         offset = (page - 1) * per_page
@@ -175,7 +175,7 @@ async def filtered_income(
     month: Optional[int] = Query(None),  # Параметр фильтрации по месяцу (может быть пустым)
     year: Optional[int] = Query(None),  # Параметр фильтрации по году (может быть пустым)
     page: int = Query(1, ge=1),  # Параметр пагинации (страница)
-    per_page: int = Query(10, ge=1, le=100),  # Параметр количества записей на страницу
+    per_page: int = Query(30, ge=1, le=100),  # Параметр количества записей на страницу
 ):
     # Получаем токен и проверяем пользователя
     token = get_token_from_cookie(request)
