@@ -1,8 +1,19 @@
 from pydantic import BaseModel
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, Numeric, Boolean, Text, DateTime, SmallInteger
-import sqlalchemy
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    Numeric,
+    Boolean,
+    Text,
+    DateTime,
+    SmallInteger,
+)
+from sqlalchemy import BigInteger
+
 Base = declarative_base()
+
 
 class UserInDB(BaseModel):
     username: str
@@ -21,43 +32,64 @@ class UserCreate(User):
     password: str
     role: str
 
+
 class UpdateUserRole(BaseModel):
     role: str
 
 
 class Sources(Base):
-    __tablename__ = 'sources'
+    __tablename__ = "sources"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
 
 class PaymentTypes(Base):
-    __tablename__ = 'payment_types'
+    __tablename__ = "payment_types"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
 
 class Users(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    full_name = Column(Text)
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    tg = Column(Text, nullable=False)
+    full_name = Column(Text, nullable=False)
+    is_manager = Column(Boolean, default=False)
+    is_instructor = Column(Boolean, default=False)
+    is_assistant = Column(Boolean, default=False)
+    send_button = Column(Boolean, default=False)
+    deposit_income = Column(Boolean, default=False)
+    enter_operation = Column(Boolean, default=False)
+    view_salary = Column(Boolean, default=False)
+    contribute_expense = Column(Boolean, default=False)
+    is_director = Column(Boolean, default=False)
+    chat_id = Column(BigInteger, nullable=True)
+    comission = Column(Boolean, default=False)
+    penalty = Column(Boolean, default=False)
+    is_investor = Column(Boolean, default=False)
+
 
 class Routes(Base):
-    __tablename__ = 'routes'
+    __tablename__ = "routes"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class Flights(Base):
-    __tablename__ = 'flights'
+    __tablename__ = "flights"
     id = Column(Integer, primary_key=True)
     flight_number = Column(SmallInteger)
     instructor_id = Column(Integer)
 
+
 class Techniques(Base):
-    __tablename__ = 'techniques'
+    __tablename__ = "techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class FlightTechniques(Base):
-    __tablename__ = 'flight_techniques'
+    __tablename__ = "flight_techniques"
     id = Column(Integer, primary_key=True)
     flight_id = Column(Integer)
     technique_id = Column(Integer)
@@ -69,3 +101,15 @@ class FlightTechniques(Base):
     transfer = Column(Numeric)
     note = Column(Text)
     created_at = Column(DateTime)
+
+
+class FlightTechniqueUpdate(BaseModel):
+    flight_id: int
+    technique_id: int
+    discount: float
+    prepayment: bool
+    price: float
+    payment_type_id: int
+    source_id: int
+    transfer: float
+    note: str

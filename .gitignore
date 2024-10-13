@@ -2,3 +2,8 @@
 __pycache__
 venv_name
 .DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+idea/
+backup.sql
