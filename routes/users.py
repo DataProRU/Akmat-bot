@@ -141,7 +141,7 @@ async def update_user(data: dict):
     return JSONResponse({"status": "error"})
 
 
-# Удаление пользователя
+# Удаление пользователя сайта
 @router.delete("/users/{user_id}")
 async def delete_user(user_id: int):
     await database.connect()

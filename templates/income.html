@@ -62,11 +62,6 @@
 
     <select name="year" id="year" class="nav-select">
         <option value="">Год</option>
-        <option value="2015">2015</option>
-        <option value="2016">2016</option>
-        <option value="2017">2017</option>
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
         <option value="2020">2020</option>
         <option value="2021">2021</option>
         <option value="2022">2022</option>
@@ -112,30 +107,29 @@
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
-        {% for item in data %}
-        <tr class="trow">
-            <td class="tcol">{{ item.created_at }}</td>
-            <td class="tcol tcol-num">{{ item.flight_number }}</td>
-            <td class="tcol">{{ item.flight_name }}</td>
-            <td class="tcol">{{ item.technique_name }}</td>
-            <td class="tcol">{{ item.user_name }}</td>
-            <td class="tcol tcol-num">{{ item.discount }}</td>
-            <td class="tcol tcol-num">{{ item.prepayment }}</td>
-            <td class="tcol tcol-num">{{ item.price }}</td>
-            <td class="tcol">{{ item.payment_type }}</td>
-            <td class="tcol">{{ item.source }}</td>
-            <td class="tcol">{{ item.note }}</td>
-            <td class="tcol tcol-filter">
-                <button class="tcol-filter-edit"></button>
-                <button class="tcol-filter-delete"></button>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    {% for item in data %}
+    <tr class="trow">
+        <td class="tcol">{{ item.created_at }}</td>
+        <td class="tcol tcol-num">{{ item.flight_number }}</td>
+        <td class="tcol">{{ item.flight_name }}</td>
+        <td class="tcol">{{ item.technique_name }}</td>
+        <td class="tcol">{{ item.user_name }}</td>
+        <td class="tcol tcol-num">{{ item.discount }}</td>
+        <td class="tcol tcol-num">{{ item.prepayment }}</td>
+        <td class="tcol tcol-num">{{ item.price }}</td>
+        <td class="tcol">{{ item.payment_type }}</td>
+        <td class="tcol">{{ item.source }}</td>
+        <td class="tcol">{{ item.note }}</td>
+        <td class="tcol tcol-filter">
+            <form action="/delete_flight/" method="post">
+                <input type="hidden" name="id" value="{{ item.id }}">
+                <button type="submit" class="tcol-filter-delete">D</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
 </table>
-
-</section>
-
 
 <section id="add-form-container">
 
@@ -144,55 +138,20 @@
         <button class="close-form-btn">✖</button>
     </div>
 
-    <form action="" class="add-entry-form">
+    <form action="/submit" method="POST" class="add-entry-form">
         <div class="form-part">
             <div class="form-element">
-                <label for="date">Дата</label>
-                <input type="date" id="date" class="middle-element">
+                <label for="flight_id">Номер рейса</label>
+                <input type="number" id="flight_id" name="flight_id" class="middle-element" required>
             </div>
 
             <div class="form-element">
-                <label for="flight">Номер рейса</label>
-                <input type="text" id="flight" class="middle-element">
-            </div>
-        </div>
-
-        <div class="form-element">
-            <label for="type-of-route">Вид маршрута</label>
-            <select name="" id="type-of-route">
-                <option selected disabled hidden></option>
-                <option value="">Малый маршрут</option>
-                <option value="">Белые водопады</option>
-                <option value="">Софийские водопады</option>
-                <option value="">Часовой маршрут</option>
-                <option value="">Пхия</option>
-                <option value="">Бездонное Озеро</option>
-                <option value="">Смотровые Дукки</option>
-            </select>
-        </div>
-
-        <div class="form-part">
-            <div class="form-element">
-                <label for="type-of-technique">Вид техники</label>
-                <select name="" id="type-of-technique" class="middle-element">
+                <label for="technique_id">Вид техники</label>
+                <select name="technique_id" id="technique_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="">--вид1--</option>
-                    <option value="">--вид2--</option>
-                    <option value="">--вид3--</option>
-                </select>
-            </div>
-
-            <div class="form-element">
-                <label for="instructor">Инструктор</label>
-                <select name="" id="instructor" class="middle-element">
-                    <option selected disabled hidden></option>
-                    <option value="">Ахматик</option>
-                    <option value="">Ибрашка</option>
-                    <option value="">Амир</option>
-                    <option value="">Мухаммад</option>
-                    <option value="">Ренат</option>
-                    <option value="">Назар</option>
-                    <option value="">Другой</option>
+                    <option value="1">--вид1--</option>
+                    <option value="2">--вид2--</option>
+                    <option value="3">--вид3--</option>
                 </select>
             </div>
         </div>
@@ -200,59 +159,66 @@
         <div class="form-part">
             <div class="form-element">
                 <label for="price">Стоимость</label>
-                <input type="text" id="price" class="small-element">
+                <input type="number" id="price" name="price" class="small-element" step="0.01" required>
             </div>
 
             <div class="form-element">
                 <label for="discount">Скидка</label>
-                <input type="text" id="discount" class="small-element">
+                <input type="number" id="discount" name="discount" class="small-element" step="0.01">
             </div>
 
             <div class="form-element">
                 <label for="prepayment">Предоплата</label>
-                <input type="checkbox" id="prepayment" class="small-element">
+                <input type="checkbox" id="prepayment" name="prepayment" class="small-element">
             </div>
-
-
         </div>
 
         <div class="form-part">
             <div class="form-element">
-                <label for="type-of-payment">Вид оплаты</label>
-                <select name="" id="type-of-payment" class="middle-element">
+                <label for="payment_type_id">Вид оплаты</label>
+                <select name="payment_type_id" id="payment_type_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="">QR</option>
-                    <option value="">Наличные</option>
-                    <option value="">Перевод</option>
-                    <option value="">Постоплата</option>
-                    <option value="">Безнал</option>
+                    <option value="1">QR</option>
+                    <option value="2">Наличные</option>
+                    <option value="3">Перевод</option>
+                    <option value="4">Постоплата</option>
+                    <option value="5">Безнал</option>
                 </select>
             </div>
 
             <div class="form-element">
-                <label for="source">Источник</label>
-                <select name="" id="source" class="middle-element">
+                <label for="source_id">Источник</label>
+                <select name="source_id" id="source_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="">Интернет</option>
-                    <option value="">Поляна</option>
-                    <option value="">Инфо офис</option>
-                    <option value="">Отели</option>
-                    <option value="">Агенты</option>
+                    <option value="1">Интернет</option>
+                    <option value="2">Поляна</option>
+                    <option value="3">Инфо офис</option>
+                    <option value="4">Отели</option>
+                    <option value="5">Агенты</option>
                 </select>
             </div>
+        </div>
 
-        </div>
         <div class="form-element">
-            <label for="comment">Комментарий</label>
-            <textarea name="" id="comment"></textarea>
+            <label for="transfer">Трансфер</label>
+            <input type="number" id="transfer" name="transfer" class="small-element" step="0.01">
         </div>
+
+        <div class="form-element">
+            <label for="note">Комментарий</label>
+            <textarea id="note" name="note"></textarea>
+        </div>
+
 
         <div class="form-btns">
             <input type="reset" class="form-btn-reset">
-            <input type="submit" id="submit" value="Добавить" class="form-btn-submit">
+            <input type="submit" value="Добавить" class="form-btn-submit">
         </div>
     </form>
 </section>
+</section>
+
+
 <div class="pagination">
     <ul class="pagination-list">
         {% if page > 1 %}

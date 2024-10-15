@@ -231,13 +231,13 @@ p {
 .tcol-filter-edit {
     width: 15px;
     height: 15px;
-    background: url(../img/icon-edit-button.png) center/cover no-repeat;
+    background: url(static/img/icon-edit-button.png) center/cover no-repeat;
 }
 
 .tcol-filter-delete {
     width: 15px;
     height: 15px;
-    background: url(../img/icon-delete-button.png) center/100% no-repeat;
+    background: url(static/img/icon-delete-button.png) center/100% no-repeat;
 }
 
 .tcol-filter:hover .tcol-filter-edit,

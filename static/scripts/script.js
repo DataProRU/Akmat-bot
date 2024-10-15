@@ -71,3 +71,4 @@ headers.forEach(header => {
         header.style.width = savedWidth;
     }
 });
+

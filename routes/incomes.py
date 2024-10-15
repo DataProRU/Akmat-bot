@@ -1,4 +1,6 @@
-from fastapi import Query, Request, HTTPException, Depends
+import datetime
+
+from fastapi import Query, Request, HTTPException, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
 from typing import Optional
@@ -16,6 +18,7 @@ from models import (
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -99,6 +102,7 @@ async def index(
             flight_name = routes.get(flight.flight_number, "Unknown Route")
             data.append(
                 {
+                    "id": flight_technique.id,
                     "created_at": flight_technique.created_at,
                     "flight_number": flight.id,
                     "flight_name": flight_name,
@@ -114,7 +118,6 @@ async def index(
                     "note": flight_technique.note,
                 }
             )
-
     # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
         "income.html",
@@ -207,6 +210,7 @@ async def filtered_income(
             flight_name = routes.get(flight.flight_number, "Unknown Route")
             data.append(
                 {
+                    "id": flight_technique.id,
                     "created_at": flight_technique.created_at,
                     "flight_number": flight.id,
                     "flight_name": flight_name,
@@ -264,6 +268,7 @@ async def flight_techniques_api(
                 flight_name = routes.get(flight.flight_number, "Unknown Route")
                 data.append(
                     {
+                        "id": flight_technique.id,
                         "created_at": flight_technique.created_at,
                         "flight_number": flight.id,
                         "flight_name": flight_name,
@@ -319,7 +324,7 @@ async def update_flight_technique(
         session.close()
 
 
-@router.delete("/flight_techniques/{flight_technique_id}")
+@router.post("/flight_techniques/{flight_technique_id}")
 async def delete_flight_technique(flight_technique_id: int):
     session = Session()
     try:
@@ -343,3 +348,59 @@ async def delete_flight_technique(flight_technique_id: int):
         )
     finally:
         session.close()
+
+@router.post("/submit")
+async def submit_form(
+    flight_id: int = Form(...),
+    technique_id: int = Form(...),
+    discount: float = Form(0.0),
+    prepayment: bool = Form(False),
+    price: float = Form(...),
+    payment_type_id: int = Form(...),
+    source_id: int = Form(...),
+    transfer: float = Form(0.0),
+    note: str = Form(""),
+    db: Session = Depends(get_db)
+):
+    try:
+        new_flight_technique = FlightTechniques(
+            created_at=datetime.datetime.now(),
+            flight_id=flight_id,
+            technique_id=technique_id,
+            discount=discount,
+            prepayment=prepayment,
+            price=price,
+            payment_type_id=payment_type_id,
+            source_id=source_id,
+            transfer=transfer,
+            note=note,
+        )
+        db.add(new_flight_technique)
+        db.commit()
+        return {"message": "Запись успешно добавлена"}
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}
+    finally:
+        db.close()
+
+
+@router.post("/delete_flight/")
+async def delete_flight(request: Request):
+    form_data = await request.form()
+    flight_id = form_data.get("id")
+
+    if not flight_id:
+        return JSONResponse({"status": "error", "message": "ID not provided"})
+
+    session = Session()
+    flight = session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+
+    if flight:
+        session.delete(flight)
+        session.commit()
+        session.close()
+        return JSONResponse({"status": "success"})
+
+    session.close()
+    return JSONResponse({"status": "error", "message": "Flight not found"})
