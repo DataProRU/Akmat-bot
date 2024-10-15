@@ -80,7 +80,6 @@
 {% block content %}
 <script>
 function openEditForm(data) {
-        // Установка значений в поля формы редактирования
         document.getElementById('edit-id').value = data.id;
         document.getElementById('edit-flight_id').value = data.flight_number;
         document.getElementById('edit-technique_id').value = data.technique_id;
@@ -92,11 +91,9 @@ function openEditForm(data) {
         document.getElementById('edit-transfer').value = data.transfer;
         document.getElementById('edit-note').value = data.note;
 
-        // Отображение формы
         document.getElementById('edit-form-container').style.display = 'block';
     }
 
-    // Закрытие формы редактирования
     document.querySelector('.close-edit-form-btn').addEventListener('click', function() {
         document.getElementById('edit-form-container').style.display = 'none';
     });
