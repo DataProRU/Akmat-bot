@@ -72,3 +72,11 @@ headers.forEach(header => {
     }
 });
 
+function toggleEdit(id) {
+        const editFields = document.getElementById(`edit-fields-${id}`);
+        if (editFields.style.display === 'none') {
+            editFields.style.display = 'block';
+        } else {
+            editFields.style.display = 'none';
+        }
+    }

@@ -404,3 +404,42 @@ async def delete_flight(request: Request):
 
     session.close()
     return JSONResponse({"status": "error", "message": "Flight not found"})
+
+
+@router.post("/update_flight/")
+async def update_flight(request: Request):
+    form_data = await request.form()
+    flight_id = form_data.get("id")
+
+    # Извлечение данных из формы
+    flight_number = form_data.get("flight_number")
+    technique_id = form_data.get("technique_id")
+    price = form_data.get("price")
+    discount = form_data.get("discount")
+    prepayment = form_data.get("prepayment") == "on"
+    payment_type = form_data.get("payment_type")
+    source_id = form_data.get("source_id")
+    transfer = form_data.get("transfer")
+    note = form_data.get("note")
+
+    # Обновление записи в базе данных
+    session = Session()
+    flight_technique = session.query(FlightTechniques).filter_by(id=flight_id).first()
+
+    if flight_technique:
+        flight_technique.flight_number = flight_number
+        flight_technique.technique_id = technique_id
+        flight_technique.price = price
+        flight_technique.discount = discount
+        flight_technique.prepayment = prepayment
+        flight_technique.payment_type = payment_type
+        flight_technique.source_id = source_id
+        flight_technique.transfer = transfer
+        flight_technique.note = note
+
+        session.commit()
+        session.close()
+        return JSONResponse({"status": "success"})
+
+    session.close()
+    return JSONResponse({"status": "error", "message": "Record not found"})
