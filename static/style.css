@@ -59,11 +59,12 @@ p {
 }
 
 .content-container {
+    margin-top: 65px;
     flex-grow: 1;
     background-color: #f6f9fb;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: top;
 }
 
 /*end base*/
@@ -144,7 +145,7 @@ p {
 .reset-filter {
     width: 30px;
     height: 30px;
-    background: url(../img/icon-reset-filter.png) center/cover;
+    background: url(/img/icon-reset-filter.png) center/cover;
 }
 
 .reset-filter-btn {
@@ -231,13 +232,13 @@ p {
 .tcol-filter-edit {
     width: 15px;
     height: 15px;
-    background: url(static/img/icon-edit-button.png) center/cover no-repeat;
+    background: url(/img/icon-edit-button.png) center/cover no-repeat;
 }
 
 .tcol-filter-delete {
     width: 15px;
     height: 15px;
-    background: url(static/img/icon-delete-button.png) center/100% no-repeat;
+    background: url(/img/icon-delete-button.png) center/100% no-repeat;
 }
 
 .tcol-filter:hover .tcol-filter-edit,
@@ -408,18 +409,22 @@ p {
     font-weight: bold;
 }
 
-.pagination-link.first, .pagination-link.last {
+.pagination-link.first,
+.pagination-link.last {
     font-weight: bold;
     background-color: #f1f1f1;
 }
 
-.pagination-link.prev, .pagination-link.next {
+.pagination-link.prev,
+.pagination-link.next {
     font-weight: bold;
     background-color: #f1f1f1;
 }
 
-.pagination-link.prev:hover, .pagination-link.next:hover,
-.pagination-link.first:hover, .pagination-link.last:hover {
+.pagination-link.prev:hover,
+.pagination-link.next:hover,
+.pagination-link.first:hover,
+.pagination-link.last:hover {
     background-color: #0056b3;
     color: #fff;
 }
@@ -452,4 +457,3 @@ p {
         visibility: visible;
     }
 }
-
