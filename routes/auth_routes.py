@@ -27,7 +27,6 @@ async def post_register(
 
 
 @router.get("/login", response_class=HTMLResponse)
-@router.get("/", response_class=HTMLResponse)
 async def get_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
 
@@ -43,16 +42,15 @@ async def login(
 
 
 @router.get("/welcome", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def welcome(request: Request):
-    # Получаем токен
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
+        return token
 
-    # Получаем информацию о текущем пользователе
     payload = get_current_user(token)
     if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+        return payload
 
     # Извлекаем информацию о пользователе
     username = payload.get("sub")
