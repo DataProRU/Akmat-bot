@@ -64,7 +64,7 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
 async def index(
         request: Request,
         page: int = Query(1, ge=1),
-        per_page: int = Query(10, ge=1, le=100),
+        per_page: int = Query(20, ge=1, le=100),
 ):
     # Получаем токен
     token = get_token_from_cookie(request)
