@@ -22,6 +22,8 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
+
 def get_db():
     db = Session()
     try:
@@ -29,14 +31,17 @@ def get_db():
     finally:
         db.close()
 
-def get_flight_techniques(page: int = 1, per_page: int = 10):
+
+def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = Session()
     try:
         offset = (page - 1) * per_page
         flights_techniques = (
             session.query(FlightTechniques).offset(offset).limit(per_page).all()
         )
-        total_count = session.query(FlightTechniques).count()  # Подсчёт общего числа записей
+        total_count = session.query(
+            FlightTechniques
+        ).count()  # Подсчёт общего числа записей
         total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
 
         techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
@@ -55,16 +60,17 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
             "payment_types": payment_types,
             "sources": sources,
             "total_pages": total_pages,
-            "page": page
+            "page": page,
         }
     finally:
         session.close()
 
+
 @router.get("/income", response_class=HTMLResponse)
 async def index(
-        request: Request,
-        page: int = Query(1, ge=1),
-        per_page: int = Query(10, ge=1, le=100),
+    request: Request,
+    page: int = Query(1, ge=1),
+    per_page: int = Query(10, ge=1, le=100),
 ):
     # Получаем токен
     token = get_token_from_cookie(request)
@@ -126,11 +132,18 @@ async def index(
             "data": data,
             "page": page,
             "per_page": per_page,
-            "total_pages": total_pages  # передаем общее количество страниц
+            "total_pages": total_pages,  # передаем общее количество страниц
         },
     )
 
-def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30):
+
+def get_filtered_flight_techniques(
+    day: Optional[int],
+    month: Optional[int],
+    year: Optional[int],
+    page: int = 1,
+    per_page: int = 30,
+):
     session = Session()
     try:
         offset = (page - 1) * per_page
@@ -138,11 +151,11 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
 
         # Фильтрация по дате
         if day is not None:
-            query = query.filter(extract('day', FlightTechniques.created_at) == day)
+            query = query.filter(extract("day", FlightTechniques.created_at) == day)
         if month is not None:
-            query = query.filter(extract('month', FlightTechniques.created_at) == month)
+            query = query.filter(extract("month", FlightTechniques.created_at) == month)
         if year is not None:
-            query = query.filter(extract('year', FlightTechniques.created_at) == year)
+            query = query.filter(extract("year", FlightTechniques.created_at) == year)
 
         # Пагинация
         flights_techniques = query.offset(offset).limit(per_page).all()
@@ -165,7 +178,7 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
             "payment_types": payment_types,
             "sources": sources,
             "total_pages": total_pages,
-            "page": page
+            "page": page,
         }
     finally:
         session.close()
@@ -175,8 +188,12 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
 async def filtered_income(
     request: Request,
     day: Optional[int] = Query(None),  # Параметр фильтрации по дню (может быть пустым)
-    month: Optional[int] = Query(None),  # Параметр фильтрации по месяцу (может быть пустым)
-    year: Optional[int] = Query(None),  # Параметр фильтрации по году (может быть пустым)
+    month: Optional[int] = Query(
+        None
+    ),  # Параметр фильтрации по месяцу (может быть пустым)
+    year: Optional[int] = Query(
+        None
+    ),  # Параметр фильтрации по году (может быть пустым)
     page: int = Query(1, ge=1),  # Параметр пагинации (страница)
     per_page: int = Query(30, ge=1, le=100),  # Параметр количества записей на страницу
 ):
@@ -205,7 +222,9 @@ async def filtered_income(
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
         if flight:
-            technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
+            technique_name = techniques.get(
+                flight_technique.technique_id, "Unknown Technique"
+            )
             user_name = users.get(flight.instructor_id, "Unknown User")
             flight_name = routes.get(flight.flight_number, "Unknown Route")
             data.append(
@@ -219,7 +238,9 @@ async def filtered_income(
                     "discount": flight_technique.discount,
                     "prepayment": "Yes" if flight_technique.prepayment else "No",
                     "price": flight_technique.price,
-                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Unknown Payment Type"),
+                    "payment_type": payment_types.get(
+                        flight_technique.payment_type_id, "Unknown Payment Type"
+                    ),
                     "source": sources.get(flight_technique.source_id, "Unknown Source"),
                     "note": flight_technique.note,
                 }
@@ -238,7 +259,6 @@ async def filtered_income(
     )
 
 
-
 @router.get("/api/flight_techniques")
 async def flight_techniques_api(
     request: Request,
@@ -254,9 +274,15 @@ async def flight_techniques_api(
     role = payload.get("role")
     data = []
     if role == "admin" or role == "user":
-        flights_techniques, techniques, flights, routes, users, payment_types, sources = (
-            get_flight_techniques(page, per_page)
-        )
+        (
+            flights_techniques,
+            techniques,
+            flights,
+            routes,
+            users,
+            payment_types,
+            sources,
+        ) = get_flight_techniques(page, per_page)
         data = []
         for flight_technique in flights_techniques:
             flight = flights.get(flight_technique.flight_id)
@@ -280,7 +306,9 @@ async def flight_techniques_api(
                         "payment_type": payment_types.get(
                             flight_technique.payment_type_id, "Unknown Payment Type"
                         ),
-                        "source": sources.get(flight_technique.source_id, "Unknown Source"),
+                        "source": sources.get(
+                            flight_technique.source_id, "Unknown Source"
+                        ),
                         "note": flight_technique.note,
                     }
                 )
@@ -349,6 +377,7 @@ async def delete_flight_technique(flight_technique_id: int):
     finally:
         session.close()
 
+
 @router.post("/submit")
 async def submit_form(
     flight_id: int = Form(...),
@@ -360,7 +389,7 @@ async def submit_form(
     source_id: int = Form(...),
     transfer: float = Form(0.0),
     note: str = Form(""),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     try:
         new_flight_technique = FlightTechniques(
@@ -394,7 +423,9 @@ async def delete_flight(request: Request):
         return JSONResponse({"status": "error", "message": "ID not provided"})
 
     session = Session()
-    flight = session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+    flight = (
+        session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+    )
 
     if flight:
         session.delete(flight)
