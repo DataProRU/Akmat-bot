@@ -431,31 +431,6 @@ p {
     color: white;
 }
 
-/*
-.pagination-link.first,
-.pagination-link.last {
-    font-weight: bold;
-    background-color: #f1f1f1;
-}
-
-.pagination-link.prev,
-.pagination-link.next {
-    font-weight: bold;
-    background-color: #f1f1f1;
-}
-
-.pagination-link.prev:hover,
-.pagination-link.next:hover,
-.pagination-link.first:hover,
-.pagination-link.last:hover {
-    background-color: #66ccf3;
-    color: #fff;
-}
-
-.pagination-link:active {
-    transform: translateY(0);
-}*/
-
 
 @keyframes fadeIn {
     from {
