@@ -382,8 +382,8 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-
+    padding: 5px;
+    background-color: #ffffff;
 }
 
 .pagination-text {
@@ -448,7 +448,7 @@ p {
     }
 }
 
-@media (width:1200px) {
+@media (max-width: 1200px) {
 
     .tcol-filter-edit,
     .tcol-filter-delete {
