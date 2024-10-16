@@ -67,6 +67,7 @@ class Users(Base):
     comission = Column(Boolean, default=False)
     penalty = Column(Boolean, default=False)
     is_investor = Column(Boolean, default=False)
+    change_salary= Column(Boolean, default=False)
 
 
 class Routes(Base):

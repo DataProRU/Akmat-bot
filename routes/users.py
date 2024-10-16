@@ -85,6 +85,7 @@ async def update_users(
     comission: bool = Form(False),
     penalty: bool = Form(False),
     is_investor: bool = Form(False),
+    change_salary: bool = Form(False),
 ):
     session = Session()
     try:
@@ -107,6 +108,7 @@ async def update_users(
         user.comission = comission
         user.penalty = penalty
         user.is_investor = is_investor
+        user.change_salary = change_salary
 
         session.commit()
     finally:
@@ -134,6 +136,7 @@ async def update_user(data: dict):
         user.comission = data['comission']
         user.penalty = data['penalty']
         user.is_investor = data['is_investor']
+        user.change_salary = data['change_salary']
         session.commit()
         session.close()
         return JSONResponse({"status": "success"})
@@ -186,6 +189,7 @@ async def add_user(
     comission: bool = Form(False),
     penalty: bool = Form(False),
     is_investor: bool = Form(False),
+    change_salary: bool = Form(False),
     db: Session = Depends(get_db)
 ):
     user = Users(
@@ -203,7 +207,8 @@ async def add_user(
         chat_id=chat_id,
         comission=comission,
         penalty=penalty,
-        is_investor=is_investor
+        is_investor=is_investor,
+        change_salary = change_salary
     )
 
     db.add(user)

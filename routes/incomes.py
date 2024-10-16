@@ -390,6 +390,8 @@ async def delete_flight(request: Request):
     form_data = await request.form()
     flight_id = form_data.get("id")
 
+    page = request.query_params.get("page", 1)
+
     if not flight_id:
         return JSONResponse({"status": "error", "message": "ID not provided"})
 
@@ -400,7 +402,7 @@ async def delete_flight(request: Request):
         session.delete(flight)
         session.commit()
         session.close()
-        return RedirectResponse(url="/income", status_code=303)
+        return RedirectResponse(url=f"/income?page={page}", status_code=303)
 
     session.close()
     return JSONResponse({"status": "error", "message": "Flight not found"})

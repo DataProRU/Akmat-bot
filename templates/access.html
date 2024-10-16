@@ -205,6 +205,7 @@
             <th>Commission</th>
             <th>Penalty</th>
             <th>Investor</th>
+            <th>Изменить зарплату</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -227,6 +228,7 @@
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
+             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="change_salary" {% if user.change_salary %}checked{% endif %}></td>
             <td>
                 <button onclick="saveUser({{ user.id }})">Save</button>
                 <button onclick="deleteUserTG({{ user.id }})">Delete</button>
@@ -282,6 +284,9 @@
 
         <label for="is_investor">Является ли инвестором:</label>
         <input type="checkbox" id="is_investor" name="is_investor"><br><br>
+
+         <label for="change_salary">Изменить зарплату:</label>
+        <input type="checkbox" id="change_salary" name="change_salary="><br><br>
 
         <input type="submit" value="Добавить пользователя">
     </form>
@@ -379,6 +384,7 @@ function saveUser(userId) {
         comission: row.find('input[data-field="comission"]').is(':checked'),
         penalty: row.find('input[data-field="penalty"]').is(':checked'),
         is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
+        change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
     };
 
     // Отправляем AJAX запрос для сохранения данных
@@ -417,6 +423,7 @@ function saveUser(userId) {
         comission: row.find('input[data-field="comission"]').is(':checked'),
         penalty: row.find('input[data-field="penalty"]').is(':checked'),
         is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
+        change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
     };
 
     $.ajax({
