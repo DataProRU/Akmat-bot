@@ -102,6 +102,7 @@ class FlightTechniques(Base):
     transfer = Column(Numeric)
     note = Column(Text)
     created_at = Column(DateTime)
+    is_approved  = Column(Boolean)
 
 
 class FlightTechniqueUpdate(BaseModel):
