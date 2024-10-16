@@ -9,6 +9,7 @@
         <span class="tooltip-text">Добавить запись</span>
     </div>
     <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
+
         <select name="day" id="day" class="nav-select">
             <option value="">День</option>
             <option value="1">1</option>
@@ -94,6 +95,7 @@
             }
         });
     });
+
     function openEditForm(data) {
         document.getElementById('edit-id').value = data.id;
         document.getElementById('edit-flight_id').value = data.flight_number;
