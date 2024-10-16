@@ -8,7 +8,8 @@
     <div class="add-entry-btn tooltip">✚
         <span class="tooltip-text">Добавить запись</span>
     </div>
-    <form action="/filtered-income" method="get" class="nav-form-filter">
+    <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
+
         <select name="day" id="day" class="nav-select">
             <option value="">День</option>
             <option value="1">1</option>
@@ -82,6 +83,19 @@
 
 {% block content %}
 <script>
+    document.querySelectorAll('.nav-select').forEach(select => {
+        select.addEventListener('change', function () {
+            const day = document.getElementById('day').value;
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+
+            // Проверяем, что все поля заполнены
+            if (day && month && year) {
+                document.getElementById('filter-form').submit();
+            }
+        });
+    });
+
     function openEditForm(data) {
         document.getElementById('edit-id').value = data.id;
         document.getElementById('edit-flight_id').value = data.flight_number;
@@ -342,23 +356,30 @@
 </section>
 
 
-<div class="pagination">
+<section class="pagination">
+    <p class="pagination-text">
+        Page
+        <span>{{ page }}</span>
+        of
+        <span>{{ total_pages }}</span>
+    </p>
     <ul class="pagination-list">
         {% if page > 1 %}
-        <li><a href="?page=1">&laquo; Первая</a></li>
-        <li><a href="?page={{ page - 1 }}">&lsaquo; Предыдущая</a></li>
+        <li class="pagination-item"><a href="?page=1" class="pagination-link">&laquo;</a></li>
+        <li class="pagination-item"><a href="?page={{ page - 1 }}" class="pagination-link">&lsaquo;</a></li>
         {% endif %}
 
         {% for p in range((page - 2) if page > 2 else 1, (page + 2) if page < total_pages - 1 else total_pages + 1) %}
-            <li class="{% if p == page %}active{% endif %}">
-            <a href="?page={{ p }}">{{ p }}</a>
+            <li class="{% if p == page %}active{% endif %} pagination-item">
+            <a href="?page={{ p }}" class="pagination-link">{{ p }}</a>
             </li>
             {% endfor %}
 
-            {% if page < total_pages %} <li><a href="?page={{ page + 1 }}">Следующая &rsaquo;</a></li>
-                <li><a href="?page={{ total_pages }}">Последняя &raquo;</a></li>
+            {% if page < total_pages %} <li class="pagination-item"><a href="?page={{ page + 1 }}"
+                    class="pagination-link">&rsaquo;</a></li>
+                <li class="pagination-item"><a href="?page={{ total_pages }}" class="pagination-link">&raquo;</a></li>
                 {% endif %}
     </ul>
-</div>
+</section>
 
 {% endblock %}
