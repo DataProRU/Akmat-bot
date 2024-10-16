@@ -38,7 +38,8 @@ async def get_users(request: Request, db: Session = Depends(get_db)):
         return templates.TemplateResponse("not_access.html", {"request": request})
     if exp <= 0:
         return templates.TemplateResponse("invalid_token.html", {"request": request})
-
+    if not database.is_connected:
+        await database.connect()
     # Подключение к базе данных и выбор всех пользователей
     query = web_users.select()
     users_data = await database.fetch_all(query)
@@ -60,6 +61,8 @@ async def update_user_role(user_id: int, role_update: UpdateUserRole):
         .where(web_users.c.id == user_id)
         .values(role=role_update.role)
     )
+    if not database.is_connected:
+        await database.connect()
     await database.execute(query)
     return {"message": "User role updated"}
 

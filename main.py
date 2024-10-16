@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import auth_routes, user_routes, users, incomes
+from routes import user_routes, users, incomes, auth_routes
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
