@@ -8,92 +8,80 @@
     <div class="add-entry-btn tooltip">✚
         <span class="tooltip-text">Добавить запись</span>
     </div>
-   <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
-    <select name="day" id="day" class="nav-select">
-        <option value="">День</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21">21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-        <option value="25">25</option>
-        <option value="26">26</option>
-        <option value="27">27</option>
-        <option value="28">28</option>
-        <option value="29">29</option>
-        <option value="30">30</option>
-        <option value="31">31</option>
-    </select>
+    <form action="/filtered-income" method="get" class="nav-form-filter">
+        <select name="day" id="day" class="nav-select">
+            <option value="">День</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+        </select>
 
-    <select name="month" id="month" class="nav-select">
-        <option value="">Месяц</option>
-        <option value="1">Январь</option>
-        <option value="2">Февраль</option>
-        <option value="3">Март</option>
-        <option value="4">Апрель</option>
-        <option value="5">Май</option>
-        <option value="6">Июнь</option>
-        <option value="7">Июль</option>
-        <option value="8">Август</option>
-        <option value="9">Сентябрь</option>
-        <option value="10">Октябрь</option>
-        <option value="11">Ноябрь</option>
-        <option value="12">Декабрь</option>
-    </select>
+        <select name="month" id="month" class="nav-select">
+            <option value="">Месяц</option>
+            <option value="1">Январь</option>
+            <option value="2">Февраль</option>
+            <option value="3">Март</option>
+            <option value="4">Апрель</option>
+            <option value="5">Май</option>
+            <option value="6">Июнь</option>
+            <option value="7">Июль</option>
+            <option value="8">Август</option>
+            <option value="9">Сентябрь</option>
+            <option value="10">Октябрь</option>
+            <option value="11">Ноябрь</option>
+            <option value="12">Декабрь</option>
+        </select>
 
-    <select name="year" id="year" class="nav-select">
-        <option value="">Год</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-    </select>
+        <select name="year" id="year" class="nav-select">
+            <option value="">Год</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+        </select>
 
-    <div class="reset-filter tooltip">
-        <input class="reset-filter-btn" type="reset" value=""><!--✖-->
-        <span class="tooltip-text">Сбросить фильтры</span>
-    </div>
-</form>
+        <div class="reset-filter tooltip">
+            <input class="reset-filter-btn" type="reset" value=""><!--✖-->
+            <span class="tooltip-text">Сбросить фильтры</span>
+        </div>
+    </form>
 </nav>
 {% endblock %}
 
 
 {% block content %}
 <script>
-    document.querySelectorAll('.nav-select').forEach(select => {
-        select.addEventListener('change', function() {
-            const day = document.getElementById('day').value;
-            const month = document.getElementById('month').value;
-            const year = document.getElementById('year').value;
-
-            // Проверяем, что все поля заполнены
-            if (day && month && year) {
-                document.getElementById('filter-form').submit();
-            }
-        });
-    });
     function openEditForm(data) {
         document.getElementById('edit-id').value = data.id;
         document.getElementById('edit-flight_id').value = data.flight_number;

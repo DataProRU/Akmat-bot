@@ -29,7 +29,7 @@ def get_db():
     finally:
         db.close()
 
-def get_flight_techniques(page: int = 1, per_page: int = 10):
+def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = Session()
     try:
         offset = (page - 1) * per_page
