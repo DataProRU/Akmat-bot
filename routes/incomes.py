@@ -29,7 +29,7 @@ def get_db():
     finally:
         db.close()
 
-def get_flight_techniques(page: int = 1, per_page: int = 20):
+def get_flight_techniques(page: int = 1, per_page: int = 10):
     session = Session()
     try:
         offset = (page - 1) * per_page
@@ -314,7 +314,7 @@ async def update_flight_technique(
 
         session.commit()
 
-        return {"message": "Flight technique updated successfully"}
+        return RedirectResponse(url="/income", status_code=303)
     except Exception as e:
         session.rollback()
         raise HTTPException(
@@ -340,7 +340,7 @@ async def delete_flight_technique(flight_technique_id: int):
         session.delete(flight_technique)
         session.commit()
 
-        return {"message": "Flight technique deleted successfully"}
+        return RedirectResponse(url="/income", status_code=303)
     except Exception as e:
         session.rollback()
         raise HTTPException(
@@ -377,7 +377,7 @@ async def submit_form(
         )
         db.add(new_flight_technique)
         db.commit()
-        return {"message": "Запись успешно добавлена"}
+        return RedirectResponse(url="/income", status_code=303)
     except Exception as e:
         db.rollback()
         return {"error": str(e)}
@@ -400,7 +400,7 @@ async def delete_flight(request: Request):
         session.delete(flight)
         session.commit()
         session.close()
-        return JSONResponse({"status": "success"})
+        return RedirectResponse(url="/income", status_code=303)
 
     session.close()
     return JSONResponse({"status": "error", "message": "Flight not found"})
@@ -439,7 +439,7 @@ async def update_flight(request: Request):
 
         session.commit()
         session.close()
-        return JSONResponse({"status": "success"})
+        return RedirectResponse(url="/income", status_code=303)
 
     session.close()
     return JSONResponse({"status": "error", "message": "Record not found"})
