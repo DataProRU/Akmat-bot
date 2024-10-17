@@ -70,6 +70,17 @@ p {
     align-items: center;
 }
 
+.form-checkbox {
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.form-checkbox:checked {
+    background-color: #66ccf3;
+}
+
 /*end base*/
 
 .nav-container {
