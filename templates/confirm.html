@@ -2,6 +2,61 @@
 
 {% block title %}На подтверждение{% endblock %}
 
-{% block content %}
+{% block nav %}
+<button class="form-btn-submit">Или здесь</button>
+{% endblock %}
 
+{% block content %}
+<table class="table-data" id="table-data">
+    <thead>
+        <tr class="trow-head">
+            <th class="trow-head-data">Дата<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Номер рейса<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Вид маршрута<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Вид техники<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Инструктор<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Скидка<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Предоплата<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Стоимость<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Вид оплаты<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Источник<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Примечание<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data th-filter"></th>
+        </tr>
+    </thead>
+    <tbody class="table-body" id="table-body">
+
+        <tr class="trow">
+            <td class="tcol">Паша, привет</td>
+            <td class="tcol tcol-num"></td>
+            <td class="tcol">Я очень хотела тебе помочь</td>
+            <td class="tcol">и сделала это</td>
+            <td class="tcol"></td>
+            <td class="tcol tcol-num">Если тебе это не нужно,</td>
+            <td class="tcol tcol-num">то можешь убирать,</td>
+            <td class="tcol tcol-num">оставь только</td>
+            <td class="tcol">наследование от base</td>
+            <td class="tcol"></td>
+            <td class="tcol">Хорошего дня!</td>
+            <td class="tcol"></td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+<section class="bottom">
+    <button class="form-btn-submit">Кнопку можно разместить здесь</button>
+</section>
 {% endblock %}

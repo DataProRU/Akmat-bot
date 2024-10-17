@@ -374,7 +374,7 @@ p {
 }
 
 /*pagination*/
-.pagination {
+.pagination, .bottom {
     position: fixed;
     left: 0;
     bottom: 0;
