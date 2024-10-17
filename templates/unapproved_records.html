@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Unapproved Records for {{ day }}/{{ month }}/{{ year }}{% endblock %}
+
+{% block nav %}
+<button class="welcome-bth"> <a href="/unapproved-days">Назад</a></button>
+{% endblock %}
+
+{% block content %}
+<h1>Не подтверждённые записи за {{ day }}/{{ month }}/{{ year }}</h1>
+
+<table class="table-data" id="table-data">
+    <thead>
+        <tr class="trow-head">
+            <th class="trow-head-data">Номер рейса<div class="resizer"></div></th>
+            <th class="trow-head-data">Название рейса<div class="resizer"></div></th>
+            <th class="trow-head-data">Вид техники<div class="resizer"></div></th>
+            <th class="trow-head-data">Пользователь<div class="resizer"></div></th>
+            <th class="trow-head-data">Скидка<div class="resizer"></div></th>
+            <th class="trow-head-data">Предоплата<div class="resizer"></div></th>
+            <th class="trow-head-data">Стоимость<div class="resizer"></div></th>
+            <th class="trow-head-data">Тип оплаты<div class="resizer"></div></th>
+            <th class="trow-head-data">Источник<div class="resizer"></div></th>
+            <th class="trow-head-data">Примечание<div class="resizer"></div></th>
+        </tr>
+    </thead>
+    <tbody class="table-body" id="table-body">
+        {% for record in flights_techniques %}
+            <tr class="trow">
+                <td class="tcol">{{ record.flight_number }}</td>
+                <td class="tcol">{{ record.flight_name }}</td>
+                <td class="tcol">{{ record.technique_name }}</td>
+                <td class="tcol">{{ record.user_name }}</td>
+                <td class="tcol">{{ record.discount }}</td>
+                <td class="tcol">{{ record.prepayment }}</td>
+                <td class="tcol">{{ record.price }}</td>
+                <td class="tcol">{{ record.payment_type }}</td>
+                <td class="tcol">{{ record.source }}</td>
+                <td class="tcol">{{ record.note }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<button class="form-btn-submit">Одобрить все записи</button>
+
+<!-- Пагинация -->
+<div>
+    {% if page > 1 %}
+        <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page - 1 }}&per_page={{ per_page }}">Previous</a>
+    {% endif %}
+    {% if page < total_pages %}
+        <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page + 1 }}&per_page={{ per_page }}">Next</a>
+    {% endif %}
+</div>
+{% endblock %}
