@@ -1,129 +1,149 @@
-<!--start-->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        td {
-            background-color: #786c6c;
-        }
-        button {
-            background-color: #4CAF50;
-            color: black;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #82a045;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .btn-container button {
-            margin-right: 10px;
-        }
-        /* Стиль для модального окна */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #bdb3b3;
-            width: 400px;
-            border-radius: 8px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+{% extends 'base.html' %}
+
+{% block title %}Управление пользователями{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    td {
+        background-color: #786c6c;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: black;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #82a045;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .btn-container button {
+        margin-right: 10px;
+    }
+
+    /* Стиль для модального окна */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #bdb3b3;
+        width: 400px;
+        border-radius: 8px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #5bb14d;
-        }
-        td {
-            text-align: center;
-        }
-        button {
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
-    </style>
-</head>
-<body>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #5bb14d;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    button {
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.2);
+    }
+</style>
 
 <div class="container">
     <h2>User Management</h2>
@@ -142,21 +162,21 @@
             </tr>
         </thead>
         <tbody id="userTable">
-           {% for user in users %}
+            {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>
                     <select onchange="updateUserRole({{ user.id }}, this.value)">
-                       <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
-                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                        <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
+                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
                     </select>
                 </td>
                 <td>
                     <button onclick="deleteUser({{ user.id }})">Delete</button>
                 </td>
             </tr>
-           {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -190,7 +210,7 @@
 <table id="users_table" class="display">
     <thead>
         <tr>
-             <th>ID</th>
+            <th>ID</th>
             <th>Telegram</th>
             <th>Full Name</th>
             <th>Manager</th>
@@ -216,20 +236,33 @@
             <td>{{ user.id }}</td>
             <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
             <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}"  data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_instructor" {% if user.is_instructor %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_assistant" {% if user.is_assistant %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="send_button" {% if user.send_button %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="deposit_income" {% if user.deposit_income %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="enter_operation" {% if user.enter_operation %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="view_salary" {% if user.view_salary %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="contribute_expense" {% if user.contribute_expense %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_manager" {% if user.is_manager
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_instructor" {% if user.is_instructor
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_assistant" {% if user.is_assistant
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="send_button" {% if user.send_button
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="deposit_income" {% if
+                    user.deposit_income %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="enter_operation" {% if
+                    user.enter_operation %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="view_salary" {% if user.view_salary
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="contribute_expense" {% if
+                    user.contribute_expense %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_director" {% if user.is_director
+                    %}checked{% endif %}></td>
             <td contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}</td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
-             <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="change_salary" {% if user.change_salary %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{%
+                    endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor
+                    %}checked{% endif %}></td>
+            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="change_salary" {% if user.change_salary
+                    %}checked{% endif %}></td>
             <td>
                 <button onclick="saveUser({{ user.id }})">Save</button>
                 <button onclick="deleteUserTG({{ user.id }})">Delete</button>
@@ -239,62 +272,62 @@
     </tbody>
 </table>
 <h1>Добавить нового пользователя</h1>
-    <form action="/users_tg/add" method="POST">
+<form action="/users_tg/add" method="POST">
 
-        <label for="tg">Ник в телеграм (tg):</label>
-        <input type="text" id="tg" name="tg" required><br><br>
+    <label for="tg">Ник в телеграм (tg):</label>
+    <input type="text" id="tg" name="tg" required><br><br>
 
-        <label for="full_name">Имя (full_name):</label>
-        <input type="text" id="full_name" name="full_name" required><br><br>
+    <label for="full_name">Имя (full_name):</label>
+    <input type="text" id="full_name" name="full_name" required><br><br>
 
-        <label for="is_manager">Является ли менеджером:</label>
-        <input type="checkbox" id="is_manager" name="is_manager"><br><br>
+    <label for="is_manager">Является ли менеджером:</label>
+    <input type="checkbox" id="is_manager" name="is_manager"><br><br>
 
-        <label for="is_instructor">Является ли инструктором:</label>
-        <input type="checkbox" id="is_instructor" name="is_instructor"><br><br>
+    <label for="is_instructor">Является ли инструктором:</label>
+    <input type="checkbox" id="is_instructor" name="is_instructor"><br><br>
 
-        <label for="is_assistant">Является ли ассистентом:</label>
-        <input type="checkbox" id="is_assistant" name="is_assistant"><br><br>
+    <label for="is_assistant">Является ли ассистентом:</label>
+    <input type="checkbox" id="is_assistant" name="is_assistant"><br><br>
 
-        <label for="send_button">Отправить кнопки:</label>
-        <input type="checkbox" id="send_button" name="send_button"><br><br>
+    <label for="send_button">Отправить кнопки:</label>
+    <input type="checkbox" id="send_button" name="send_button"><br><br>
 
-        <label for="deposit_income">Внести доход:</label>
-        <input type="checkbox" id="deposit_income" name="deposit_income"><br><br>
+    <label for="deposit_income">Внести доход:</label>
+    <input type="checkbox" id="deposit_income" name="deposit_income"><br><br>
 
-        <label for="enter_operation">Внести операции:</label>
-        <input type="checkbox" id="enter_operation" name="enter_operation"><br><br>
+    <label for="enter_operation">Внести операции:</label>
+    <input type="checkbox" id="enter_operation" name="enter_operation"><br><br>
 
-        <label for="view_salary">Посмотреть зарплату:</label>
-        <input type="checkbox" id="view_salary" name="view_salary"><br><br>
+    <label for="view_salary">Посмотреть зарплату:</label>
+    <input type="checkbox" id="view_salary" name="view_salary"><br><br>
 
-        <label for="contribute_expense">Внести расход:</label>
-        <input type="checkbox" id="contribute_expense" name="contribute_expense"><br><br>
+    <label for="contribute_expense">Внести расход:</label>
+    <input type="checkbox" id="contribute_expense" name="contribute_expense"><br><br>
 
-        <label for="is_director">Является ли директором:</label>
-        <input type="checkbox" id="is_director" name="is_director"><br><br>
+    <label for="is_director">Является ли директором:</label>
+    <input type="checkbox" id="is_director" name="is_director"><br><br>
 
-        <label for="chat_id">Идентификатор чата сотрудника (chat_id):</label>
-        <input type="number" id="chat_id" name="chat_id"><br><br>
+    <label for="chat_id">Идентификатор чата сотрудника (chat_id):</label>
+    <input type="number" id="chat_id" name="chat_id"><br><br>
 
-        <label for="comission">Внести комиссию:</label>
-        <input type="checkbox" id="comission" name="comission"><br><br>
+    <label for="comission">Внести комиссию:</label>
+    <input type="checkbox" id="comission" name="comission"><br><br>
 
-        <label for="penalty">Внести штраф:</label>
-        <input type="checkbox" id="penalty" name="penalty"><br><br>
+    <label for="penalty">Внести штраф:</label>
+    <input type="checkbox" id="penalty" name="penalty"><br><br>
 
-        <label for="is_investor">Является ли инвестором:</label>
-        <input type="checkbox" id="is_investor" name="is_investor"><br><br>
+    <label for="is_investor">Является ли инвестором:</label>
+    <input type="checkbox" id="is_investor" name="is_investor"><br><br>
 
-         <label for="change_salary">Изменить зарплату:</label>
-        <input type="checkbox" id="change_salary" name="change_salary="><br><br>
+    <label for="change_salary">Изменить зарплату:</label>
+    <input type="checkbox" id="change_salary" name="change_salary="><br><br>
 
-        <input type="submit" value="Добавить пользователя">
-    </form>
+    <input type="submit" value="Добавить пользователя">
+</form>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script>
- $(document).ready(function() {
+    $(document).ready(function () {
         $('#users_table').DataTable({
             paging: false,
             searching: false,
@@ -303,7 +336,7 @@
 
         loadUsers();
 
-        $('#createUserTgForm').on('submit', function(e) {
+        $('#createUserTgForm').on('submit', function (e) {
             e.preventDefault();
 
             const userData = {
@@ -317,7 +350,7 @@
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(userData),
-                success: function(response) {
+                success: function (response) {
                     if (response.status === 'success') {
                         alert('User created successfully');
                         closeModal();
@@ -329,118 +362,118 @@
             });
         });
     });
-   function openModal_tg() {
-       document.getElementById('userModal_tg').style.display = 'block';
+    function openModal_tg() {
+        document.getElementById('userModal_tg').style.display = 'block';
     }
- function closeModal_tg() {
-    document.getElementById('userModal_tg').style.display = 'none';
-}
+    function closeModal_tg() {
+        document.getElementById('userModal_tg').style.display = 'none';
+    }
 
- document.getElementById('createUserForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+    document.getElementById('createUserForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
 
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('role', role);
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('role', role);
 
-    try {
-        const response = await fetch('/register', {
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('User created successfully!');
+            } else {
+                alert(`Error: ${result.detail || 'Failed to create user'}`);
+            }
+        } catch (error) {
+            alert(`Request failed: ${error.message}`);
+        }
+    });
+
+    function saveUser(userId) {
+        const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
+
+        const userData = {
+            id: userId,
+            tg: row.find('td[data-field="tg"]').text().trim(),
+            full_name: row.find('td[data-field="full_name"]').text().trim(),
+            is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
+            is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
+            is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
+            send_button: row.find('input[data-field="send_button"]').is(':checked'),
+            deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
+            enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
+            view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
+            contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
+            is_director: row.find('input[data-field="is_director"]').is(':checked'),
+            chat_id: row.find('td[data-field="chat_id"]').text().trim(),
+            comission: row.find('input[data-field="comission"]').is(':checked'),
+            penalty: row.find('input[data-field="penalty"]').is(':checked'),
+            is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
+            change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
+        };
+
+        // Отправляем AJAX запрос для сохранения данных
+        $.ajax({
+            url: '/update_user_tg/',
             method: 'POST',
-            body: formData
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function (response) {
+                if (response.status === 'success') {
+                    alert('User updated successfully');
+                } else {
+                    alert('Error updating user');
+                }
+            }
         });
-        const result = await response.json();
-
-        if (response.ok) {
-            alert('User created successfully!');
-        } else {
-            alert(`Error: ${result.detail || 'Failed to create user'}`);
-        }
-    } catch (error) {
-        alert(`Request failed: ${error.message}`);
     }
-});
 
-function saveUser(userId) {
-    const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
+    function deleteUserTG(userId) {
+        const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
 
-    const userData = {
-        id: userId,
-        tg: row.find('td[data-field="tg"]').text().trim(),
-        full_name: row.find('td[data-field="full_name"]').text().trim(),
-        is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
-        is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
-        is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
-        send_button: row.find('input[data-field="send_button"]').is(':checked'),
-        deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
-        enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
-        view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
-        contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
-        is_director: row.find('input[data-field="is_director"]').is(':checked'),
-        chat_id: row.find('td[data-field="chat_id"]').text().trim(),
-        comission: row.find('input[data-field="comission"]').is(':checked'),
-        penalty: row.find('input[data-field="penalty"]').is(':checked'),
-        is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
-        change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
-    };
+        const userData = {
+            id: userId,
+            tg: row.find('td[data-field="tg"]').text().trim(),
+            full_name: row.find('td[data-field="full_name"]').text().trim(),
+            is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
+            is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
+            is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
+            send_button: row.find('input[data-field="send_button"]').is(':checked'),
+            deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
+            enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
+            view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
+            contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
+            is_director: row.find('input[data-field="is_director"]').is(':checked'),
+            chat_id: row.find('td[data-field="chat_id"]').text().trim(),
+            comission: row.find('input[data-field="comission"]').is(':checked'),
+            penalty: row.find('input[data-field="penalty"]').is(':checked'),
+            is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
+            change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
+        };
 
-    // Отправляем AJAX запрос для сохранения данных
-    $.ajax({
-        url: '/update_user_tg/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(userData),
-        success: function(response) {
-            if (response.status === 'success') {
-                alert('User updated successfully');
-            } else {
-                alert('Error updating user');
+        $.ajax({
+            url: '/delete_user_tg/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function (response) {
+                if (response.status === 'success') {
+                    alert('deleted updated successfully');
+                } else {
+                    alert('Error updating user');
+                }
             }
-        }
-    });
-}
-
- function deleteUserTG(userId) {
-    const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
-
-    const userData = {
-        id: userId,
-        tg: row.find('td[data-field="tg"]').text().trim(),
-        full_name: row.find('td[data-field="full_name"]').text().trim(),
-        is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
-        is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
-        is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
-        send_button: row.find('input[data-field="send_button"]').is(':checked'),
-        deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
-        enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
-        view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
-        contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
-        is_director: row.find('input[data-field="is_director"]').is(':checked'),
-        chat_id: row.find('td[data-field="chat_id"]').text().trim(),
-        comission: row.find('input[data-field="comission"]').is(':checked'),
-        penalty: row.find('input[data-field="penalty"]').is(':checked'),
-        is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
-        change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
-    };
-
-    $.ajax({
-        url: '/delete_user_tg/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(userData),
-        success: function(response) {
-            if (response.status === 'success') {
-                alert('deleted updated successfully');
-            } else {
-                alert('Error updating user');
-            }
-        }
-    });
-}
+        });
+    }
 
     async function loadUsers() {
         const response = await fetch('/users/');
@@ -493,7 +526,7 @@ function saveUser(userId) {
         document.getElementById('userModal').style.display = 'none';
     }
 
-    document.getElementById('createUserForm').addEventListener('submit', async function(e) {
+    document.getElementById('createUserForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const role = document.getElementById('role').value;
@@ -511,5 +544,4 @@ function saveUser(userId) {
     window.onload = loadUsers;
 </script>
 
-</body>
-</html>
+{% endblock %}
