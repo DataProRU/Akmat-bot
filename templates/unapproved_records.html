@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unapproved Records for {{ day }}/{{ month }}/{{ year }}</title>
+</head>
+<body>
+    <h1>Unapproved Records for {{ day }}/{{ month }}/{{ year }}</h1>
+    <ul>
+        {% for record in flights_techniques %}
+            <li>
+                Flight: {{ record.flight_number }}, Technique: {{ record.technique_name }}, Price: {{ record.price }}
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- Пагинация -->
+    <div>
+        {% if page > 1 %}
+            <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page - 1 }}&per_page={{ per_page }}">Previous</a>
+        {% endif %}
+        {% if page < total_pages %}
+            <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page + 1 }}&per_page={{ per_page }}">Next</a>
+        {% endif %}
+    </div>
+</body>
+</html>

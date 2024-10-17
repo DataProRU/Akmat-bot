@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unapproved Days</title>
+</head>
+<body>
+    <h1>Days with Unapproved Records</h1>
+    <ul>
+        {% for day in days_with_unapproved %}
+            <li>
+                <form method="get" action="/unapproved-records/">
+                    <input type="hidden" name="day" value="{{ day.day }}">
+                    <input type="hidden" name="month" value="{{ day.month }}">
+                    <input type="hidden" name="year" value="{{ day.year }}">
+                    <button type="submit">View records for {{ day.day }}/{{ day.month }}/{{ day.year }}</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

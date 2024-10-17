@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import user_routes, users, incomes, auth_routes
+from routes import user_routes, users, incomes, auth_routes, unapproved
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
@@ -9,3 +9,4 @@ app.include_router(auth_routes.router)
 app.include_router(user_routes.router)
 app.include_router(users.router)
 app.include_router(incomes.router)
+app.include_router(unapproved.router)
