@@ -382,6 +382,7 @@ p {
     transition: 0.3s;
 }
 
+/*welcome*/
 .welcome-title {
     width: 100%;
     text-align: center;
@@ -415,6 +416,17 @@ p {
     text-decoration: none;
     color: #f6f9fb;
 }
+
+
+/*access*/
+
+.small-table-container {
+    max-width: 900px;
+}
+
+
+
+
 
 /*pagination*/
 .pagination,
