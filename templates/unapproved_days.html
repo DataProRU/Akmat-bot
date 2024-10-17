@@ -9,14 +9,14 @@
     <h1>Дни с неподтверждёнными записями</h1>
     <ul>
         {% for day in days_with_unapproved %}
-            <li>
+            <ul>
                 <form method="get" action="/unapproved-records/">
                     <input type="hidden" name="day" value="{{ day.day }}">
                     <input type="hidden" name="month" value="{{ day.month }}">
                     <input type="hidden" name="year" value="{{ day.year }}">
-                    <button type="submit">View records for {{ day.day }}/{{ day.month }}/{{ day.year }}</button>
+                    <button type="submit" class="welcome-bth">Отобразить записи за {{ day.day }}/{{ day.month }}/{{ day.year }}</button>
                 </form>
-            </li>
+            </ul>
         {% endfor %}
     </ul>
 {% endblock %}

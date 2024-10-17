@@ -17,7 +17,8 @@ from models import (
 )
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
-from routes.incomes import get_filtered_flight_techniques
+from sqlalchemy import extract
+from routes.incomes import get_flight_techniques
 
 
 router = APIRouter()
@@ -29,6 +30,79 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, per_page: int, db: Session):
+    offset = (page - 1) * per_page
+
+    # Выполняем запрос для получения данных о неподтверждённых записях полётов по дате
+    flights_techniques = (
+        db.query(FlightTechniques)
+        .filter(
+            extract('day', FlightTechniques.created_at) == day,
+            extract('month', FlightTechniques.created_at) == month,
+            extract('year', FlightTechniques.created_at) == year
+        )
+        .offset(offset)
+        .limit(per_page)
+        .all()
+    )
+
+    # Подсчёт общего числа записей
+    total_count = (
+        db.query(FlightTechniques)
+        .filter(
+            extract('day', FlightTechniques.created_at) == day,
+            extract('month', FlightTechniques.created_at) == month,
+            extract('year', FlightTechniques.created_at) == year
+        )
+        .count()
+    )
+    total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
+
+    # Загружаем связанные данные
+    techniques = {tech.id: tech.title for tech in db.query(Techniques).all()}
+    flights = {flight.id: flight for flight in db.query(Flights).all()}
+    users = {user.id: user.full_name for user in db.query(Users).all()}
+    payment_types = {ptype.id: ptype.title for ptype in db.query(PaymentTypes).all()}
+    sources = {source.id: source.title for source in db.query(Sources).all()}
+
+    # Преобразуем данные о полётах и техниках
+    results = []
+    data = get_flight_techniques(page, per_page)
+    for flight_technique in flights_techniques:
+        flight = flights.get(flight_technique.flight_id)
+        if flight:
+            technique_name = techniques.get(
+                flight_technique.technique_id, "Unknown Technique"
+            )
+            user_name = users.get(flight.instructor_id, "Unknown User")
+            flight_name = data.get(flight.flight_number, "Unknown Route")
+            results.append(
+                {
+                    "id": flight_technique.id,
+                    "created_at": flight_technique.created_at,
+                    "flight_number": flight.id,
+                    "flight_name": flight_name,
+                    "technique_name": technique_name,
+                    "user_name": user_name,
+                    "discount": flight_technique.discount,
+                    "prepayment": "Yes" if flight_technique.prepayment else "No",
+                    "price": flight_technique.price,
+                    "payment_type": payment_types.get(
+                        flight_technique.payment_type_id, "Unknown Payment Type"
+                    ),
+                    "source": sources.get(flight_technique.source_id, "Unknown Source"),
+                    "note": flight_technique.note,
+                }
+        )
+
+    return {
+        "flights_techniques": results,
+        "total_pages": total_pages,
+        "page": page
+    }
+
+
 @router.get("/unapproved-days", response_class=HTMLResponse)
 async def unapproved_days(request: Request, db: Session = Depends(get_db)):
     # Получаем все уникальные даты с неподтверждёнными записями
@@ -53,8 +127,9 @@ async def unapproved_records(
     per_page: int = Query(30, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
-    # Фильтруем неподтверждённые записи по дате
-    result = get_filtered_flight_techniques(day=day, month=month, year=year, page=page, per_page=per_page)
+    # Передаем объект сессии в функцию get_filtered_flight_techniques
+    result = get_filtered_flight_techniques(day=day, month=month, year=year, page=page, per_page=per_page, db=db)
+
     flights_techniques = result["flights_techniques"]
 
     # Передаём отфильтрованные записи в шаблон

@@ -3,43 +3,30 @@
 {% block title %}Unapproved Records for {{ day }}/{{ month }}/{{ year }}{% endblock %}
 
 {% block nav %}
+<button class="welcome-bth"> <a href="/unapproved-days">Назад</a></button>
 {% endblock %}
 
 {% block content %}
-<h1>Unapproved Records for {{ day }}/{{ month }}/{{ year }}</h1>
+<h1>Не подтверждённые записи за {{ day }}/{{ month }}/{{ year }}</h1>
 
 <table class="table-data" id="table-data">
     <thead>
         <tr class="trow-head">
-             <th class="trow-head-data">Дата<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Номер рейса<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Вид маршрута<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Вид техники<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Инструктор<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Скидка<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Предоплата<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Стоимость<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Вид оплаты<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Источник<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Примечание<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-filter"></th>
+            <th class="trow-head-data">Номер рейса<div class="resizer"></div></th>
+            <th class="trow-head-data">Название рейса<div class="resizer"></div></th>
+            <th class="trow-head-data">Вид техники<div class="resizer"></div></th>
+            <th class="trow-head-data">Пользователь<div class="resizer"></div></th>
+            <th class="trow-head-data">Скидка<div class="resizer"></div></th>
+            <th class="trow-head-data">Предоплата<div class="resizer"></div></th>
+            <th class="trow-head-data">Стоимость<div class="resizer"></div></th>
+            <th class="trow-head-data">Тип оплаты<div class="resizer"></div></th>
+            <th class="trow-head-data">Источник<div class="resizer"></div></th>
+            <th class="trow-head-data">Примечание<div class="resizer"></div></th>
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
         {% for record in flights_techniques %}
             <tr class="trow">
-                <td class="tcol">{{ record.created_at }}</td>
                 <td class="tcol">{{ record.flight_number }}</td>
                 <td class="tcol">{{ record.flight_name }}</td>
                 <td class="tcol">{{ record.technique_name }}</td>
@@ -47,14 +34,16 @@
                 <td class="tcol">{{ record.discount }}</td>
                 <td class="tcol">{{ record.prepayment }}</td>
                 <td class="tcol">{{ record.price }}</td>
-                <td class="tcol">{{ record.payment_type}}</td>
-                 <td class="tcol">{{ record.source}}</td>
-                <td class="tcol">{{ record.note}}</td>
+                <td class="tcol">{{ record.payment_type }}</td>
+                <td class="tcol">{{ record.source }}</td>
+                <td class="tcol">{{ record.note }}</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
- <button class="form-btn-submit">Одобрить все записи</button>
+
+<button class="form-btn-submit">Одобрить все записи</button>
+
 <!-- Пагинация -->
 <div>
     {% if page > 1 %}
