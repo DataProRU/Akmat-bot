@@ -3,7 +3,6 @@ import datetime
 from fastapi import Query, Request, HTTPException, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
-from typing import Optional
 from sqlalchemy import extract
 from models import (
     FlightTechniques,
