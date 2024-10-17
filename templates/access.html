@@ -6,17 +6,6 @@
 
 {% block content %}
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 20px;
-    }
-
-    h2 {
-        text-align: center;
-    }
-
     .container {
         max-width: 900px;
         margin: 0 auto;
@@ -26,25 +15,19 @@
         border-radius: 8px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th,
-    td {
+    th:not([class="trow-head-data"]),
+    td:not([class="tcol"]) {
         border: 1px solid #ddd;
         padding: 10px;
         text-align: left;
     }
 
-    th {
+    th:not([class="trow-head-data"]) {
         background-color: #4CAF50;
         color: white;
     }
 
-    td {
+    td:not([class="tcol"]) {
         background-color: #786c6c;
     }
 
@@ -107,27 +90,6 @@
         cursor: pointer;
     }
 
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #5bb14d;
-    }
-
-    td {
-        text-align: center;
-    }
-
     button {
         padding: 5px 10px;
         background-color: #4CAF50;
@@ -145,41 +107,41 @@
     }
 </style>
 
-<div class="container">
-    <h2>User Management</h2>
+<section class="small-table-container">
+    <h2>Управление пользователями</h2>
     <div class="btn-container">
-        <button onclick="openModal()">Create User</button>
-        <button onclick="loadUsers()">Refresh List</button>
+        <button onclick="openModal()">Создать пользователя</button>
+        <button onclick="loadUsers()">Обновить список</button>
     </div>
 
-    <table>
+    <table class="table-data">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Actions</th>
+                <th class="trow-head-data">ID</th>
+                <th class="trow-head-data">Имя пользователя</th>
+                <th class="trow-head-data">Роль</th>
+                <th class="trow-head-data">Действия</th>
             </tr>
         </thead>
         <tbody id="userTable">
             {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>
+            <tr class="trow">
+                <td class="tcol">{{ user.id }}</td>
+                <td class="tcol">{{ user.username }}</td>
+                <td class="tcol">
                     <select onchange="updateUserRole({{ user.id }}, this.value)">
-                        <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
-                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
+                        <option value="user" {% if user.role=='user' %}selected{% endif %}>Пользователь</option>
+                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Администратор</option>
                     </select>
                 </td>
-                <td>
-                    <button onclick="deleteUser({{ user.id }})">Delete</button>
+                <td class="tcol">
+                    <button onclick="deleteUser({{ user.id }})">Удалить</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</div>
+</section>
 
 <div id="userModal" class="modal">
     <div class="modal-content">
@@ -207,7 +169,7 @@
     </div>
 </div>
 <h1>Users List</h1>
-<table id="users_table" class="display">
+<table id="users_table" class="display table-data">
     <thead>
         <tr>
             <th>ID</th>
