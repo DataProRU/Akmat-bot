@@ -163,7 +163,7 @@
                 <!-- Форма для удаления -->
                 <form action="/delete_flight/" method="post">
                     <input type="hidden" name="id" value="{{ item.id }}">
-                    <button type="submit" class="tcol-filter-delete">D</button>
+                    <button type="submit" class="tcol-filter-delete"></button>
                 </form>
                 <!-- Кнопка для редактирования -->
                 <button type="button" class="tcol-filter-edit" onclick="openEditForm({
@@ -177,7 +177,7 @@
                         source_id: '{{ item.source_id }}',
                         transfer: '{{ item.transfer }}',
                         note: '{{ item.note }}'
-                    })">E</button>
+                    })"></button>
             </td>
         </tr>
         {% endfor %}
@@ -193,19 +193,55 @@
     </div>
 
     <form action="/submit" method="POST" class="add-entry-form">
+
         <div class="form-part">
+            <div class="form-element">
+                <label for="date">Выбор даты</label>
+                <input type="date" id="date" name="date" class="middle-element">
+            </div>
+
             <div class="form-element">
                 <label for="flight_id">Номер рейса</label>
                 <input type="number" id="flight_id" name="flight_id" class="middle-element" required>
             </div>
+        </div>
 
+        <div class="form-element">
+            <label for="type-of-route">Вид маршрута</label>
+            <select name="type-of-route" id="type-of-route">
+                <option selected disabled hidden></option>
+                <option value="">Малый маршрут</option>
+                <option value="">Белые водопады</option>
+                <option value="">Софийские водопады</option>
+                <option value="">Часовой маршрут</option>
+                <option value="">Пхия</option>
+                <option value="">Бездонное Озеро</option>
+                <option value="">Смотровые Дукки</option>
+            </select>
+        </div>
+
+        <div class="form-part">
             <div class="form-element">
                 <label for="technique_id">Вид техники</label>
-                <select name="technique_id" id="technique_id" class="middle-element" required>
+                <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="1">--вид1--</option>
-                    <option value="2">--вид2--</option>
-                    <option value="3">--вид3--</option>
+                    <option value="">--вид1--</option>
+                    <option value="">--вид2--</option>
+                    <option value="">--вид3--</option>
+                </select>
+            </div>
+
+            <div class="form-element">
+                <label for="instructor">Инструктор</label>
+                <select name="instructor" id="instructor" class="middle-element">
+                    <option selected disabled hidden></option>
+                    <option value="">Ахматик</option>
+                    <option value="">Ибрашка</option>
+                    <option value="">Амир</option>
+                    <option value="">Мухаммад</option>
+                    <option value="">Ренат</option>
+                    <option value="">Назар</option>
+                    <option value="">Другой</option>
                 </select>
             </div>
         </div>
@@ -223,7 +259,7 @@
 
             <div class="form-element">
                 <label for="prepayment">Предоплата</label>
-                <input type="checkbox" id="prepayment" name="prepayment" class="small-element">
+                <input type="checkbox" id="prepayment" name="prepayment" class="form-checkbox">
             </div>
         </div>
 
@@ -251,11 +287,6 @@
                     <option value="5">Агенты</option>
                 </select>
             </div>
-        </div>
-
-        <div class="form-element">
-            <label for="transfer">Трансфер</label>
-            <input type="number" id="transfer" name="transfer" class="small-element" step="0.01">
         </div>
 
         <div class="form-element">
