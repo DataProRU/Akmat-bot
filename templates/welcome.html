@@ -3,48 +3,19 @@
 {% block title %}Добро пожаловать{% endblock %}
 
 {% block nav %}
-<h2 class="title-welcome">Добро пожаловать {{ username }}</h2>
+<h2 class="welcome-title">Добро пожаловать {{ username }}</h2>
 {% endblock %}
 
 {% block content %}
-<style>
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
 
-    button {
-        width: 200px;
-        /* Фиксированная ширина для кнопок */
-        margin: 10px 0;
-        padding: 10px;
-        font-size: 16px;
-        color: #fff;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-
-    a {
-        color: #fff;
-        text-decoration: none;
-    }
-</style>
-
-<div class="button-container">
-    <button> <a href="/confirm"> На подтверждение </a> </button>
-    <button> <a href="/income">Доходы</a></button>
-    {% if role == 'admin' %}
-    <button><a href="/users/">Доступ</a></button>
-    {% endif %}
-    <button>Справочник</button>
-</div>
+<section class="welcome-section">
+    <div class="welcome-btn-container">
+        <button class="welcome-bth"> <a href="/confirm"> На подтверждение </a> </button>
+        <button class="welcome-bth"> <a href="/income">Доходы</a></button>
+        {% if role == 'admin' %}
+        <button class="welcome-bth"><a href="/users/">Доступ</a></button>
+        {% endif %}
+        <button class="welcome-bth">Справочник</button>
+    </div>
+</section>
 {% endblock %}
