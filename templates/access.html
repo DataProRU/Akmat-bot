@@ -6,31 +6,6 @@
 
 {% block content %}
 <style>
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-
-    th:not([class="trow-head-data"]),
-    td:not([class="tcol"]) {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th:not([class="trow-head-data"]) {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    td:not([class="tcol"]) {
-        background-color: #786c6c;
-    }
-
     button {
         background-color: #4CAF50;
         color: black;
@@ -89,22 +64,6 @@
         text-decoration: none;
         cursor: pointer;
     }
-
-    button {
-        padding: 5px 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    input[type="checkbox"] {
-        transform: scale(1.2);
-    }
 </style>
 
 <section class="small-table-container">
@@ -146,86 +105,88 @@
 <div id="userModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h3>Create New User</h3>
+        <h3>Создать нового пользователя</h3>
         <form id="createUserForm">
-            <label for="username">Username:</label>
+            <label for="username">Имя пользователя:</label>
             <input type="text" id="username" name="username" required>
 
             <p>
-                <label for="password">Password:</label>
+                <label for="password">Пароль:</label>
                 <input type="text" id="password" name="password" required>
             </p>
 
             <br><br>
-            <label for="role">Role:</label>
+            <label for="role">Роль:</label>
             <select id="role" name="role">
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
             </select>
 
             <br><br>
-            <button type="submit">Create</button>
+            <button type="submit">Создать</button>
         </form>
     </div>
 </div>
-<h1>Users List</h1>
+<h2>Список пользователей</h2>
 <table id="users_table" class="display table-data">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Telegram</th>
-            <th>Full Name</th>
-            <th>Manager</th>
-            <th>Instructor</th>
-            <th>Assistant</th>
-            <th>Send Button</th>
-            <th>Deposit Income</th>
-            <th>Enter Operation</th>
-            <th>View Salary</th>
-            <th>Contribute Expense</th>
-            <th>Director</th>
-            <th>Chat ID</th>
-            <th>Commission</th>
-            <th>Penalty</th>
-            <th>Investor</th>
-            <th>Изменить зарплату</th>
-            <th>Actions</th>
+            <th class="trow-head-data">ID</th>
+            <th class="trow-head-data">Telegram</th>
+            <th class="trow-head-data">Имя</th>
+            <th class="trow-head-data">Менеджер</th>
+            <th class="trow-head-data">Инструктор</th>
+            <th class="trow-head-data">Ассистент</th>
+            <th class="trow-head-data">Send Button</th>
+            <th class="trow-head-data">Deposit Income</th>
+            <th class="trow-head-data">Enter Operation</th>
+            <th class="trow-head-data">View Salary</th>
+            <th class="trow-head-data">Contribute Expense</th>
+            <th class="trow-head-data">Директор</th>
+            <th class="trow-head-data">Chat ID</th>
+            <th class="trow-head-data">Commission</th>
+            <th class="trow-head-data">Штрафы</th>
+            <th class="trow-head-data">Инвестор</th>
+            <th class="trow-head-data">Изменить зарплату</th>
+            <th class="trow-head-data">Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for user in users_tg %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
-            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{ user.full_name }}</td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_manager" {% if user.is_manager
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_instructor" {% if user.is_instructor
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_assistant" {% if user.is_assistant
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="send_button" {% if user.send_button
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="deposit_income" {% if
-                    user.deposit_income %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="enter_operation" {% if
-                    user.enter_operation %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="view_salary" {% if user.view_salary
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="contribute_expense" {% if
-                    user.contribute_expense %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_director" {% if user.is_director
-                    %}checked{% endif %}></td>
-            <td contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}</td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="comission" {% if user.comission
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="penalty" {% if user.penalty %}checked{%
-                    endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="is_investor" {% if user.is_investor
-                    %}checked{% endif %}></td>
-            <td><input type="checkbox" data-user-id="{{ user.id }}" data-field="change_salary" {% if user.change_salary
-                    %}checked{% endif %}></td>
-            <td>
+        <tr class="trow">
+            <td class="tcol">{{ user.id }}</td>
+            <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
+            <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{
+                user.full_name }}</td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="is_instructor" {% if user.is_instructor %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="is_assistant" {% if user.is_assistant %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="send_button" {% if user.send_button %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="deposit_income" {% if user.deposit_income %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="enter_operation" {% if user.enter_operation %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="view_salary" {% if user.view_salary %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="contribute_expense" {% if user.contribute_expense %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
+            <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{ user.chat_id }}
+            </td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="comission" {% if user.comission %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
+            <td class="tcol"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                    data-field="change_salary" {% if user.change_salary %}checked{% endif %}></td>
+            <td class="tcol">
                 <button onclick="saveUser({{ user.id }})">Save</button>
                 <button onclick="deleteUserTG({{ user.id }})">Delete</button>
             </td>
