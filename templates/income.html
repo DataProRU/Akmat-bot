@@ -210,13 +210,9 @@
             <label for="type-of-route">Вид маршрута</label>
             <select name="type-of-route" id="type-of-route">
                 <option selected disabled hidden></option>
-                <option value="">Малый маршрут</option>
-                <option value="">Белые водопады</option>
-                <option value="">Софийские водопады</option>
-                <option value="">Часовой маршрут</option>
-                <option value="">Пхия</option>
-                <option value="">Бездонное Озеро</option>
-                <option value="">Смотровые Дукки</option>
+                {% for route_id, route_name in routes.items() %}
+    <option value="{{ route_id }}">{{ route_name }}</option>
+{% endfor %}
             </select>
         </div>
 
@@ -225,25 +221,21 @@
                 <label for="technique_id">Вид техники</label>
                 <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="1">--вид1--</option>
-                    <option value="2">--вид2--</option>
-                    <option value="3">--вид3--</option>
+              {% for technique_id, technique_name in techniques.items() %}
+    <option value="{{ technique_id }}">{{ technique_name }}</option>
+{% endfor %}
                 </select>
             </div>
 
             <div class="form-element">
-                <label for="instructor">Инструктор</label>
-                <select name="instructor" id="instructor" class="middle-element">
-                    <option selected disabled hidden></option>
-                    <option value="">Ахматик</option>
-                    <option value="">Ибрашка</option>
-                    <option value="">Амир</option>
-                    <option value="">Мухаммад</option>
-                    <option value="">Ренат</option>
-                    <option value="">Назар</option>
-                    <option value="">Другой</option>
-                </select>
-            </div>
+            <label for="instructor">Инструктор</label>
+            <select name="instructor" id="instructor" class="middle-element">
+                <option selected disabled hidden></option>
+                {% for user_id, user_name in users.items() %}
+                    <option value="{{ user_id }}">{{ user_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         </div>
 
         <div class="form-part">
@@ -268,11 +260,9 @@
                 <label for="payment_type_id">Вид оплаты</label>
                 <select name="payment_type_id" id="payment_type_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="1">QR</option>
-                    <option value="2">Наличные</option>
-                    <option value="3">Перевод</option>
-                    <option value="4">Постоплата</option>
-                    <option value="5">Безнал</option>
+                    {% for pay_id, pay_name in payment_types.items() %}
+                    <option value="{{ pay_id }}">{{ pay_name }}</option>
+                {% endfor %}
                 </select>
             </div>
 
