@@ -142,3 +142,23 @@ async def unapproved_records(
         "per_page": per_page,
         "total_pages": result["total_pages"]
     })
+
+@router.post("/approve-all", response_class=RedirectResponse)
+async def approve_all_records(
+    day: int = Form(...),
+    month: int = Form(...),
+    year: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    # Обновляем все записи, соответствующие указанной дате
+    db.query(FlightTechniques).filter(
+        extract('day', FlightTechniques.created_at) == day,
+        extract('month', FlightTechniques.created_at) == month,
+        extract('year', FlightTechniques.created_at) == year
+    ).update({"is_approved": True})
+
+    # Сохраняем изменения
+    db.commit()
+
+    # Перенаправляем обратно на страницу с неподтверждёнными записями
+    return RedirectResponse(url=f"/unapproved-days", status_code=303)
