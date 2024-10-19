@@ -1,6 +1,7 @@
 const buttonOpen = document.querySelector('.add-entry-btn');
 const formAdd = document.querySelector('#add-form-container');
 const buttonClose = document.querySelector('.close-form-btn');
+const formEdit = document.querySelector('#edit-form-container');
 
 //открыть форму для добавления записи
 buttonOpen.addEventListener('click', () => {
@@ -10,6 +11,18 @@ buttonOpen.addEventListener('click', () => {
 //закрыть форму для добавлеиия записи
 buttonClose.addEventListener('click', () => {
     formAdd.classList.remove('open');
+});
+
+//открыть форму для редактирования записи
+var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
+
+btnsEditIncome.forEach(function (elem) {
+    elem.addEventListener('click', () => {
+        console.log("Hello")
+        formEdit.classList.add('open');
+        let trEdit = elem.parentNode.parentNode;
+        trEdit.append(formEdit);
+    });
 });
 
 var tableBody = document.querySelector('#table-body');
@@ -73,10 +86,10 @@ headers.forEach(header => {
 });
 
 function toggleEdit(id) {
-        const editFields = document.getElementById(`edit-fields-${id}`);
-        if (editFields.style.display === 'none') {
-            editFields.style.display = 'block';
-        } else {
-            editFields.style.display = 'none';
-        }
+    const editFields = document.getElementById(`edit-fields-${id}`);
+    if (editFields.style.display === 'none') {
+        editFields.style.display = 'block';
+    } else {
+        editFields.style.display = 'none';
     }
+}
