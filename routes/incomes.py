@@ -126,7 +126,12 @@ async def index(
             "data": data,
             "page": page,
             "per_page": per_page,
-            "total_pages": total_pages  # передаем общее количество страниц
+            "total_pages": total_pages,
+            "users": users,
+            "techniques": techniques,
+            "payment_types": payment_types,
+            "sources": sources,
+            "routes": routes,
         },
     )
 
@@ -234,6 +239,7 @@ async def filtered_income(
             "page": page,
             "per_page": per_page,
             "total_pages": total_pages,
+            "techniques": techniques,
         },
     )
 
