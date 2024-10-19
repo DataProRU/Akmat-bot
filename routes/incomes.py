@@ -359,12 +359,12 @@ async def delete_flight_technique(flight_technique_id: int):
 async def submit_form(
     flight_id: int = Form(...),
     technique_id: int = Form(...),
-    discount: float = Form(0.0),
+    discount: float = Form(0),
     prepayment: bool = Form(False),
     price: float = Form(...),
     payment_type_id: int = Form(...),
     source_id: int = Form(...),
-    transfer: float = Form(0.0),
+    transfer: float = Form(0),
     note: str = Form(""),
     db: Session = Depends(get_db)
 ):
