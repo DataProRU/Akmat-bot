@@ -106,6 +106,7 @@ p {
 
 .add-entry-btn:hover,
 .form-btn-submit:hover,
+.form-btn-edit:hover,
 .welcome-bth:hover {
     background-color: #4e9dbb;
     color: #fffff8;
@@ -397,7 +398,21 @@ p {
 }
 
 .edit-entry-form {
+    height: 100%;
     display: flex;
+    justify-content: space-between;
+}
+
+.form-btn-edit {
+    height: 100%;
+    border: none;
+    line-height: 29px;
+    border-radius: 3px;
+    font-weight: 500;
+    color: #f6f9fb;
+    cursor: pointer;
+    background-color: #66ccf3;
+    box-shadow: 1px 1px 6px #b0b6b950;
 }
 
 /*welcome*/

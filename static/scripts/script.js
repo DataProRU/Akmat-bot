@@ -16,41 +16,31 @@ buttonClose.addEventListener('click', () => {
 //открыть форму для редактирования записи
 var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
 
-btnsEditIncome.forEach(function (elem) {
-    elem.addEventListener('click', () => {
-        console.log("Hello")
-        formEdit.classList.add('open');
-        let trEdit = elem.parentNode.parentNode;
+btnsEditIncome.forEach(function (btnEdit) {
+    btnEdit.addEventListener('click', () => {
+        let trEdit = btnEdit.parentNode.parentNode;
         trEdit.append(formEdit);
-        /*openEditForm({
-            id: '{{ item.id }}',
-            flight_number: '{{ item.flight_number }}',
-            technique_id: '{{ item.technique_id }}',
-            price: '{{ item.price }}',
-            discount: '{{ item.discount }}',
-            prepayment: '{{ item.prepayment }}',
-            payment_type: '{{ item.payment_type }}',
-            source_id: '{{ item.source_id }}',
-            transfer: '{{ item.transfer }}',
-            note: '{{ item.note }}'
-        })*/
+        const data = trEdit.children;
+        console.log(data)
+        fillEditForm(data);
+        formEdit.classList.add('open');
     });
 });
 
 //заполнить форму для редактирования записи
 function fillEditForm(data) {
-    document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-date').value = None;
-    document.getElementById('edit-flight_id').value = data.flight_number;
-    document.getElementById('edit-type-of-route').value = None;
-    document.getElementById('edit-technique_id').value = data.technique_id;
-    document.getElementById('edit-instructor').value = None;
-    document.getElementById('edit-discount').value = data.discount;
-    document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
-    document.getElementById('edit-price').value = data.price;
-    document.getElementById('edit-payment_type').value = data.payment_type;
-    document.getElementById('edit-source_id').value = data.source_id;
-    document.getElementById('edit-note').value = data.note;
+    //document.getElementById('edit-id').value = None;
+    document.getElementById('edit-date').value = data[0].innerHTML;
+    document.getElementById('edit-flight_id').value = data[1].innerHTML;
+    document.getElementById('edit-type-of-route').value = data[2].value;
+    document.getElementById('edit-technique_id').value = data[3].value;
+    document.getElementById('edit-instructor').value = data[4].value;
+    document.getElementById('edit-discount').value = data[5].innerHTML;
+    //document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
+    document.getElementById('edit-price').value = data[7].innerHTML;
+    document.getElementById('edit-payment_type').value = data[8].value;
+    document.getElementById('edit-source_id').value = data[9].value;
+    document.getElementById('edit-note').value = data[10].innerHTML;
 };
 
 var tableBody = document.querySelector('#table-body');

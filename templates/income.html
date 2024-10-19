@@ -193,13 +193,13 @@
             <label for="type-of-route">Вид маршрута</label>
             <select name="type-of-route" id="type-of-route">
                 <option selected disabled hidden></option>
-                <option value="">Малый маршрут</option>
-                <option value="">Белые водопады</option>
-                <option value="">Софийские водопады</option>
-                <option value="">Часовой маршрут</option>
-                <option value="">Пхия</option>
-                <option value="">Бездонное Озеро</option>
-                <option value="">Смотровые Дукки</option>
+                <option value="1">Малый маршрут</option>
+                <option value="2">Белые водопады</option>
+                <option value="3">Софийские водопады</option>
+                <option value="4">Часовой маршрут</option>
+                <option value="5">Пхия</option>
+                <option value="6">Бездонное Озеро</option>
+                <option value="7">Смотровые Дукки</option>
             </select>
         </div>
 
@@ -218,13 +218,13 @@
                 <label for="instructor">Инструктор</label>
                 <select name="instructor" id="instructor" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="">Ахматик</option>
-                    <option value="">Ибрашка</option>
-                    <option value="">Амир</option>
-                    <option value="">Мухаммад</option>
-                    <option value="">Ренат</option>
-                    <option value="">Назар</option>
-                    <option value="">Другой</option>
+                    <option value="1">Ахматик</option>
+                    <option value="2">Ибрашка</option>
+                    <option value="3">Амир</option>
+                    <option value="4">Мухаммад</option>
+                    <option value="5">Ренат</option>
+                    <option value="6">Назар</option>
+                    <option value="7">Другой</option>
                 </select>
             </div>
         </div>
@@ -289,44 +289,45 @@
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 
-        <input type="date" id="edit-date" name="" class="middle-element">
-        <input type="number" id="edit-flight_id" name="flight_number" class="middle-element" required>
+        <input type="date" id="edit-date" name="" class="">
+        <input type="number" id="edit-flight_id" name="flight_number" class="" required>
 
         <select name="type-of-route" id="edit-type-of-route">
             <option selected disabled hidden></option>
-            <option value="">Малый маршрут</option>
-            <option value="">Белые водопады</option>
-            <option value="">Софийские водопады</option>
-            <option value="">Часовой маршрут</option>
-            <option value="">Пхия</option>
-            <option value="">Бездонное Озеро</option>
-            <option value="">Смотровые Дукки</option>
+            <option value="1">Малый маршрут</option>
+            <option value="2">Белые водопады</option>
+            <option value="3">Софийские водопады</option>
+            <option value="4">Часовой маршрут</option>
+            <option value="5">Пхия</option>
+            <option value="6">Бездонное Озеро</option>
+            <option value="7">Смотровые Дукки</option>
         </select>
 
-        <select name="technique_id" id="edit-technique_id" class="middle-element" required>
+        <select name="technique_id" id="edit-technique_id" class="" required>
+            <option selected disabled hidden></option>
             <option value="1">--вид1--</option>
             <option value="2">--вид2--</option>
             <option value="3">--вид3--</option>
         </select>
 
-        <select name="edit-instructor" id="edit-instructor" class="middle-element">
+        <select name="edit-instructor" id="edit-instructor" class="">
             <option selected disabled hidden></option>
-            <option value="">Ахматик</option>
-            <option value="">Ибрашка</option>
-            <option value="">Амир</option>
-            <option value="">Мухаммад</option>
-            <option value="">Ренат</option>
-            <option value="">Назар</option>
-            <option value="">Другой</option>
+            <option value="1">Ахматик</option>
+            <option value="2">Ибрашка</option>
+            <option value="4">Амир</option>
+            <option value="5">Мухаммад</option>
+            <option value="6">Ренат</option>
+            <option value="7">Назар</option>
+            <option value="8">Другой</option>
         </select>
 
-        <input type="number" id="edit-discount" name="discount" class="small-element" step="0.01">
+        <input type="number" id="edit-discount" name="discount" class="" step="0.01">
 
         <input type="checkbox" id="edit-prepayment" name="prepayment">
 
-        <input type="number" id="edit-price" name="price" class="small-element" step="0.01" required>
+        <input type="number" id="edit-price" name="price" class="" step="0.01" required>
 
-        <select name="payment_type" id="edit-payment_type" class="middle-element" required>
+        <select name="payment_type" id="edit-payment_type" class="" required>
             <option value="QR">QR</option>
             <option value="Наличные">Наличные</option>
             <option value="Перевод">Перевод</option>
@@ -334,7 +335,7 @@
             <option value="Безнал">Безнал</option>
         </select>
 
-        <select name="source_id" id="edit-source_id" class="middle-element" required>
+        <select name="source_id" id="edit-source_id" class="" required>
             <option value="1">Интернет</option>
             <option value="2">Поляна</option>
             <option value="3">Инфо офис</option>
@@ -344,7 +345,7 @@
 
         <input id="edit-note" name="note">
 
-        <input type="submit" value="Сохранить изменения" class="form-btn-submit">
+        <input type="submit" value="Сохранить изменения" class="form-btn-edit">
 
     </form>
 </section>
