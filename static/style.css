@@ -394,7 +394,6 @@ p {
 
 #edit-form-container.open {
     display: block;
-    animation: appForm 0.4s linear 0s 1 normal both;
 }
 
 .edit-entry-form {

@@ -22,8 +22,36 @@ btnsEditIncome.forEach(function (elem) {
         formEdit.classList.add('open');
         let trEdit = elem.parentNode.parentNode;
         trEdit.append(formEdit);
+        /*openEditForm({
+            id: '{{ item.id }}',
+            flight_number: '{{ item.flight_number }}',
+            technique_id: '{{ item.technique_id }}',
+            price: '{{ item.price }}',
+            discount: '{{ item.discount }}',
+            prepayment: '{{ item.prepayment }}',
+            payment_type: '{{ item.payment_type }}',
+            source_id: '{{ item.source_id }}',
+            transfer: '{{ item.transfer }}',
+            note: '{{ item.note }}'
+        })*/
     });
 });
+
+//заполнить форму для редактирования записи
+function fillEditForm(data) {
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('edit-date').value = None;
+    document.getElementById('edit-flight_id').value = data.flight_number;
+    document.getElementById('edit-type-of-route').value = None;
+    document.getElementById('edit-technique_id').value = data.technique_id;
+    document.getElementById('edit-instructor').value = None;
+    document.getElementById('edit-discount').value = data.discount;
+    document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
+    document.getElementById('edit-price').value = data.price;
+    document.getElementById('edit-payment_type').value = data.payment_type;
+    document.getElementById('edit-source_id').value = data.source_id;
+    document.getElementById('edit-note').value = data.note;
+};
 
 var tableBody = document.querySelector('#table-body');
 const butttonAddOrder = document.querySelector('#submit');
