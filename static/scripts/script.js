@@ -1,6 +1,7 @@
 const buttonOpen = document.querySelector('.add-entry-btn');
 const formAdd = document.querySelector('#add-form-container');
 const buttonClose = document.querySelector('.close-form-btn');
+const formEdit = document.querySelector('#edit-form-container');
 
 //открыть форму для добавления записи
 buttonOpen.addEventListener('click', () => {
@@ -11,6 +12,35 @@ buttonOpen.addEventListener('click', () => {
 buttonClose.addEventListener('click', () => {
     formAdd.classList.remove('open');
 });
+
+//открыть форму для редактирования записи
+var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
+
+btnsEditIncome.forEach(function (btnEdit) {
+    btnEdit.addEventListener('click', () => {
+        let trEdit = btnEdit.parentNode.parentNode;
+        trEdit.append(formEdit);
+        //const data = trEdit.children;
+        //console.log(data)
+        formEdit.classList.add('open');
+    });
+});
+
+//заполнить форму для редактирования записи
+function fillEditForm(data) {
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('edit-date').value = 0 //data.;
+    document.getElementById('edit-flight_id').value = data.flight_number;
+    document.getElementById('edit-type-of-route').value = 0 //data.;
+    document.getElementById('edit-technique_id').value = data.technique_id;
+    document.getElementById('edit-instructor').value = 0 //data.;
+    document.getElementById('edit-discount').value = data.discount;
+    document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
+    document.getElementById('edit-price').value = data.price;
+    document.getElementById('edit-payment_type').value = data.payment_type;
+    document.getElementById('edit-source_id').value = data.source_id;
+    document.getElementById('edit-note').value = data.note;
+};
 
 var tableBody = document.querySelector('#table-body');
 const butttonAddOrder = document.querySelector('#submit');
@@ -73,10 +103,10 @@ headers.forEach(header => {
 });
 
 function toggleEdit(id) {
-        const editFields = document.getElementById(`edit-fields-${id}`);
-        if (editFields.style.display === 'none') {
-            editFields.style.display = 'block';
-        } else {
-            editFields.style.display = 'none';
-        }
+    const editFields = document.getElementById(`edit-fields-${id}`);
+    if (editFields.style.display === 'none') {
+        editFields.style.display = 'block';
+    } else {
+        editFields.style.display = 'none';
     }
+}

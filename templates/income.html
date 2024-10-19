@@ -96,24 +96,6 @@
         });
     });
 
-    function openEditForm(data) {
-        document.getElementById('edit-id').value = data.id;
-        document.getElementById('edit-flight_id').value = data.flight_number;
-        document.getElementById('edit-technique_id').value = data.technique_id;
-        document.getElementById('edit-price').value = data.price;
-        document.getElementById('edit-discount').value = data.discount;
-        document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
-        document.getElementById('edit-payment_type').value = data.payment_type;
-        document.getElementById('edit-source_id').value = data.source_id;
-        document.getElementById('edit-transfer').value = data.transfer;
-        document.getElementById('edit-note').value = data.note;
-
-        document.getElementById('edit-form-container').style.display = 'block';
-    }
-
-    document.querySelector('.close-edit-form-btn').addEventListener('click', function () {
-        document.getElementById('edit-form-container').style.display = 'none';
-    });
 </script>
 <table class="table-data" id="table-data">
     <thead>
@@ -160,24 +142,24 @@
 
             <!-- Здесь кнопки редактирования и удаления -->
             <td class="tcol tcol-filter">
+                <!-- Кнопка для редактирования -->
+                <button type="button" class="tcol-filter-edit" onclick="fillEditForm({
+                    id: '{{ item.id }}',
+                    flight_number: '{{ item.flight_number }}',
+                    technique_id: '{{ item.technique_id }}',
+                    price: '{{ item.price }}',
+                    discount: '{{ item.discount }}',
+                    prepayment: '{{ item.prepayment }}',
+                    payment_type: '{{ item.payment_type }}',
+                    source_id: '{{ item.source_id }}',
+                    transfer: '{{ item.transfer }}',
+                    note: '{{ item.note }}'
+                })"></button>
                 <!-- Форма для удаления -->
                 <form action="/delete_flight/" method="post">
                     <input type="hidden" name="id" value="{{ item.id }}">
                     <button type="submit" class="tcol-filter-delete"></button>
                 </form>
-                <!-- Кнопка для редактирования -->
-                <button type="button" class="tcol-filter-edit" onclick="openEditForm({
-                        id: '{{ item.id }}',
-                        flight_number: '{{ item.flight_number }}',
-                        technique_id: '{{ item.technique_id }}',
-                        price: '{{ item.price }}',
-                        discount: '{{ item.discount }}',
-                        prepayment: '{{ item.prepayment }}',
-                        payment_type: '{{ item.payment_type }}',
-                        source_id: '{{ item.source_id }}',
-                        transfer: '{{ item.transfer }}',
-                        note: '{{ item.note }}'
-                    })"></button>
             </td>
         </tr>
         {% endfor %}
@@ -210,9 +192,13 @@
             <label for="type-of-route">Вид маршрута</label>
             <select name="type-of-route" id="type-of-route">
                 <option selected disabled hidden></option>
-                {% for route_id, route_name in routes.items() %}
-    <option value="{{ route_id }}">{{ route_name }}</option>
-{% endfor %}
+                <option value="1">Малый маршрут</option>
+                <option value="2">Белые водопады</option>
+                <option value="3">Софийские водопады</option>
+                <option value="4">Часовой маршрут</option>
+                <option value="5">Пхия</option>
+                <option value="6">Бездонное Озеро</option>
+                <option value="7">Смотровые Дукки</option>
             </select>
         </div>
 
@@ -221,21 +207,25 @@
                 <label for="technique_id">Вид техники</label>
                 <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-              {% for technique_id, technique_name in techniques.items() %}
-    <option value="{{ technique_id }}">{{ technique_name }}</option>
-{% endfor %}
+                    <option value="1">--вид1--</option>
+                    <option value="2">--вид2--</option>
+                    <option value="3">--вид3--</option>
                 </select>
             </div>
 
             <div class="form-element">
-            <label for="instructor">Инструктор</label>
-            <select name="instructor" id="instructor" class="middle-element">
-                <option selected disabled hidden></option>
-                {% for user_id, user_name in users.items() %}
-                    <option value="{{ user_id }}">{{ user_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+                <label for="instructor">Инструктор</label>
+                <select name="instructor" id="instructor" class="middle-element">
+                    <option selected disabled hidden></option>
+                    <option value="1">Ахматик</option>
+                    <option value="2">Ибрашка</option>
+                    <option value="3">Амир</option>
+                    <option value="4">Мухаммад</option>
+                    <option value="5">Ренат</option>
+                    <option value="6">Назар</option>
+                    <option value="7">Другой</option>
+                </select>
+            </div>
         </div>
 
         <div class="form-part">
@@ -260,9 +250,11 @@
                 <label for="payment_type_id">Вид оплаты</label>
                 <select name="payment_type_id" id="payment_type_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    {% for pay_id, pay_name in payment_types.items() %}
-                    <option value="{{ pay_id }}">{{ pay_name }}</option>
-                {% endfor %}
+                    <option value="1">QR</option>
+                    <option value="2">Наличные</option>
+                    <option value="3">Перевод</option>
+                    <option value="4">Постоплата</option>
+                    <option value="5">Безнал</option>
                 </select>
             </div>
 
@@ -291,91 +283,72 @@
         </div>
     </form>
 </section>
-</section>
 
-<section id="edit-form-container" style="display: none;">
-    <div class="form-header">
-        <h2 class="form-title">Редактирование записи</h2>
-        <button class="close-edit-form-btn">✖</button>
-    </div>
-
+<section id="edit-form-container">
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
-        <input type="hidden" id="edit-id" name="id">
+        <input type="hidden" id="edit-id" name="id" >
 
-        <div class="form-part">
-            <div class="form-element">
-                <label for="edit-flight_id">Номер рейса</label>
-                <input type="number" id="edit-flight_id" name="flight_number" class="middle-element" required>
-            </div>
+        <input type="date" id="edit-date" name="date" class="">
+        <input type="number" id="edit-flight_id" name="flight_number" class="" required>
 
-            <div class="form-element">
-                <label for="edit-technique_id">Вид техники</label>
-                <select name="technique_id" id="edit-technique_id" class="middle-element" required>
-                    <option value="1">--вид1--</option>
-                    <option value="2">--вид2--</option>
-                    <option value="3">--вид3--</option>
-                </select>
-            </div>
-        </div>
+        <select name="type-of-route" id="edit-type-of-route">
+            <option selected disabled hidden></option>
+            <option value="1">Малый маршрут</option>
+            <option value="2">Белые водопады</option>
+            <option value="3">Софийские водопады</option>
+            <option value="4">Часовой маршрут</option>
+            <option value="5">Пхия</option>
+            <option value="6">Бездонное Озеро</option>
+            <option value="7">Смотровые Дукки</option>
+        </select>
 
-        <div class="form-part">
-            <div class="form-element">
-                <label for="edit-price">Стоимость</label>
-                <input type="number" id="edit-price" name="price" class="small-element" step="0.01" required>
-            </div>
+        <select name="technique_id" id="edit-technique_id" class="" required>
+            <option selected disabled hidden></option>
+            <option value="1">--вид1--</option>
+            <option value="2">--вид2--</option>
+            <option value="3">--вид3--</option>
+        </select>
 
-            <div class="form-element">
-                <label for="edit-discount">Скидка</label>
-                <input type="number" id="edit-discount" name="discount" class="small-element" step="0.01">
-            </div>
+        <select name="edit-instructor" id="edit-instructor" class="">
+            <option selected disabled hidden></option>
+            <option value="1">Ахматик</option>
+            <option value="2">Ибрашка</option>
+            <option value="4">Амир</option>
+            <option value="5">Мухаммад</option>
+            <option value="6">Ренат</option>
+            <option value="7">Назар</option>
+            <option value="8">Другой</option>
+        </select>
 
-            <div class="form-element">
-                <label for="edit-prepayment">Предоплата</label>
-                <input type="checkbox" id="edit-prepayment" name="prepayment">
-            </div>
-        </div>
+        <input type="number" id="edit-discount" name="discount" class="" step="0.01">
 
-        <div class="form-part">
-            <div class="form-element">
-                <label for="edit-payment_type">Вид оплаты</label>
-                <select name="payment_type" id="edit-payment_type" class="middle-element" required>
-                    <option value="QR">QR</option>
-                    <option value="Наличные">Наличные</option>
-                    <option value="Перевод">Перевод</option>
-                    <option value="Постоплата">Постоплата</option>
-                    <option value="Безнал">Безнал</option>
-                </select>
-            </div>
+        <input type="checkbox" id="edit-prepayment" name="prepayment">
 
-            <div class="form-element">
-                <label for="edit-source_id">Источник</label>
-                <select name="source_id" id="edit-source_id" class="middle-element" required>
-                    <option value="1">Интернет</option>
-                    <option value="2">Поляна</option>
-                    <option value="3">Инфо офис</option>
-                    <option value="4">Отели</option>
-                    <option value="5">Агенты</option>
-                </select>
-            </div>
-        </div>
+        <input type="number" id="edit-price" name="price" class="" step="0.01" required>
 
-        <div class="form-element">
-            <label for="edit-transfer">Трансфер</label>
-            <input type="number" id="edit-transfer" name="transfer" class="small-element" step="0.01">
-        </div>
+        <select name="payment_type" id="edit-payment_type" class="" required>
+            <option value="QR">QR</option>
+            <option value="Наличные">Наличные</option>
+            <option value="Перевод">Перевод</option>
+            <option value="Постоплата">Постоплата</option>
+            <option value="Безнал">Безнал</option>
+        </select>
 
-        <div class="form-element">
-            <label for="edit-note">Комментарий</label>
-            <textarea id="edit-note" name="note"></textarea>
-        </div>
+        <select name="source_id" id="edit-source_id" class="" required>
+            <option value="1">Интернет</option>
+            <option value="2">Поляна</option>
+            <option value="3">Инфо офис</option>
+            <option value="4">Отели</option>
+            <option value="5">Агенты</option>
+        </select>
 
-        <div class="form-btns">
-            <input type="reset" class="form-btn-reset">
-            <input type="submit" value="Сохранить изменения" class="form-btn-submit">
-        </div>
+        <input id="edit-note" name="note">
+        <input type="number" id="edit-transfer" name="transfer">
+
+        <input type="submit" value="Сохранить изменения" class="form-btn-edit">
+
     </form>
 </section>
-
 
 <section class="pagination">
     <p class="pagination-text">
