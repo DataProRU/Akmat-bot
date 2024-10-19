@@ -42,7 +42,12 @@
     </tbody>
 </table>
 
-<button class="form-btn-submit">Одобрить все записи</button>
+<form method="post" action="/approve-all">
+    <input type="hidden" name="day" value="{{ day }}">
+    <input type="hidden" name="month" value="{{ month }}">
+    <input type="hidden" name="year" value="{{ year }}">
+    <button type="submit" class="form-btn-submit">Одобрить все записи</button>
+</form>
 
 <!-- Пагинация -->
 <div>
