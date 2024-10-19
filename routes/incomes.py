@@ -378,6 +378,7 @@ async def submit_form(
             source_id=source_id,
             note=note,
             is_approved = False,
+            transfer = 0,
         )
         db.add(new_flight_technique)
         db.commit()
