@@ -367,6 +367,7 @@ async def submit_form(
     db: Session = Depends(get_db)
 ):
     try:
+        print("technique_id: " ,technique_id)
         new_flight_technique = FlightTechniques(
             created_at=datetime.datetime.now(),
             flight_id=flight_id,
