@@ -146,13 +146,14 @@
                 <button type="button" class="tcol-filter-edit" onclick="fillEditForm({
                     id: '{{ item.id }}',
                     flight_number: '{{ item.flight_number }}',
-                    technique_id: '{{ item.technique_id }}',
+                    flight_name: '{{ item.flight_name }}',
+                    technique_name: '{{ item.technique_name }}',
+                    instructor: '{{ item.user_name }}',
                     price: '{{ item.price }}',
                     discount: '{{ item.discount }}',
                     prepayment: '{{ item.prepayment }}',
                     payment_type: '{{ item.payment_type }}',
-                    source_id: '{{ item.source_id }}',
-                    transfer: '{{ item.transfer }}',
+                    source: '{{ item.source }}',
                     note: '{{ item.note }}'
                 })"></button>
                 <!-- Форма для удаления -->

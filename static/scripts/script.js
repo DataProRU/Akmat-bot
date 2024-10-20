@@ -50,14 +50,14 @@ function fillEditForm(data) {
     document.getElementById('edit-id').value = data.id;
     document.getElementById('edit-date').value = 0; //data.;
     document.getElementById('edit-flight_id').value = data.flight_number;
-    document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = 0; //data.;
-    document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_id;
-    document.getElementById('edit-instructor').options[document.getElementById('edit-instructor').selectedIndex].text = 0; //data.;
+    document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
+    document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
+    document.getElementById('edit-instructor').options[document.getElementById('edit-instructor').selectedIndex].text = data.instructor;
     document.getElementById('edit-discount').value = data.discount;
     document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
     document.getElementById('edit-price').value = data.price;
     document.getElementById('edit-payment_type').options[document.getElementById('edit-payment_type').selectedIndex].text = data.payment_type;
-    document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data.source_id;
+    document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data.source;
     document.getElementById('edit-note').value = data.note;
 };
 
@@ -128,4 +128,4 @@ function toggleEdit(id) {
     } else {
         editFields.style.display = 'none';
     }
-}
+};
