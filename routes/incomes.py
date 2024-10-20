@@ -439,7 +439,7 @@ async def update_flight(request: Request):
 
     # Извлечение данных из формы
     flight_number = form_data.get("flight_number")
-    technique_id = form_data.get("technique_id")
+    technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
     price = form_data.get("price")
     discount = form_data.get("discount")
     prepayment = form_data.get("prepayment") == "on"
