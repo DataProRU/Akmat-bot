@@ -8,7 +8,7 @@ buttonOpen.addEventListener('click', () => {
     formAdd.classList.add('open');
 });
 
-//закрыть форму для добавлеиия записи
+//закрыть форму для добавления записи
 buttonClose.addEventListener('click', () => {
     formAdd.classList.remove('open');
 });
@@ -20,25 +20,44 @@ btnsEditIncome.forEach(function (btnEdit) {
     btnEdit.addEventListener('click', () => {
         let trEdit = btnEdit.parentNode.parentNode;
         trEdit.append(formEdit);
-        //const data = trEdit.children;
-        //console.log(data)
+        const tdsEditForm = trEdit.children;
+        console.log(tdsEditForm);
+        setWidthEditForm(tdsEditForm);
         formEdit.classList.add('open');
     });
 });
 
+function setWidthEditForm(data) {
+    document.getElementById('edit-date').style.width = widthSub(data[0].offsetWidth);
+    document.getElementById('edit-flight_id').style.width = widthSub(data[1].offsetWidth);
+    document.getElementById('edit-type-of-route').style.width = widthSub(data[2].offsetWidth);
+    document.getElementById('edit-technique_id').style.width = widthSub(data[3].offsetWidth);
+    document.getElementById('edit-instructor').style.width = widthSub(data[4].offsetWidth);
+    document.getElementById('edit-discount').style.width = widthSub(data[5].offsetWidth);
+    document.getElementById('edit-checkbox-td').style.width = widthSub(data[6].offsetWidth);
+    document.getElementById('edit-price').style.width = widthSub(data[7].offsetWidth);
+    document.getElementById('edit-payment_type').style.width = widthSub(data[8].offsetWidth);
+    document.getElementById('edit-source_id').style.width = widthSub(data[9].offsetWidth);
+    document.getElementById('edit-note').style.width = widthSub(data[10].offsetWidth);
+};
+
+function widthSub(str) {
+    return (Number(str) - 4).toString() + 'px';
+};
+
 //заполнить форму для редактирования записи
 function fillEditForm(data) {
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-date').value = 0 //data.;
+    document.getElementById('edit-date').value = 0; //data.;
     document.getElementById('edit-flight_id').value = data.flight_number;
-    document.getElementById('edit-type-of-route').value = 0 //data.;
-    document.getElementById('edit-technique_id').value = data.technique_id;
-    document.getElementById('edit-instructor').value = 0 //data.;
+    document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
+    document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
+    document.getElementById('edit-instructor').options[document.getElementById('edit-instructor').selectedIndex].text = data.instructor;
     document.getElementById('edit-discount').value = data.discount;
     document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
     document.getElementById('edit-price').value = data.price;
-    document.getElementById('edit-payment_type').value = data.payment_type;
-    document.getElementById('edit-source_id').value = data.source_id;
+    document.getElementById('edit-payment_type').options[document.getElementById('edit-payment_type').selectedIndex].text = data.payment_type;
+    document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data.source;
     document.getElementById('edit-note').value = data.note;
 };
 
@@ -63,7 +82,7 @@ function newOrder() {
 
 butttonAddOrder.addEventListener('click', (event) => {
     formAdd.classList.remove('open');
-    event.preventDefault();
+    //event.preventDefault();
     document.querySelector('.add-entry-form').reset();
 });
 
@@ -109,4 +128,4 @@ function toggleEdit(id) {
     } else {
         editFields.style.display = 'none';
     }
-}
+};

@@ -146,12 +146,14 @@
                 <button type="button" class="tcol-filter-edit" onclick="fillEditForm({
                     id: '{{ item.id }}',
                     flight_number: '{{ item.flight_number }}',
-                    technique_id: '{{ item.technique_id }}',
+                    flight_name: '{{ item.flight_name }}',
+                    technique_name: '{{ item.technique_name }}',
+                    instructor: '{{ item.user_name }}',
                     price: '{{ item.price }}',
                     discount: '{{ item.discount }}',
                     prepayment: '{{ item.prepayment }}',
                     payment_type: '{{ item.payment_type }}',
-                    source_id: '{{ item.source_id }}',
+                    source: '{{ item.source }}',
                     note: '{{ item.note }}'
                 })"></button>
                 <!-- Форма для удаления -->
@@ -273,10 +275,10 @@
 
 <section id="edit-form-container">
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
-        <input type="hidden" id="edit-id" name="id" >
+        <input type="hidden" id="edit-id" name="id">
 
         <input type="date" id="edit-date" name="date" class="">
-        <input type="number" id="edit-flight_id" name="flight_number" class="" required>
+        <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
             <option selected disabled hidden></option>
@@ -299,11 +301,13 @@
             {% endfor %}
         </select>
 
-        <input type="number" id="edit-discount" name="discount" class="" step="0.01">
+        <input type="number" id="edit-discount" name="discount" class="tcol-num" step="1">
 
-        <input type="checkbox" id="edit-prepayment" name="prepayment">
+        <div id="edit-checkbox-td" class="edit-checkbox-td">
+            <input type="checkbox" id="edit-prepayment" name="prepayment" class="form-checkbox">
+        </div>
 
-        <input type="number" id="edit-price" name="price" class="" step="0.01" required>
+        <input type="number" id="edit-price" name="price" class="tcol-num" step="1" required>
 
         <select name="payment_type" id="edit-payment_type" class="" required>
             {% for pay_id, pay_name in payment_types.items() %}
@@ -319,7 +323,7 @@
 
         <input id="edit-note" name="note">
 
-        <input type="submit" value="Сохранить изменения" class="form-btn-edit">
+        <input type="submit" value="Сохранить" class="form-btn-edit">
 
     </form>
 </section>
