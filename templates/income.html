@@ -295,11 +295,11 @@
         </select>
 
         <select name="edit-instructor" id="edit-instructor" class="">
-            <option selected disabled hidden></option>
-             {% for user_id, user_name in users.items() %}
-                        <option value="{{ user_id }}">{{ user_name }}</option>
+        <option selected disabled hidden></option>
+            {% for user_id, user_name in users.items() %}
+                <option value="{{ user_id }}">{{ user_name }}</option>
             {% endfor %}
-        </select>
+</select>
 
         <input type="number" id="edit-discount" name="discount" class="tcol-num" step="1">
 

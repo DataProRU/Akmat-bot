@@ -42,6 +42,7 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
         techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
         flights = {flight.id: flight for flight in session.query(Flights).all()}
         routes = {route.id: route.title for route in session.query(Routes).all()}
+        users = {user.id: user.full_name for user in session.query(Users).filter(Users.is_instructor == True).all()}
         users = {user.id: user.full_name for user in session.query(Users).all()}
         payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
         sources = {source.id: source.title for source in session.query(Sources)}
@@ -119,6 +120,7 @@ async def index(
                 }
             )
     # Возвращаем HTML-шаблон с данными
+    print(users)
     return templates.TemplateResponse(
         "income.html",
         {
@@ -440,6 +442,8 @@ async def update_flight(request: Request):
     # Извлечение данных из формы
     flight_number = form_data.get("flight_number")
     technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
+    instructor = form_data.get("edit-instructor")
+    route_type = form_data.get("type-of-route")
     price = form_data.get("price")
     discount = form_data.get("discount")
     prepayment = form_data.get("prepayment") == "on"
@@ -449,21 +453,28 @@ async def update_flight(request: Request):
 
     # Обновление записи в базе данных
     session = Session()
-    flight_technique = session.query(FlightTechniques).filter_by(id=flight_id).first()
+    flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
 
-    if flight_technique:
-        flight_technique.flight_number = flight_number
-        flight_technique.technique_id = technique_id
-        flight_technique.price = price
-        flight_technique.discount = discount
-        flight_technique.prepayment = prepayment
-        flight_technique.payment_type = payment_type
-        flight_technique.source_id = source_id
-        flight_technique.note = note
+    if flight_techniques:
+        flight_techniques.flight_number = flight_number
+        flight_techniques.technique_id = technique_id
+        flight_techniques.price = price
+        flight_techniques.discount = discount
+        flight_techniques.prepayment = prepayment
+        flight_techniques.payment_type = payment_type
+        flight_techniques.source_id = source_id
+        flight_techniques.note = note
 
         session.commit()
         session.close()
-        return RedirectResponse(url="/income", status_code=303)
 
-    session.close()
-    return JSONResponse({"status": "error", "message": "Record not found"})
+    flight_technique = session.query(Flights).filter_by(id=flight_id).first()
+    if flight_technique:
+        flight_technique.technique_id = technique_id
+        flight_technique.instructor_id = instructor
+        flight_technique.route_id = route_type
+
+        session.commit()
+        session.close()
+
+    return RedirectResponse(url="/income", status_code=303)
