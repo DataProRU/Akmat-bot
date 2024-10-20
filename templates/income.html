@@ -143,7 +143,7 @@
             <!-- Здесь кнопки редактирования и удаления -->
             <td class="tcol tcol-filter">
                 <!-- Кнопка для редактирования -->
-                <button type="button" class="tcol-filter-edit" onclick="fillEditForm(this, {
+                <button type="button" class="tcol-filter-edit" onfocus="fillEditForm(this, {
                     id: '{{ item.id }}',
                     date: '{{ item.created_at }}',
                     flight_number: '{{ item.flight_number }}',
