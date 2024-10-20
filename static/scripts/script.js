@@ -42,7 +42,7 @@ function setWidthEditForm(data) {
 };
 
 function widthSub(str) {
-    return (Number(str) - 4).toString() + 'px';
+    return (str - 4) + 'px';
 };
 
 //заполнить форму для редактирования записи
@@ -87,7 +87,7 @@ function newOrder() {
 
 };
 
-butttonAddOrder.addEventListener('click', () => {
+butttonAddOrder.addEventListener('click', (event) => {
     formAdd.classList.remove('open');
     //event.preventDefault();
     document.querySelector('.add-entry-form').reset();
