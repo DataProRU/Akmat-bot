@@ -14,18 +14,18 @@ buttonClose.addEventListener('click', () => {
 });
 
 //открыть форму для редактирования записи
-var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
+//var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
 
-btnsEditIncome.forEach(function (btnEdit) {
-    btnEdit.addEventListener('click', () => {
-        let trEdit = btnEdit.parentNode.parentNode;
-        trEdit.append(formEdit);
-        const tdsEditForm = trEdit.children;
-        console.log(tdsEditForm);
-        setWidthEditForm(tdsEditForm);
-        formEdit.classList.add('open');
-    });
-});
+//btnsEditIncome.forEach(function (btnEdit) {
+//btnEdit.addEventListener('click', () => {
+//let trEdit = btnEdit.parentNode.parentNode;
+//trEdit.append(formEdit);
+//const tdsEditForm = trEdit.children;
+//console.log(tdsEditForm);
+//setWidthEditForm(tdsEditForm);
+//formEdit.classList.add('open');
+//});
+//});
 
 function setWidthEditForm(data) {
     document.getElementById('edit-date').style.width = widthSub(data[0].offsetWidth);
@@ -46,9 +46,9 @@ function widthSub(str) {
 };
 
 //заполнить форму для редактирования записи
-function fillEditForm(data) {
+function fillEditForm(btnEdit, data) {
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-date').value = 0; //data.;
+    document.getElementById('edit-date').value = data.date;
     document.getElementById('edit-flight_id').value = data.flight_number;
     document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
     document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
@@ -59,6 +59,13 @@ function fillEditForm(data) {
     document.getElementById('edit-payment_type').options[document.getElementById('edit-payment_type').selectedIndex].text = data.payment_type;
     document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data.source;
     document.getElementById('edit-note').value = data.note;
+
+    let trEdit = btnEdit.parentNode.parentNode;
+    trEdit.append(formEdit);
+    const tdsEditForm = trEdit.children;
+    console.log(tdsEditForm);
+    setWidthEditForm(tdsEditForm);
+    formEdit.classList.add('open');
 };
 
 var tableBody = document.querySelector('#table-body');
