@@ -124,14 +124,14 @@ async def index(
         {
             "request": request,
             "data": data,
-            "users": users,
             "page": page,
             "per_page": per_page,
+            "total_pages": total_pages,
+            "users": users,
             "techniques": techniques,
             "payment_types": payment_types,
             "sources": sources,
             "routes": routes,
-            "total_pages": total_pages  # передаем общее количество страниц
         },
     )
 
@@ -315,7 +315,6 @@ async def update_flight_technique(
         flight_technique.price = data.price
         flight_technique.payment_type_id = data.payment_type_id
         flight_technique.source_id = data.source_id
-        flight_technique.transfer = data.transfer
         flight_technique.note = data.note
 
         session.commit()
@@ -359,16 +358,16 @@ async def delete_flight_technique(flight_technique_id: int):
 async def submit_form(
     flight_id: int = Form(...),
     technique_id: int = Form(...),
-    discount: float = Form(0),
+    discount: float = Form(0.0),
     prepayment: bool = Form(False),
     price: float = Form(...),
     payment_type_id: int = Form(...),
     source_id: int = Form(...),
-    transfer: float = Form(0),
     note: str = Form(""),
     db: Session = Depends(get_db)
 ):
     try:
+        print("technique_id: " ,technique_id)
         new_flight_technique = FlightTechniques(
             created_at=datetime.datetime.now(),
             flight_id=flight_id,
@@ -378,9 +377,9 @@ async def submit_form(
             price=price,
             payment_type_id=payment_type_id,
             source_id=source_id,
-            transfer=transfer,
             note=note,
             is_approved = False,
+            transfer = 0,
         )
         db.add(new_flight_technique)
         db.commit()
@@ -428,7 +427,6 @@ async def update_flight(request: Request):
     prepayment = form_data.get("prepayment") == "on"
     payment_type = form_data.get("payment_type")
     source_id = form_data.get("source_id")
-    transfer = form_data.get("transfer")
     note = form_data.get("note")
 
     # Обновление записи в базе данных
@@ -443,7 +441,6 @@ async def update_flight(request: Request):
         flight_technique.prepayment = prepayment
         flight_technique.payment_type = payment_type
         flight_technique.source_id = source_id
-        flight_technique.transfer = transfer
         flight_technique.note = note
 
         session.commit()

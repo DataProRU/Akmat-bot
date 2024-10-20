@@ -193,13 +193,9 @@
             <label for="type-of-route">Вид маршрута</label>
             <select name="type-of-route" id="type-of-route">
                 <option selected disabled hidden></option>
-                <option value="1">Малый маршрут</option>
-                <option value="2">Белые водопады</option>
-                <option value="3">Софийские водопады</option>
-                <option value="4">Часовой маршрут</option>
-                <option value="5">Пхия</option>
-                <option value="6">Бездонное Озеро</option>
-                <option value="7">Смотровые Дукки</option>
+                 {% for route_id, route_name in routes.items() %}
+                    <option value="{{ route_id }}">{{ route_name }}</option>
+                {% endfor %}
             </select>
         </div>
 
@@ -208,9 +204,9 @@
                 <label for="technique_id">Вид техники</label>
                 <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="1">--вид1--</option>
-                    <option value="2">--вид2--</option>
-                    <option value="3">--вид3--</option>
+                     {% for technique_id, technique_name in techniques.items() %}
+                        <option value="{{ technique_id }}">{{ technique_name }}</option>
+                     {% endfor %}
                 </select>
             </div>
 
@@ -218,13 +214,9 @@
                 <label for="instructor">Инструктор</label>
                 <select name="instructor" id="instructor" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="1">Ахматик</option>
-                    <option value="2">Ибрашка</option>
-                    <option value="3">Амир</option>
-                    <option value="4">Мухаммад</option>
-                    <option value="5">Ренат</option>
-                    <option value="6">Назар</option>
-                    <option value="7">Другой</option>
+                     {% for user_id, user_name in users.items() %}
+                        <option value="{{ user_id }}">{{ user_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -251,11 +243,9 @@
                 <label for="payment_type_id">Вид оплаты</label>
                 <select name="payment_type_id" id="payment_type_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="1">QR</option>
-                    <option value="2">Наличные</option>
-                    <option value="3">Перевод</option>
-                    <option value="4">Постоплата</option>
-                    <option value="5">Безнал</option>
+                    {% for pay_id, pay_name in payment_types.items() %}
+                    <option value="{{ pay_id }}">{{ pay_name }}</option>
+                {% endfor %}
                 </select>
             </div>
 
@@ -263,11 +253,9 @@
                 <label for="source_id">Источник</label>
                 <select name="source_id" id="source_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="1">Интернет</option>
-                    <option value="2">Поляна</option>
-                    <option value="3">Инфо офис</option>
-                    <option value="4">Отели</option>
-                    <option value="5">Агенты</option>
+                     {% for source_id, source_name in sources.items() %}
+                        <option value="{{ source_id }}">{{ source_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -294,31 +282,23 @@
 
         <select name="type-of-route" id="edit-type-of-route">
             <option selected disabled hidden></option>
-            <option value="1">Малый маршрут</option>
-            <option value="2">Белые водопады</option>
-            <option value="3">Софийские водопады</option>
-            <option value="4">Часовой маршрут</option>
-            <option value="5">Пхия</option>
-            <option value="6">Бездонное Озеро</option>
-            <option value="7">Смотровые Дукки</option>
+             {% for route_id, route_name in routes.items() %}
+                    <option value="{{ route_id }}">{{ route_name }}</option>
+             {% endfor %}
         </select>
 
         <select name="technique_id" id="edit-technique_id" class="" required>
             <option selected disabled hidden></option>
-            <option value="1">--вид1--</option>
-            <option value="2">--вид2--</option>
-            <option value="3">--вид3--</option>
+           {% for technique_id, technique_name in techniques.items() %}
+                        <option value="{{ technique_id }}">{{ technique_name }}</option>
+            {% endfor %}
         </select>
 
         <select name="edit-instructor" id="edit-instructor" class="">
             <option selected disabled hidden></option>
-            <option value="1">Ахматик</option>
-            <option value="2">Ибрашка</option>
-            <option value="4">Амир</option>
-            <option value="5">Мухаммад</option>
-            <option value="6">Ренат</option>
-            <option value="7">Назар</option>
-            <option value="8">Другой</option>
+             {% for user_id, user_name in users.items() %}
+                        <option value="{{ user_id }}">{{ user_name }}</option>
+            {% endfor %}
         </select>
 
         <input type="number" id="edit-discount" name="discount" class="tcol-num" step="1">
@@ -330,23 +310,18 @@
         <input type="number" id="edit-price" name="price" class="tcol-num" step="1" required>
 
         <select name="payment_type" id="edit-payment_type" class="" required>
-            <option value="QR">QR</option>
-            <option value="Наличные">Наличные</option>
-            <option value="Перевод">Перевод</option>
-            <option value="Постоплата">Постоплата</option>
-            <option value="Безнал">Безнал</option>
+            {% for pay_id, pay_name in payment_types.items() %}
+                    <option value="{{ pay_id }}">{{ pay_name }}</option>
+            {% endfor %}
         </select>
 
         <select name="source_id" id="edit-source_id" class="" required>
-            <option value="1">Интернет</option>
-            <option value="2">Поляна</option>
-            <option value="3">Инфо офис</option>
-            <option value="4">Отели</option>
-            <option value="5">Агенты</option>
+            {% for source_id, source_name in sources.items() %}
+                        <option value="{{ source_id }}">{{ source_name }}</option>
+            {% endfor %}
         </select>
 
         <input id="edit-note" name="note">
-        <input type="number" id="edit-transfer" name="transfer">
 
         <input type="submit" value="Сохранить" class="form-btn-edit">
 
