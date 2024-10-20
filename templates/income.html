@@ -145,6 +145,7 @@
                 <!-- Кнопка для редактирования -->
                 <button type="button" class="tcol-filter-edit" onclick="fillEditForm({
                     id: '{{ item.id }}',
+                    date: '{{ item.created_at }}',
                     flight_number: '{{ item.flight_number }}',
                     flight_name: '{{ item.flight_name }}',
                     technique_name: '{{ item.technique_name }}',
@@ -193,8 +194,8 @@
             <label for="type-of-route">Вид маршрута</label>
             <select name="route_id" id="type-of-route">
                 <option selected disabled hidden></option>
-                 {% for route_id, route_name in routes.items() %}
-                    <option value="{{ route_id }}">{{ route_name }}</option>
+                {% for route_id, route_name in routes.items() %}
+                <option value="{{ route_id }}">{{ route_name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -204,9 +205,9 @@
                 <label for="technique_id">Вид техники</label>
                 <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-                     {% for technique_id, technique_name in techniques.items() %}
-                        <option value="{{ technique_id }}">{{ technique_name }}</option>
-                     {% endfor %}
+                    {% for technique_id, technique_name in techniques.items() %}
+                    <option value="{{ technique_id }}">{{ technique_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -214,8 +215,8 @@
                 <label for="instructor_id">Инструктор</label>
                 <select name="instructor_id" id="instructor_id" class="middle-element">
                     <option selected disabled hidden></option>
-                     {% for user_id, user_name in users.items() %}
-                        <option value="{{ user_id }}">{{ user_name }}</option>
+                    {% for user_id, user_name in users.items() %}
+                    <option value="{{ user_id }}">{{ user_name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -245,7 +246,7 @@
                     <option selected disabled hidden></option>
                     {% for pay_id, pay_name in payment_types.items() %}
                     <option value="{{ pay_id }}">{{ pay_name }}</option>
-                {% endfor %}
+                    {% endfor %}
                 </select>
             </div>
 
@@ -253,8 +254,8 @@
                 <label for="source_id">Источник</label>
                 <select name="source_id" id="source_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                     {% for source_id, source_name in sources.items() %}
-                        <option value="{{ source_id }}">{{ source_name }}</option>
+                    {% for source_id, source_name in sources.items() %}
+                    <option value="{{ source_id }}">{{ source_name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -281,23 +282,20 @@
         <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
-            <option selected disabled hidden></option>
-             {% for route_id, route_name in routes.items() %}
-                    <option value="{{ route_id }}">{{ route_name }}</option>
-             {% endfor %}
+            {% for route_id, route_name in routes.items() %}
+            <option value="{{ route_id }}">{{ route_name }}</option>
+            {% endfor %}
         </select>
 
         <select name="technique_id" id="edit-technique_id" class="" required>
-            <option selected disabled hidden></option>
-           {% for technique_id, technique_name in techniques.items() %}
-                        <option value="{{ technique_id }}">{{ technique_name }}</option>
+            {% for technique_id, technique_name in techniques.items() %}
+            <option value="{{ technique_id }}">{{ technique_name }}</option>
             {% endfor %}
         </select>
 
         <select name="edit-instructor" id="edit-instructor" class="">
-            <option selected disabled hidden></option>
-             {% for user_id, user_name in users.items() %}
-                        <option value="{{ user_id }}">{{ user_name }}</option>
+            {% for user_id, user_name in users.items() %}
+            <option value="{{ user_id }}">{{ user_name }}</option>
             {% endfor %}
         </select>
 
@@ -311,13 +309,13 @@
 
         <select name="payment_type" id="edit-payment_type" class="" required>
             {% for pay_id, pay_name in payment_types.items() %}
-                    <option value="{{ pay_id }}">{{ pay_name }}</option>
+            <option value="{{ pay_id }}">{{ pay_name }}</option>
             {% endfor %}
         </select>
 
         <select name="source_id" id="edit-source_id" class="" required>
             {% for source_id, source_name in sources.items() %}
-                        <option value="{{ source_id }}">{{ source_name }}</option>
+            <option value="{{ source_id }}">{{ source_name }}</option>
             {% endfor %}
         </select>
 

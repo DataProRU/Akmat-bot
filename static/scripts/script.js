@@ -48,7 +48,7 @@ function widthSub(str) {
 //заполнить форму для редактирования записи
 function fillEditForm(data) {
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-date').value = 0; //data.;
+    document.getElementById('edit-date').value = data.date;
     document.getElementById('edit-flight_id').value = data.flight_number;
     document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
     document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
