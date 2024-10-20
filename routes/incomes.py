@@ -43,7 +43,6 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
         flights = {flight.id: flight for flight in session.query(Flights).all()}
         routes = {route.id: route.title for route in session.query(Routes).all()}
         users = {user.id: user.full_name for user in session.query(Users).filter(Users.is_instructor == True).all()}
-        users = {user.id: user.full_name for user in session.query(Users).all()}
         payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
         sources = {source.id: source.title for source in session.query(Sources)}
 
@@ -120,7 +119,6 @@ async def index(
                 }
             )
     # Возвращаем HTML-шаблон с данными
-    print(users)
     return templates.TemplateResponse(
         "income.html",
         {
