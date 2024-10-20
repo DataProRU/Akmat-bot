@@ -87,7 +87,7 @@ function newOrder() {
 
 };
 
-butttonAddOrder.addEventListener('click', (event) => {
+butttonAddOrder.addEventListener('click', () => {
     formAdd.classList.remove('open');
     //event.preventDefault();
     document.querySelector('.add-entry-form').reset();
