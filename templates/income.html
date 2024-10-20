@@ -286,10 +286,10 @@
 
 <section id="edit-form-container">
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
-        <input type="hidden" id="edit-id" name="id" >
+        <input type="hidden" id="edit-id" name="id">
 
         <input type="date" id="edit-date" name="date" class="">
-        <input type="number" id="edit-flight_id" name="flight_number" class="" required>
+        <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
             <option selected disabled hidden></option>
@@ -320,11 +320,13 @@
             <option value="8">Другой</option>
         </select>
 
-        <input type="number" id="edit-discount" name="discount" class="" step="0.01">
+        <input type="number" id="edit-discount" name="discount" class="tcol-num" step="1">
 
-        <input type="checkbox" id="edit-prepayment" name="prepayment">
+        <div id="edit-checkbox-td" class="edit-checkbox-td">
+            <input type="checkbox" id="edit-prepayment" name="prepayment" class="form-checkbox">
+        </div>
 
-        <input type="number" id="edit-price" name="price" class="" step="0.01" required>
+        <input type="number" id="edit-price" name="price" class="tcol-num" step="1" required>
 
         <select name="payment_type" id="edit-payment_type" class="" required>
             <option value="QR">QR</option>
@@ -345,7 +347,7 @@
         <input id="edit-note" name="note">
         <input type="number" id="edit-transfer" name="transfer">
 
-        <input type="submit" value="Сохранить изменения" class="form-btn-edit">
+        <input type="submit" value="Сохранить" class="form-btn-edit">
 
     </form>
 </section>
