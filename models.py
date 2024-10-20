@@ -81,6 +81,13 @@ class Flights(Base):
     id = Column(Integer, primary_key=True)
     flight_number = Column(SmallInteger)
     instructor_id = Column(Integer)
+    route_id = Column(Integer)
+    flight_date= Column(DateTime)
+    manager_id = Column(Integer)
+    confirmed = Column(Boolean)
+    source_id = Column(Integer)
+    source_data = Column(Text)
+    created_at = Column(DateTime)
 
 
 class Techniques(Base):

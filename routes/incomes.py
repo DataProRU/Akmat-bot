@@ -356,9 +356,12 @@ async def delete_flight_technique(flight_technique_id: int):
 
 @router.post("/submit")
 async def submit_form(
-    flight_id: int = Form(...),
+    flight_number: int = Form(...),
+    instructor_id: int = Form(...),
+    date: str = Form(...),
+    route_id: int = Form(...),  # Добавляем параметр route_id
     technique_id: int = Form(...),
-    discount: float = Form(0.0),
+    discount: float = Form(0),
     prepayment: bool = Form(False),
     price: float = Form(...),
     payment_type_id: int = Form(...),
@@ -367,10 +370,25 @@ async def submit_form(
     db: Session = Depends(get_db)
 ):
     try:
-        print("technique_id: " ,technique_id)
+        # Создание новой записи в таблице Flights
+        new_flight = Flights(
+            flight_number=flight_number,
+            instructor_id=instructor_id,
+            flight_date=date,
+            route_id=route_id,
+            manager_id=0,
+            confirmed=False,
+            source_id=source_id,
+            source_data=note,
+            created_at=date,
+        )
+        db.add(new_flight)
+        db.flush()  # Это нужно для получения id нового рейса
+
+        # Создание новой записи в таблице FlightTechniques
         new_flight_technique = FlightTechniques(
             created_at=datetime.datetime.now(),
-            flight_id=flight_id,
+            flight_id=new_flight.id,
             technique_id=technique_id,
             discount=discount,
             prepayment=prepayment,
@@ -378,8 +396,8 @@ async def submit_form(
             payment_type_id=payment_type_id,
             source_id=source_id,
             note=note,
-            is_approved = False,
-            transfer = 0,
+            is_approved=False,
+            transfer=0,
         )
         db.add(new_flight_technique)
         db.commit()

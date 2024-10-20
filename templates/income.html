@@ -184,14 +184,14 @@
             </div>
 
             <div class="form-element">
-                <label for="flight_id">Номер рейса</label>
-                <input type="number" id="flight_id" name="flight_id" class="middle-element" required>
+                <label for="flight_number">Номер рейса</label>
+                <input type="number" id="flight_number" name="flight_number" class="middle-element" required>
             </div>
         </div>
 
         <div class="form-element">
             <label for="type-of-route">Вид маршрута</label>
-            <select name="type-of-route" id="type-of-route">
+            <select name="route_id" id="type-of-route">
                 <option selected disabled hidden></option>
                  {% for route_id, route_name in routes.items() %}
                     <option value="{{ route_id }}">{{ route_name }}</option>
@@ -211,8 +211,8 @@
             </div>
 
             <div class="form-element">
-                <label for="instructor">Инструктор</label>
-                <select name="instructor" id="instructor" class="middle-element">
+                <label for="instructor_id">Инструктор</label>
+                <select name="instructor_id" id="instructor_id" class="middle-element">
                     <option selected disabled hidden></option>
                      {% for user_id, user_name in users.items() %}
                         <option value="{{ user_id }}">{{ user_name }}</option>
