@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Операции {% endblock %}
+
+{% block nav %}
+<h2 class="welcome-title">Операции</h2>
+<button class="unapproved-btn-back"> <a href="/directory/">Назад</a></button>
+{% endblock %}
+
+{% block content %}
+ <div class="opasity-btn-container">
+    <table class="table-data" id="table-data">
+    <thead>
+        <tr class="trow-head">
+            <th class="trow-head-data">Название<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Показывать типы техники<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Показывать канистры<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Показывать сумму<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Показывать стоимость<div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Показывать технику<div class="resizer"></div>
+            </th>
+             <th class="trow-head-data">Показывать примечания<div class="resizer"></div>
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-body" id="table-body">
+
+        <tr class="trow">
+            <td class="tcol"></td>
+        </tr>
+
+    </tbody>
+
+</table>
+ </div>
+{% endblock %}
