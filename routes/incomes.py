@@ -103,7 +103,7 @@ async def index(
             user_name = users.get(flight.instructor_id, "Unknown User")
             flight_name = routes.get(flight.flight_number, "Unknown Route")
             if flight_technique.created_at:
-                formatted_created_at = flight_technique.created_at.strftime("%d %B %Y, %H:%M")
+                formatted_created_at = flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
             else:
                 formatted_created_at = "Дата не указана"
             data.append(
