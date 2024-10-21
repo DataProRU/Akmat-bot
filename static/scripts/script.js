@@ -64,7 +64,7 @@ function fillEditForm(btnEdit, data) {
     trEdit.append(formEdit);
     const tdsEditForm = trEdit.children;
     console.log(tdsEditForm);
-    setWidthEditForm(tdsEditForm);
+    //setWidthEditForm(tdsEditForm);
     formEdit.classList.add('open');
 };
 
