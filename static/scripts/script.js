@@ -1,4 +1,4 @@
-const buttonOpen = document.querySelector('.add-entry-btn');
+const buttonOpen = document.querySelector('#add-entry-btn-income');
 const formAdd = document.querySelector('#add-form-container');
 const buttonClose = document.querySelector('.close-form-btn');
 const formEdit = document.querySelector('#edit-form-container');
@@ -42,7 +42,7 @@ function setWidthEditForm(data) {
 };
 
 function widthSub(str) {
-    return (Number(str) - 4).toString() + 'px';
+    return (str - 4) + 'px';
 };
 
 //заполнить форму для редактирования записи
@@ -64,7 +64,7 @@ function fillEditForm(btnEdit, data) {
     trEdit.append(formEdit);
     const tdsEditForm = trEdit.children;
     console.log(tdsEditForm);
-    setWidthEditForm(tdsEditForm);
+    //setWidthEditForm(tdsEditForm);
     formEdit.classList.add('open');
 };
 
