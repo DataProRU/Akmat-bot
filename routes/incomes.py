@@ -98,10 +98,10 @@ async def index(
         flight = flights.get(flight_technique.flight_id)
         if flight:
             technique_name = techniques.get(
-                flight_technique.technique_id, "Unknown Technique"
+                flight_technique.technique_id, "Неизвестная техника"
             )
-            user_name = users.get(flight.instructor_id, "Unknown User")
-            flight_name = routes.get(flight.flight_number, "Unknown Route")
+            user_name = users.get(flight.instructor_id, "Неизвестный пользователь")
+            flight_name = routes.get(flight.flight_number, "Неизвестный пользователь")
             if flight_technique.created_at:
                 formatted_created_at = flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
             else:
@@ -115,12 +115,12 @@ async def index(
                     "technique_name": technique_name,
                     "user_name": user_name,
                     "discount": flight_technique.discount,
-                    "prepayment": "Yes" if flight_technique.prepayment else "No",
+                    "prepayment": "Да" if flight_technique.prepayment else "Нет",
                     "price": flight_technique.price,
                     "payment_type": payment_types.get(
-                        flight_technique.payment_type_id, "Unknown Payment Type"
+                        flight_technique.payment_type_id, "Неизвестный тип оплаты"
                     ),
-                    "source": sources.get(flight_technique.source_id, "Unknown Source"),
+                    "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
                     "note": flight_technique.note,
                 }
             )
