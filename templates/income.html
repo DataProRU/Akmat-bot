@@ -181,7 +181,7 @@
         <div class="form-part">
             <div class="form-element">
                 <label for="date">Выбор даты</label>
-                <input type="date" id="date" name="date" class="middle-element">
+                <input type="datetime-local" id="date" name="date" class="middle-element">
             </div>
 
             <div class="form-element">
@@ -278,7 +278,7 @@
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 
-        <input type="date" id="edit-date" name="date" class="">
+        <input type="datetime-local" id="edit-date" name="date" class="">
         <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
