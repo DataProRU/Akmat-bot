@@ -125,7 +125,7 @@ p {
     background-color: #272d32da;
     color: #f6f9fb;
     font-size: 10px;
-    width: 60px;
+    width: 70px;
     text-align: center;
     line-height: 15px;
     padding: 2px;
@@ -479,7 +479,15 @@ p {
 /*access*/
 
 .small-table-container {
-    max-width: 900px;
+    min-width: 450px;
+    margin: 20px 0;
+}
+
+.header-smal-table {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 /*unapproved_days*/

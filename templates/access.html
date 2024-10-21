@@ -6,7 +6,7 @@
 
 {% block content %}
 <style>
-    button {
+    /*button {
         background-color: #4CAF50;
         color: black;
         border: none;
@@ -27,7 +27,7 @@
 
     .btn-container button {
         margin-right: 10px;
-    }
+    }*/
 
     /* Стиль для модального окна */
     .modal {
@@ -67,12 +67,13 @@
 </style>
 
 <section class="small-table-container">
-    <h2>Управление пользователями</h2>
-    <div class="btn-container">
-        <button onclick="openModal()">Создать пользователя</button>
-        <button onclick="loadUsers()">Обновить список</button>
+    <div class="header-smal-table">
+        <h2>Управление пользователями</h2>
+        <button onclick="openModal()" class="add-entry-btn tooltip">✚
+            <span class="tooltip-text">Добавить пользователя</span>
+        </button>
+        <!--button onclick="loadUsers()">Обновить список</button-->
     </div>
-
     <table class="table-data">
         <thead>
             <tr>
@@ -89,12 +90,12 @@
                 <td class="tcol">{{ user.username }}</td>
                 <td class="tcol">
                     <select onchange="updateUserRole({{ user.id }}, this.value)">
-                        <option value="user" {% if user.role=='user' %}selected{% endif %}>Пользователь</option>
-                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Администратор</option>
+                        <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
+                        <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
                     </select>
                 </td>
                 <td class="tcol">
-                    <button onclick="deleteUser({{ user.id }})">Удалить</button>
+                    <button class="tcol-filter-delete" onclick="deleteUser({{ user.id }})"></button>
                 </td>
             </tr>
             {% endfor %}
@@ -148,7 +149,7 @@
             <th class="trow-head-data">Штрафы</th>
             <th class="trow-head-data">Инвестор</th>
             <th class="trow-head-data">Изменить зарплату</th>
-            <th class="trow-head-data">Actions</th>
+            <th class="trow-head-data">Действия</th>
         </tr>
     </thead>
     <tbody>

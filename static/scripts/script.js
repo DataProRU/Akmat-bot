@@ -1,4 +1,4 @@
-const buttonOpen = document.querySelector('.add-entry-btn');
+const buttonOpen = document.querySelector('#add-entry-btn-income');
 const formAdd = document.querySelector('#add-form-container');
 const buttonClose = document.querySelector('.close-form-btn');
 const formEdit = document.querySelector('#edit-form-container');
