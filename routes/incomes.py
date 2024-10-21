@@ -101,7 +101,7 @@ async def index(
                 flight_technique.technique_id, "Неизвестная техника"
             )
             user_name = users.get(flight.instructor_id, "Неизвестный пользователь")
-            flight_name = routes.get(flight.flight_number, "Неизвестный пользователь")
+            flight_name = routes.get(flight.flight_number, "Неизвестный путь")
             if flight_technique.created_at:
                 formatted_created_at = flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
             else:
@@ -444,6 +444,7 @@ async def update_flight(request: Request):
     flight_id = form_data.get("id")
 
     # Извлечение данных из формы
+    flight_date = form_data.get("date")
     flight_number = form_data.get("flight_number")
     technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
     instructor = form_data.get("edit-instructor")
@@ -460,6 +461,7 @@ async def update_flight(request: Request):
     flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
 
     if flight_techniques:
+        flight_techniques.created_at = flight_date
         flight_techniques.flight_number = flight_number
         flight_techniques.technique_id = technique_id
         flight_techniques.price = price
