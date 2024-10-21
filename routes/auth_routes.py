@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, Form, status
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import HTMLResponse,  RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
