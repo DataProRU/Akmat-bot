@@ -111,6 +111,10 @@ class FlightTechniques(Base):
     created_at = Column(DateTime)
     is_approved  = Column(Boolean)
 
+class TypeTechniques(Base):
+    __tablename__ = "type_techniques"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
 
 class FlightTechniqueUpdate(BaseModel):
     flight_id: int
@@ -122,3 +126,5 @@ class FlightTechniqueUpdate(BaseModel):
     source_id: int
     transfer: float
     note: str
+
+

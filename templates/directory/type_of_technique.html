@@ -18,11 +18,11 @@
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
-
+         {% for type in type_techniques %}
         <tr class="trow">
-            <td class="tcol"></td>
+            <td class="tcol">{{ type.title }}</td>
         </tr>
-
+         {% endfor %}
     </tbody>
 
 </table>

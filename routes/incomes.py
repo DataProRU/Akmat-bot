@@ -19,6 +19,7 @@ from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import JSONResponse
+from datetime import datetime
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -91,6 +92,7 @@ async def index(
     sources = result["sources"]
     total_pages = result["total_pages"]
 
+
     data = []
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
@@ -100,10 +102,14 @@ async def index(
             )
             user_name = users.get(flight.instructor_id, "Unknown User")
             flight_name = routes.get(flight.flight_number, "Unknown Route")
+            if flight_technique.created_at:
+                formatted_created_at = flight_technique.created_at.strftime("%d %B %Y, %H:%M")
+            else:
+                formatted_created_at = "Дата не указана"
             data.append(
                 {
                     "id": flight_technique.id,
-                    "created_at": flight_technique.created_at,
+                    "created_at": formatted_created_at,
                     "flight_number": flight.id,
                     "flight_name": flight_name,
                     "technique_name": technique_name,
