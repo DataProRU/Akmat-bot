@@ -490,6 +490,17 @@ p {
     margin-bottom: 10px;
 }
 
+#form-new-user-bot {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.big-table-container {
+    width: 100%;
+}
+
 /*unapproved_days*/
 .unap-days-section {
     background: url(img/unapproved_days_bg.jpeg) center/cover no-repeat;
