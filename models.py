@@ -47,15 +47,25 @@ class PaymentTypes(Base):
     __tablename__ = "payment_types"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
+
 class CategoryExpenses(Base):
     __tablename__ = "category_expenses"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+
 class Commisions(Base):
     __tablename__ = "comissions"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
+class Ranks(Base):
+    __tablename__ = "ranks"
+    id = Column(Integer, primary_key=True)
+    rank = Column(Text)
+    salary = Column(Numeric)
+    percent = Column(Numeric)
 
 
 class Users(Base):
@@ -76,7 +86,7 @@ class Users(Base):
     comission = Column(Boolean, default=False)
     penalty = Column(Boolean, default=False)
     is_investor = Column(Boolean, default=False)
-    change_salary= Column(Boolean, default=False)
+    change_salary = Column(Boolean, default=False)
 
 
 class Routes(Base):
@@ -91,7 +101,7 @@ class Flights(Base):
     flight_number = Column(SmallInteger)
     instructor_id = Column(Integer)
     route_id = Column(Integer)
-    flight_date= Column(DateTime)
+    flight_date = Column(DateTime)
     manager_id = Column(Integer)
     confirmed = Column(Boolean)
     source_id = Column(Integer)
@@ -118,12 +128,14 @@ class FlightTechniques(Base):
     transfer = Column(Numeric)
     note = Column(Text)
     created_at = Column(DateTime)
-    is_approved  = Column(Boolean)
+    is_approved = Column(Boolean)
+
 
 class TypeTechniques(Base):
     __tablename__ = "type_techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
 
 class FlightTechniqueUpdate(BaseModel):
     flight_id: int
@@ -135,5 +147,3 @@ class FlightTechniqueUpdate(BaseModel):
     source_id: int
     transfer: float
     note: str
-
-
