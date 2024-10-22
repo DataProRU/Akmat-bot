@@ -246,6 +246,10 @@ async def filtered_income(
             "per_page": per_page,
             "total_pages": total_pages,
             "techniques": techniques,
+            "routes":routes,
+            "users": users,
+            "payment_types": payment_types,
+            "sources": sources,
         },
     )
 
