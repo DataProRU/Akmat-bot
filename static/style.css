@@ -109,7 +109,8 @@ p {
 .form-btn-submit:hover,
 .form-btn-edit:hover,
 .welcome-bth:hover,
-.unapproved-btn-back:hover {
+.unapproved-btn-back:hover,
+.unapproved-days-btn:hover {
     background-color: #4e9dbb;
     color: #fffff8;
     transition: 0.3s;
@@ -365,20 +366,22 @@ p {
 .form-btn-reset,
 .form-btn-submit,
 .welcome-bth,
-.unapproved-btn-back {
+.unapproved-btn-back,
+.unapproved-days-btn {
     display: block;
     border: none;
     padding: 10px;
     border-radius: 3px;
     width: 120px;
-    font-weight: 600;
+    font-weight: 500;
     color: #f6f9fb;
     cursor: pointer;
 }
 
 .form-btn-submit,
 .welcome-bth,
-.unapproved-btn-back {
+.unapproved-btn-back,
+.unapproved-days-btn {
     background-color: #66ccf3;
     box-shadow: 1px 1px 6px #b0b6b950;
 }
@@ -510,6 +513,7 @@ p {
 
 .big-table-container {
     width: 100%;
+    padding: 10px;
 }
 
 /*
@@ -525,6 +529,11 @@ p {
 /*unapproved_days*/
 .unap-days-section {
     background: url(img/unapproved_days_bg.jpeg) center/cover no-repeat;
+}
+
+.unapproved-days-btn {
+    width: 300px;
+    font-size: 1.2rem;
 }
 
 /*unapproved_records*/
