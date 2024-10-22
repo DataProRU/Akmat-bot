@@ -47,7 +47,10 @@ class PaymentTypes(Base):
     __tablename__ = "payment_types"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
-
+class CategoryExpenses(Base):
+    __tablename__ = "category_expenses"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
 
 class Users(Base):
     __tablename__ = "users"
