@@ -1,12 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from dependencies import get_token_from_cookie, get_current_user
-from fastapi.responses import RedirectResponse
-from fastapi import  Request, Depends
+from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
+from dependencies import get_token_from_cookie, get_current_user
 from models import PaymentTypes
-from fastapi import Form
 
 router = APIRouter()
 

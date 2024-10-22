@@ -1,15 +1,14 @@
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
 from dependencies import get_token_from_cookie, get_current_user
-from fastapi.responses import RedirectResponse
-from fastapi import APIRouter, Request, Depends
 from models import TypeTechniques
-from fastapi import Form
 
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
+
 
 def get_db():
     db = Session()
@@ -17,6 +16,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @router.get("/type_of_technique", response_class=HTMLResponse)
 async def directory(request: Request, db: Session = Depends(get_db)):
@@ -32,14 +32,16 @@ async def directory(request: Request, db: Session = Depends(get_db)):
 
     type_techniques = db.query(TypeTechniques).all()
 
+    return templates.TemplateResponse(
+        "directory/type_of_technique.html",
+        {"request": request, "type_techniques": type_techniques},
+    )
 
-    return templates.TemplateResponse("directory/type_of_technique.html", {
-        "request": request,
-        "type_techniques": type_techniques
-    })
 
 @router.post("/type_of_technique/add", response_class=HTMLResponse)
-async def add_type_technique(request: Request, title: str = Form(...), db: Session = Depends(get_db)):
+async def add_type_technique(
+    request: Request, title: str = Form(...), db: Session = Depends(get_db)
+):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
         return token
@@ -54,8 +56,11 @@ async def add_type_technique(request: Request, title: str = Form(...), db: Sessi
 
     return RedirectResponse(url="/type_of_technique", status_code=303)
 
+
 @router.post("/type_of_technique/edit/{id}", response_class=HTMLResponse)
-async def edit_type_technique(request: Request, id: int, title: str = Form(...), db: Session = Depends(get_db)):
+async def edit_type_technique(
+    request: Request, id: int, title: str = Form(...), db: Session = Depends(get_db)
+):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
         return token
@@ -72,8 +77,11 @@ async def edit_type_technique(request: Request, id: int, title: str = Form(...),
 
     return RedirectResponse(url="/type_of_technique", status_code=303)
 
+
 @router.post("/type_of_technique/delete/{id}", response_class=HTMLResponse)
-async def delete_type_technique(request: Request, id: int, db: Session = Depends(get_db)):
+async def delete_type_technique(
+    request: Request, id: int, db: Session = Depends(get_db)
+):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
         return token
@@ -88,4 +96,3 @@ async def delete_type_technique(request: Request, id: int, db: Session = Depends
         db.commit()
 
     return RedirectResponse(url="/type_of_technique", status_code=303)
-
