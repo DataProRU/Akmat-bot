@@ -4,29 +4,31 @@
 
 {% block nav %}
 <h2 class="welcome-title">Категории</h2>
-<button class="unapproved-btn-back"> <a href="/directory/">Назад</a></button>
+<button class="unapproved-btn-back"><a href="/directory/">Назад</a></button>
 {% endblock %}
 
 {% block content %}
- <div class="opasity-btn-container">
+<div class="opasity-btn-container">
     <table class="table-data" id="table-data">
-    <thead>
+        <thead>
         <tr class="trow-head">
-            <th class="trow-head-data">Вид расхода<div class="resizer"></div>
+            <th class="trow-head-data">Вид расхода
+                <div class="resizer"></div>
             </th>
-            <th class="trow-head-data">Категория<div class="resizer"></div>
+            <th class="trow-head-data">Категория
+                <div class="resizer"></div>
             </th>
         </tr>
-    </thead>
-    <tbody class="table-body" id="table-body">
+        </thead>
+        <tbody class="table-body" id="table-body">
 
         <tr class="trow">
             <td class="tcol"></td>
             <td class="tcol tcol-num"></td>
         </tr>
 
-    </tbody>
+        </tbody>
 
-</table>
- </div>
+    </table>
+</div>
 {% endblock %}
