@@ -246,7 +246,8 @@ p {
 }
 
 .tcol-filter-edit,
-.tcol-filter-delete {
+.tcol-filter-delete,
+.tcol-filter-save {
     border: none;
     cursor: pointer;
 }
@@ -261,6 +262,12 @@ p {
     width: 15px;
     height: 15px;
     background: url(img/icon-delete-button.png) center/100% no-repeat;
+}
+
+.tcol-filter-save {
+    width: 15px;
+    height: 15px;
+    background: url(img/icon-save-button.png) center/100% no-repeat;
 }
 
 #add-form-container {
@@ -399,13 +406,13 @@ p {
 }
 
 #edit-form-container.open {
-    display: flex;
-    align-items: center;
+    display: block;
 }
 
 .edit-entry-form {
     height: 23px;
     display: flex;
+    align-items: center;
 }
 
 .edit-entry-form select,
@@ -493,12 +500,25 @@ p {
 #form-new-user-bot {
     visibility: hidden;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 1px 1px 6px #5a5c5e30;
+    animation: fadeIn 0.5s linear;
+    width: 400px;
 }
 
 .big-table-container {
     width: 100%;
+}
+
+.trow-head {
+    height: 110px;
+}
+
+.vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
 }
 
 /*unapproved_days*/
