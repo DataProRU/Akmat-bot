@@ -148,12 +148,14 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
         query = session.query(FlightTechniques)
 
         # Фильтрация по дате
-        if day is not None:
-            query = query.filter(extract('day', FlightTechniques.created_at) == day)
-        if month is not None:
-            query = query.filter(extract('month', FlightTechniques.created_at) == month)
         if year is not None:
             query = query.filter(extract('year', FlightTechniques.created_at) == year)
+
+            if month is not None:
+                query = query.filter(extract('month', FlightTechniques.created_at) == month)
+
+                if day is not None:
+                    query = query.filter(extract('day', FlightTechniques.created_at) == day)
 
         # Пагинация
         flights_techniques = query.offset(offset).limit(per_page).all()
@@ -185,11 +187,11 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
 @router.get("/filtered-income", response_class=HTMLResponse)
 async def filtered_income(
     request: Request,
-    day: Optional[int] = Query(None),  # Параметр фильтрации по дню (может быть пустым)
-    month: Optional[int] = Query(None),  # Параметр фильтрации по месяцу (может быть пустым)
-    year: Optional[int] = Query(None),  # Параметр фильтрации по году (может быть пустым)
-    page: int = Query(1, ge=1),  # Параметр пагинации (страница)
-    per_page: int = Query(30, ge=1, le=100),  # Параметр количества записей на страницу
+    day: Optional[int] = Query(None),
+    month: Optional[int] = Query(None),
+    year: Optional[int] = Query(None),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(30, ge=1, le=100),
 ):
     # Получаем токен и проверяем пользователя
     token = get_token_from_cookie(request)
@@ -200,7 +202,6 @@ async def filtered_income(
     if isinstance(payload, RedirectResponse):
         return payload  # Если токен недействителен, перенаправляем на страницу логина
 
-    # Получаем данные с учетом фильтрации по дате
     result = get_filtered_flight_techniques(day, month, year, page, per_page)
     flights_techniques = result["flights_techniques"]
     techniques = result["techniques"]
@@ -211,7 +212,6 @@ async def filtered_income(
     sources = result["sources"]
     total_pages = result["total_pages"]
 
-    # Формируем список данных для отображения
     data = []
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
