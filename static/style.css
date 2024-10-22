@@ -511,7 +511,7 @@ p {
 .big-table-container {
     width: 100%;
 }
-
+/*
 .trow-head {
     height: 110px;
 }
@@ -520,7 +520,7 @@ p {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
 }
-
+*/
 /*unapproved_days*/
 .unap-days-section {
     background: url(img/unapproved_days_bg.jpeg) center/cover no-repeat;

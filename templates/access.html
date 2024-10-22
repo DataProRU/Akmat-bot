@@ -118,22 +118,20 @@
     <table id="users_table" class="display table-data">
         <thead>
             <tr class="trow-head">
-                <th class="trow-head-data vertical">ID</th>
                 <th class="trow-head-data vertical">Telegram</th>
                 <th class="trow-head-data vertical">Имя</th>
+                <th class="trow-head-data vertical">Инвестор</th>
+                <th class="trow-head-data vertical">Директор</th>
                 <th class="trow-head-data vertical">Менеджер</th>
                 <th class="trow-head-data vertical">Инструктор</th>
                 <th class="trow-head-data vertical">Ассистент</th>
                 <th class="trow-head-data vertical">Отправить кнопки</th>
-                <th class="trow-head-data vertical">Дпозитный доход</th>
-                <th class="trow-head-data vertical">Enter Operation</th>
+                <th class="trow-head-data vertical">Внести доход</th>
+                <th class="trow-head-data vertical">Внести операцию</th>
                 <th class="trow-head-data vertical">Посмотреть зарплату</th>
-                <th class="trow-head-data vertical">Contribute Expense</th>
-                <th class="trow-head-data vertical">Директор</th>
-                <th class="trow-head-data vertical">Chat ID</th>
-                <th class="trow-head-data vertical">Commission</th>
-                <th class="trow-head-data vertical">Штрафы</th>
-                <th class="trow-head-data vertical">Инвестор</th>
+                <th class="trow-head-data vertical">Внести расход</th>
+                <th class="trow-head-data vertical">Комиссия</th>
+                <th class="trow-head-data vertical">Штраф</th>
                 <th class="trow-head-data vertical">Изменить зарплату</th>
                 <th class="trow-head-data vertical">Действия</th>
             </tr>
@@ -141,10 +139,13 @@
         <tbody>
             {% for user in users_tg %}
             <tr class="trow">
-                <td class="tcol tcol-num">{{ user.id }}</td>
                 <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
                 <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{
                     user.full_name }}</td>
+                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                        data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
+                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
+                        data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
                         data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
@@ -162,16 +163,9 @@
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
                         data-field="contribute_expense" {% if user.contribute_expense %}checked{% endif %}></td>
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
-                <td class="tcol tcol-num" contenteditable="true" data-user-id="{{ user.id }}" data-field="chat_id">{{
-                    user.chat_id }}
-                </td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
                         data-field="comission" {% if user.comission %}checked{% endif %}></td>
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
                         data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
                 <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
                         data-field="change_salary" {% if user.change_salary %}checked{% endif %}></td>
                 <td class="tcol-filter">
