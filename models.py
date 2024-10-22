@@ -52,6 +52,12 @@ class CategoryExpenses(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+class Commisions(Base):
+    __tablename__ = "comissions"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+
+
 class Users(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
