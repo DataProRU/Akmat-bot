@@ -9,7 +9,6 @@
 {% block content %}
 <section class="section-center unap-days-section">
     <div class="opasity-btn-container">
-        <ul>
             {% for day in days_with_unapproved %}
             <ul>
                 <form method="get" action="/unapproved-records/">
@@ -21,7 +20,6 @@
                 </form>
             </ul>
             {% endfor %}
-        </ul>
     </div>
 </section>
 {% endblock %}
