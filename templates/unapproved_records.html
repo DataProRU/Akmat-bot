@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Неподтверждённые записи за {{ day }}/{{ month }}/{{ year }}{% endblock %}
+{% block title %}Неподтверждённые записи за {{ day }}.{{ month }}.{{ year }}{% endblock %}
 
 {% block nav %}
-<h2 class="welcome-title">Неподтверждённые записи за {{ day }}/{{ month }}/{{ year }}</h2>
+<h2 class="welcome-title">Неподтверждённые записи за {{ day }}.{{ month }}.{{ year }}</h2>
 <button class="unapproved-btn-back"> <a href="/unapproved-days">Назад</a></button>
 {% endblock %}
 
@@ -52,20 +52,23 @@
     </tbody>
 </table>
 
-<form method="post" action="/approve-all">
-    <input type="hidden" name="day" value="{{ day }}">
-    <input type="hidden" name="month" value="{{ month }}">
-    <input type="hidden" name="year" value="{{ year }}">
-    <button type="submit" class="form-btn-submit">Одобрить все записи</button>
-</form>
+<section class="bottom">
+    <form method="post" action="/approve-all">
+        <input type="hidden" name="day" value="{{ day }}">
+        <input type="hidden" name="month" value="{{ month }}">
+        <input type="hidden" name="year" value="{{ year }}">
+        <button type="submit" class="form-btn-submit">Одобрить все записи</button>
+    </form>
+</section>
+
 
 <!-- Пагинация -->
-<div>
+<!--div>
     {% if page > 1 %}
     <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page - 1 }}&per_page={{ per_page }}">Previous</a>
     {% endif %}
     {% if page < total_pages %} 
     <a href="?day={{ day }}&month={{ month }}&year={{ year }}&page={{ page + 1 }}&per_page={{ per_page }}">Next</a>
         {% endif %}
-</div>
+</div-->
 {% endblock %}
