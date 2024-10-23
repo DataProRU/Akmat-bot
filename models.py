@@ -119,6 +119,9 @@ class Techniques(Base):
     __tablename__ = "techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+    type_technique_id = Column(Integer)
+    investor_id = Column(Integer)
+    visible = Column(Boolean)
 
 
 class FlightTechniques(Base):
