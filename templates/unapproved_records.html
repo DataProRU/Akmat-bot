@@ -32,21 +32,26 @@
             </th>
             <th class="trow-head-data">Примечание<div class="resizer"></div>
             </th>
+            <th class="trow-head-data th-filter"></th>
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
         {% for record in flights_techniques %}
         <tr class="trow">
-            <td class="tcol">{{ record.flight_number }}</td>
+            <td class="tcol tcol-num">{{ record.flight_number }}</td>
             <td class="tcol">{{ record.flight_name }}</td>
             <td class="tcol">{{ record.technique_name }}</td>
             <td class="tcol">{{ record.user_name }}</td>
-            <td class="tcol">{{ record.discount }}</td>
-            <td class="tcol">{{ record.prepayment }}</td>
-            <td class="tcol">{{ record.price }}</td>
+            <td class="tcol tcol-num">{{ record.discount }}</td>
+            <td class="tcol tcol-num">{{ record.prepayment }}</td>
+            <td class="tcol tcol-num">{{ record.price }}</td>
             <td class="tcol">{{ record.payment_type }}</td>
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
+            <td>
+                <button class="tcol-filter-edit"></button>
+                <button class="tcol-filter-delete"></button>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

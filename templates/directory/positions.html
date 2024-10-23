@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+<img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
     <form action="/positions/add" method="post">
         <input type="text" name="rank" placeholder="Должность" required>
@@ -17,46 +18,46 @@
     </form>
     <table class="table-data" id="table-data">
         <thead>
-        <tr class="trow-head">
-            <th class="trow-head-data">Должность
-                <div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Оклад
-                <div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Процент
-                <div class="resizer"></div>
-            </th>
-            <th class="trow-head-data">Действия
-                <div class="resizer"></div>
-            </th>
+            <tr class="trow-head">
+                <th class="trow-head-data">Должность
+                    <div class="resizer"></div>
+                </th>
+                <th class="trow-head-data">Оклад
+                    <div class="resizer"></div>
+                </th>
+                <th class="trow-head-data">Процент
+                    <div class="resizer"></div>
+                </th>
+                <th class="trow-head-data">Действия
+                    <div class="resizer"></div>
+                </th>
 
-        </tr>
+            </tr>
         </thead>
         <tbody class="table-body" id="table-body">
 
-        {% for type in ranks %}
-        <tr class="trow">
-            <form action="/positions/edit/{{ type.id }}" method="post" style="display:inline;">
-                <td class="tcol">
-                    <input type="text" name="rank" value="{{ type.rank }}" required>
-                </td>
-                <td>
-                    <input type="text" name="salary" value="{{ type.salary }}" required>
-                </td>
-                <td>
-                    <input type="text" name="percent" value="{{ type.percent }}" required>
-                    <button type="submit" class="tcol-filter-edit"></button>
-                </td>
-            </form>
-            <td class="tcol">
-                <form action="/positions/delete/{{ type.id }}" method="post" style="display:inline;">
-                    <button type="submit" class="tcol-filter-delete"
-                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+            {% for type in ranks %}
+            <tr class="trow">
+                <form action="/positions/edit/{{ type.id }}" method="post" style="display:inline;">
+                    <td class="tcol">
+                        <input type="text" name="rank" value="{{ type.rank }}" required>
+                    </td>
+                    <td>
+                        <input type="text" name="salary" value="{{ type.salary }}" required>
+                    </td>
+                    <td>
+                        <input type="text" name="percent" value="{{ type.percent }}" required>
+                        <button type="submit" class="tcol-filter-edit"></button>
+                    </td>
                 </form>
-            </td>
-        </tr>
-        {% endfor %}
+                <td class="tcol">
+                    <form action="/positions/delete/{{ type.id }}" method="post" style="display:inline;">
+                        <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
 
         </tbody>
 
