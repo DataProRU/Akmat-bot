@@ -9,34 +9,84 @@
 
 {% block content %}
 <div class="opasity-btn-container">
+    <form action="/types_of_expenses/add" method="post" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <input type="text" name="title" placeholder="Название" required>
+
+        <select name="category_exp_id" id="category_exp_id">
+            {% for category in category_expenses %}
+                <option value="{{ category.id }}">{{ category.title }}</option>
+            {% endfor %}
+        </select>
+
+        <div>
+            <input type="checkbox" id="visible_investor" name="visible_investor">
+            <label for="visible_investor">Показывать инвестору</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_employee" name="visible_employee">
+            <label for="visible_employee">Показывать сотруднику</label>
+        </div>
+
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
+
     <table class="table-data" id="table-data">
-        <thead>
+    <thead>
         <tr class="trow-head">
-            <th class="trow-head-data">Категория
-                <div class="resizer"></div>
-            </th>
             <th class="trow-head-data">Название
                 <div class="resizer"></div>
             </th>
-
-            <th class="trow-head-data">Показывать инвестора
+            <th class="trow-head-data">Категория
                 <div class="resizer"></div>
             </th>
 
-            <th class="trow-head-data">Показывать сотрудника
+            <th class="trow-head-data">Показывать <br> инвестора
                 <div class="resizer"></div>
             </th>
 
+            <th class="trow-head-data">Показывать <br> сотрудника
+                <div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Действия
+                <div class="resizer"></div>
+            </th>
         </tr>
-        </thead>
-        <tbody class="table-body" id="table-body">
-
+    </thead>
+    <tbody class="table-body" id="table-body">
+        {% for type in type_expenses %}
         <tr class="trow">
-            <td class="tcol"></td>
+            <form action="/types_of_expenses/edit/{{ type.id }}" method="post" style="display:inline;">
+                <td class="tcol">
+                    <input type="text" name="title" value="{{ type.title }}" required>
+                </td>
+                <td>
+                    <select name="category_exp_id" required>
+                        {% for category in category_expenses %}
+                            <option value="{{ category.id }}" {% if category.id == type.category_exp_id %}selected{% endif %}>
+                                {{ category.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                    <input type="checkbox" name="visible_investor" {% if type.visible_investor %}checked{% endif %}>
+                </td>
+                <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                    <input type="checkbox" name="visible_employee" {% if type.visible_employee %}checked{% endif %}>
+                    <button type="submit" class="tcol-filter-edit"></button>
+                </td>
+            </form>
+            <td class="tcol">
+                <form action="/types_of_expenses/delete/{{ type.id }}" method="post" style="display:inline;">
+                    <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                </form>
+            </td>
         </tr>
-
-        </tbody>
-
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
 </div>
 {% endblock %}

@@ -142,6 +142,16 @@ class TypeTechniques(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Text)
 
+class TypeExpenses(Base):
+    __tablename__ = "type_expenses"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+    visible_investor = Column(Boolean)
+    visible_employee = Column(Boolean)
+    category_exp_id = Column(Integer)
+
+
+
 
 class FlightTechniqueUpdate(BaseModel):
     flight_id: int
