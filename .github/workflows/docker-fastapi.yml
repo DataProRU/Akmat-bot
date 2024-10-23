@@ -45,7 +45,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -56,9 +56,9 @@ jobs:
         run: |
           flake8 .
 
-      - name: Run Docker Compose
+      - name: Build and run Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up --build -d
+          docker-compose up --build -d
 
       - name: Run tests
         run: |
