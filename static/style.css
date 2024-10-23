@@ -540,6 +540,31 @@ p {
     z-index: -1;
 }
 
+/*directory*/
+
+#type_of_payments-add {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+#type_of_payments-add-container {
+    display: none;
+    animation: fadeIn 0.5s linear;
+    background-color: #d8ecfa;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 1px 1px 6px #5a5c5e30;
+    z-index: 10;
+}
+
+#type_of_payments-add-container.open {
+    display: block;
+    animation: appForm 0.4s linear 0s 1 normal both;
+}
+
 /*pagination*/
 .pagination,
 .bottom {

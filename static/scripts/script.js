@@ -1,17 +1,15 @@
-const buttonOpen = document.querySelector('#add-entry-btn-income');
-const formAdd = document.querySelector('#add-form-container');
-const buttonClose = document.querySelector('.close-form-btn');
-const formEdit = document.querySelector('#edit-form-container');
-
 //открыть форму для добавления записи
-buttonOpen.addEventListener('click', () => {
+function openFormAdd() {
+    const formAdd = document.querySelector('#add-form-container');
     formAdd.classList.add('open');
-});
+    const buttonClose = document.querySelector('.close-form-btn');
+    //закрыть форму для добавления записи
+    buttonClose.addEventListener('click', () => {
+        formAdd.classList.remove('open');
+    });
 
-//закрыть форму для добавления записи
-buttonClose.addEventListener('click', () => {
-    formAdd.classList.remove('open');
-});
+};
+const formEdit = document.querySelector('#edit-form-container');
 
 //открыть форму для редактирования записи
 //var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
@@ -64,8 +62,22 @@ function fillEditForm(btnEdit, data) {
     trEdit.append(formEdit);
     const tdsEditForm = trEdit.children;
     console.log(tdsEditForm);
-    //setWidthEditForm(tdsEditForm);
+    setWidthEditForm(tdsEditForm);
     formEdit.classList.add('open');
+};
+
+// directory
+//открыть форму для добавления типа оплаты
+function openFormAddTOP() {
+    const formAddTOP = document.querySelector('#type_of_payments-add-container');
+    formAddTOP.classList.add('open');
+    const buttonClose = document.querySelector('.close-form-btn');
+
+    //закрыть форму для добавления типа оплаты
+    buttonClose.addEventListener('click', () => {
+        formAddTOP.classList.remove('open');
+    });
+
 };
 
 var tableBody = document.querySelector('#table-body');
