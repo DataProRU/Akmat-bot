@@ -64,7 +64,7 @@ async def update_user_role(user_id: int, role_update: UpdateUserRole):
     if not database.is_connected:
         await database.connect()
     await database.execute(query)
-    return {"message": "User role updated"}
+    return RedirectResponse("/users", status_code=303)
 
 
 @router.post("/update_tg_users")
@@ -135,7 +135,7 @@ async def update_user(data: dict, db: Session = Depends(get_db)):
         user.is_investor = data['is_investor']
         user.change_salary = data['change_salary']
         db.commit()
-        return JSONResponse({"status": "success"})
+        return RedirectResponse("/users", status_code=303)
 
     return JSONResponse({"status": "error"})
 
@@ -144,7 +144,7 @@ async def update_user(data: dict, db: Session = Depends(get_db)):
 async def delete_user(user_id: int):
     query = web_users.delete().where(web_users.c.id == user_id)
     await database.execute(query)
-    return {"message": "User deleted"}
+    return RedirectResponse("/users", status_code=303)
 
 
 @router.post("/delete_user_tg/")

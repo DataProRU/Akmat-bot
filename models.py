@@ -67,6 +67,12 @@ class Ranks(Base):
     salary = Column(Numeric)
     percent = Column(Numeric)
 
+class Investors(Base):
+    __tablename__ = "investors"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+    tg = Column(Text)
+    percent = Column(Numeric)
 
 class Users(Base):
     __tablename__ = "users"
