@@ -93,7 +93,7 @@ p {
 
 .add-entry-btn {
     width: 30px;
-    height: 100%;
+    height: 30px;
     border-radius: 50%;
     border: none;
     color: #f6f9fb;
@@ -270,7 +270,7 @@ p {
     background: url(img/icon-save-button.png) center/100% no-repeat;
 }
 
-#add-form-container {
+.add-form-container {
     display: none;
     animation: fadeIn 0.5s linear;
     width: 400px;
@@ -281,7 +281,7 @@ p {
     box-shadow: 1px 1px 6px #5a5c5e30;
 }
 
-#add-form-container.open {
+.add-form-container.open {
     display: block;
     animation: appForm 0.4s linear 0s 1 normal both;
 }
@@ -293,7 +293,7 @@ p {
     width: 100%;
     color: #f6f9fb;
     background-color: #66ccf3;
-    padding: 15px 30px;
+    padding: 15px 20px;
 }
 
 .close-form-btn {
@@ -313,7 +313,7 @@ p {
 
 .add-entry-form {
     width: 100%;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     background-color: #e7e8ed;
@@ -499,20 +499,36 @@ p {
     margin-bottom: 10px;
 }
 
+
+.header-big-table {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0px 10px;
+}
+
 #form-new-user-bot {
-    visibility: hidden;
+    display: none;
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     box-shadow: 1px 1px 6px #5a5c5e30;
-    animation: fadeIn 0.5s linear;
     width: 400px;
+    background-color: #d8ecfa;
+    z-index: 5;
+
+}
+
+#form-new-user-bot.open {
+    display: block;
+    animation: appForm 0.4s linear 0s 1 normal both;
 }
 
 .big-table-container {
     width: 100%;
-    padding: 10px;
+    position: relative;
 }
 
 /*unapproved_days*/

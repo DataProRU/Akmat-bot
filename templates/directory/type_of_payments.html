@@ -4,23 +4,16 @@
 
 {% block nav %}
 <h2 class="welcome-title">Типы оплаты</h2>
-<button id="type_of_payments-add" width="10px" class="add-entry-btn tooltip" onclick="openFormAddTOP()">✚</button>
 <button class="unapproved-btn-back"><a href="/directory/">Назад</a></button>
 {% endblock %}
 
 {% block content %}
 <img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
-    <section id="type_of_payments-add-container">
-        <div class="form-header">
-            <h3 class="form-title">Добавить тип оплаты</h3>
-            <button class="close-form-btn">✖</button>
-        </div>
-        <form action="/type_of_payments/add" method="post" id="type_of_payments-add-form">
-            <input type="text" name="title" placeholder="Название типа оплаты" required>
-            <button type="submit" class="welcome-bth">Добавить</button>
-        </form>
-    </section>
+    <form action="/type_of_payments/add" method="post" id="type_of_payments-add-form">
+        <input type="text" name="title" placeholder="Название типа оплаты" required>
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
     <table class="table-data" id="table-data">
         <thead>
             <tr class="trow-head">

@@ -68,36 +68,32 @@ function fillEditForm(btnEdit, data) {
 
 // directory
 //открыть форму для добавления типа оплаты
-function openFormAddTOP() {
-    const formAddTOP = document.querySelector('#type_of_payments-add-container');
-    formAddTOP.classList.add('open');
-    const buttonClose = document.querySelector('.close-form-btn');
+//function openFormAddTOP() {
+//    const formAddTOP = document.querySelector('#type_of_payments-add-container');
+//    formAddTOP.classList.add('open');
+//    const buttonClose = document.querySelector('.close-form-btn');
 
-    //закрыть форму для добавления типа оплаты
-    buttonClose.addEventListener('click', () => {
-        formAddTOP.classList.remove('open');
-    });
+//закрыть форму для добавления типа оплаты
+//    buttonClose.addEventListener('click', () => {
+//        formAddTOP.classList.remove('open');
+//   });
+
+//};
+
+//открыть форму для добавления пользователя в бот
+function openFormAddBot() {
+    const formAddBot = document.querySelector('#form-new-user-bot');
+    formAddBot.classList.add('open');
+    //const buttonClose = document.querySelector('.close-form-btn');
+    //закрыть форму для добавления записи
+    //buttonClose.addEventListener('click', () => {
+    //formAdd.classList.remove('open');
+    //});
 
 };
 
 var tableBody = document.querySelector('#table-body');
 const butttonAddOrder = document.querySelector('#submit');
-
-function newOrder() {
-    var date = document.getElementById('date').value;
-    var flight = document.getElementById('flight').value;
-    var typeOfRoute = document.getElementById('type-of-route').options[document.getElementById('type-of-route').selectedIndex].text;
-    var typeOfTechnique = document.getElementById('type-of-technique').options[document.getElementById('type-of-technique').selectedIndex].text;
-    var instructor = document.getElementById('instructor').options[document.getElementById('instructor').selectedIndex].text;
-    var discount = document.getElementById('discount').value;
-    var prepayment = document.getElementById('prepayment').value;
-    var price = document.getElementById('price').value;
-    var dtypeOfPayment = document.getElementById('type-of-payment').options[document.getElementById('type-of-payment').selectedIndex].text;
-    var source = document.getElementById('source').options[document.getElementById('source').selectedIndex].text;
-    var comment = document.getElementById('comment').value;
-    return [date, flight, typeOfRoute, typeOfTechnique, instructor, discount, prepayment, price, dtypeOfPayment, source, comment];
-
-};
 
 butttonAddOrder.addEventListener('click', (event) => {
     formAdd.classList.remove('open');
