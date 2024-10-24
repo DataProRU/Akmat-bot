@@ -3,7 +3,12 @@
 {% block title %}Неподтверждённые записи за {{ day }}.{{ month }}.{{ year }}{% endblock %}
 
 {% block nav %}
-<h2 class="welcome-title">Неподтверждённые записи за {{ day }}.{{ month }}.{{ year }}</h2>
+<div class="welcome-title">
+    <h2>Неподтверждённые записи за {{ day }}.{{ month }}.{{ year }}</h2>
+    <button onclick="openFormAdd()" class="add-entry-btn tooltip">✚
+        <span class="tooltip-text">Добавить запись</span>
+    </button>
+</div>
 <button class="unapproved-btn-back"> <a href="/unapproved-days">Назад</a></button>
 {% endblock %}
 
@@ -66,6 +71,17 @@
     </form>
 </section>
 
+<section id="add-form-unapproved" class="add-form-container">
+
+    <div class="form-header">
+        <h3 class="form-title">Новая запись</h3>
+        <button class="close-form-btn">✖</button>
+    </div>
+
+    <form action="" class="add-entry-form">
+
+    </form>
+</section>
 
 <!-- Пагинация -->
 <!--div>

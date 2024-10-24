@@ -1,6 +1,6 @@
 //открыть форму для добавления записи
 function openFormAdd() {
-    const formAdd = document.querySelector('#add-form-container');
+    const formAdd = document.querySelector('.add-form-container');
     formAdd.classList.add('open');
     const buttonClose = document.querySelector('.close-form-btn');
     //закрыть форму для добавления записи
