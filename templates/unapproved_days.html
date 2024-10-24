@@ -7,21 +7,20 @@
 {% endblock %}
 
 {% block content %}
-<section class="section-center unap-days-section">
+<section class="section-center">
+    <img src="/static/img/unapproved_days_bg.jpeg" class="img-bg" alt="фоновое изображение">
     <div class="opasity-btn-container">
+        {% for day in days_with_unapproved %}
         <ul>
-            {% for day in days_with_unapproved %}
-            <ul>
-                <form method="get" action="/unapproved-records/">
-                    <input type="hidden" name="day" value="{{ day.day }}">
-                    <input type="hidden" name="month" value="{{ day.month }}">
-                    <input type="hidden" name="year" value="{{ day.year }}">
-                    <button type="submit" class="unapproved-days-btn">Отобразить записи за {{ day.day }}.{{ day.month
-                        }}.{{day.year }}</button>
-                </form>
-            </ul>
-            {% endfor %}
+            <form method="get" action="/unapproved-records/">
+                <input type="hidden" name="day" value="{{ day.day }}">
+                <input type="hidden" name="month" value="{{ day.month }}">
+                <input type="hidden" name="year" value="{{ day.year }}">
+                <button type="submit" class="unapproved-days-btn">Отобразить записи за {{ day.day }}.{{
+                    day.month}}.{{day.year }}</button>
+            </form>
         </ul>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

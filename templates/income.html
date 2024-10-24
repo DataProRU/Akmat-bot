@@ -5,17 +5,17 @@
 
 {% block nav %}
 <nav class="nav-container">
-    <div class="add-entry-btn tooltip" id="add-entry-btn-income">✚
+    <div class="add-entry-btn tooltip" id="add-entry-btn-income" onclick="openFormAdd()">✚
         <span class="tooltip-text">Добавить запись</span>
     </div>
     <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
 
-       <select name="day" id="day" class="nav-select">
-    <option value="">День</option>
-    {% for day in range(1, 32) %}
-        <option value="{{ day }}">{{ day }}</option>
-    {% endfor %}
-</select>
+        <select name="day" id="day" class="nav-select">
+            <option value="">День</option>
+            {% for day in range(1, 32) %}
+            <option value="{{ day }}">{{ day }}</option>
+            {% endfor %}
+        </select>
 
         <select name="month" id="month" class="nav-select">
             <option value="">Месяц</option>
@@ -141,10 +141,10 @@
 
 </table>
 
-<section id="add-form-container">
+<section id="add-form-container" class="add-form-container">
 
     <div class="form-header">
-        <h2 class="form-title">Новая запись</h2>
+        <h3 class="form-title">Новая запись</h3>
         <button class="close-form-btn">✖</button>
     </div>
 
@@ -237,7 +237,6 @@
             <label for="note">Комментарий</label>
             <textarea id="note" name="note"></textarea>
         </div>
-
 
         <div class="form-btns">
             <input type="reset" class="form-btn-reset">

@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+<img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
     <form action="/investors/add" method="post">
         <input type="text" name="title" placeholder="Имя" required>
@@ -17,20 +18,20 @@
     </form>
     <table class="table-data" id="table-data">
         <thead>
-        <tr class="trow-head">
-            <th class="trow-head-data">Имя
-                <div class="resizer"></div>
-            </th>
+            <tr class="trow-head">
+                <th class="trow-head-data">Имя
+                    <div class="resizer"></div>
+                </th>
 
-            <th class="trow-head-data">Ник в telegram
-                <div class="resizer"></div>
-            </th>
+                <th class="trow-head-data">Ник в telegram
+                    <div class="resizer"></div>
+                </th>
 
             <th class="trow-head-data">Процент
                 <div class="resizer"></div>
             </th>
 
-        </tr>
+            </tr>
         </thead>
         <tbody class="table-body" id="table-body">
 
