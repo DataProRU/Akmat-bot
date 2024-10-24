@@ -1,6 +1,6 @@
 import datetime
 
-from fastapi import Query, Request, HTTPException, Form, Depends
+from fastapi import Query, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
 from sqlalchemy import extract
