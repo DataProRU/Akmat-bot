@@ -273,9 +273,9 @@ p {
 .add-form-container {
     display: none;
     animation: fadeIn 0.5s linear;
-    width: 400px;
+    width: 350px;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 1px 1px 6px #5a5c5e30;
@@ -293,7 +293,7 @@ p {
     width: 100%;
     color: #f6f9fb;
     background-color: #66ccf3;
-    padding: 15px 20px;
+    padding: 10px 15px;
 }
 
 .close-form-btn {
@@ -313,7 +313,7 @@ p {
 
 .add-entry-form {
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     background-color: #e7e8ed;
@@ -499,13 +499,20 @@ p {
     margin-bottom: 10px;
 }
 
-
 .header-big-table {
     height: 30px;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
     padding: 0px 10px;
+}
+
+.access-new-site {
+    width: 220px;
+}
+
+.align-end {
+    align-self: flex-end;
 }
 
 #form-new-user-bot {
@@ -518,7 +525,6 @@ p {
     width: 400px;
     background-color: #d8ecfa;
     z-index: 5;
-
 }
 
 #form-new-user-bot.open {

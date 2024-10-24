@@ -114,7 +114,7 @@
     </table>
 
     <section id="form-new-user-bot">
-        <h2>Добавить нового пользователя</h2>
+        <h3>Добавить нового пользователя</h3>
         <form action="/users_tg/add" method="POST">
 
             <label for="tg">Ник в телеграм (tg):</label>
@@ -165,35 +165,34 @@
             <label for="change_salary">Изменить зарплату:</label>
             <input type="checkbox" id="change_salary" name="change_salary="><br><br>
 
-            <input type="submit" value="Добавить">
+            <input type="submit" value="Добавить" class="form-btn-submit">
         </form>
     </section>
 </section>
 
 
-<section id="userModal" class="add-form-container">
+<section id="userModal" class="add-form-container access-new-site">
     <div class="form-header">
-        <h2>Создать нового пользователя</h2>
-        <span class="close-form-btn" onclick="closeModal()">&times;</span>
+        <h3>Новый пользователь</h3>
+        <span class="close-form-btn" onclick="closeModal()">✖</span>
     </div>
     <form id="createUserForm" class="add-entry-form">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
-
-        <p>
+        <div class="form-element">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-element">
             <label for="password">Пароль:</label>
             <input type="text" id="password" name="password" required>
-        </p>
-
-        <br><br>
-        <label for="role">Роль:</label>
-        <select id="role" name="role">
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-        </select>
-
-        <br><br>
-        <button type="submit">Создать</button>
+        </div>
+        <div class="form-element">
+            <label for="role">Роль:</label>
+            <select id="role" name="role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <button type="submit" class="form-btn-submit align-end">Создать</button>
     </form>
 </section>
 
