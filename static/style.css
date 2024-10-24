@@ -275,7 +275,7 @@ p {
     animation: fadeIn 0.5s linear;
     width: 350px;
     position: absolute;
-    top: 40%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 1px 1px 6px #5a5c5e30;
@@ -359,7 +359,7 @@ p {
 .form-btns {
     display: flex;
     justify-content: space-between;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .form-btn-reset,
