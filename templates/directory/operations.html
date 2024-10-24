@@ -10,37 +10,117 @@
 {% block content %}
 <img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
+    <form action="/operations/add" method="post" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <input type="text" name="title" placeholder="Название" required>
+
+
+        <div>
+            <input type="checkbox" id="visible_type_technique" name="visible_type_technique">
+            <label for="visible_investor">Показывать <br> типы техники</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_canisters" name="visible_canisters">
+            <label for="visible_investor">Показывать <br> канистры</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_cost_fuel" name="visible_cost_fuel">
+            <label for="visible_investor">Показывать <br>сумму</label>
+        </div>
+
+          <div>
+            <input type="checkbox" id="visible_amount" name="visible_amount">
+            <label for="visible_investor">Показывать <br> стоимость</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_technique" name="visible_technique">
+            <label for="visible_investor">Показывать <br> стоимость</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_description" name="visible_description">
+            <label for="visible_investor">Показывать <br> технику</label>
+        </div>
+
+        <div>
+            <input type="checkbox" id="visible_investor" name="visible_investor">
+            <label for="visible_investor">Показывать <br> примечание</label>
+        </div>
+
+
+
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
     <table class="table-data" id="table-data">
         <thead>
             <tr class="trow-head">
                 <th class="trow-head-data">Название
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать типы техники
+                <th class="trow-head-data">Показывать
+                    <br>типы техники
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать канистры
+                <th class="trow-head-data">Показывать <br> канистры
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать сумму
+                <th class="trow-head-data">Показывать <br> сумму
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать стоимость
+                <th class="trow-head-data">Показывать <br> стоимость
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать технику
+                <th class="trow-head-data">Показывать <br> технику
                     <div class="resizer"></div>
                 </th>
-                <th class="trow-head-data">Показывать примечания
+                <th class="trow-head-data">Показывать <br> примечания
+                    <div class="resizer"></div>
+                </th>
+                <th class="trow-head-data">Действия
                     <div class="resizer"></div>
                 </th>
             </tr>
         </thead>
         <tbody class="table-body" id="table-body">
 
+            {% for type in type_expenses %}
             <tr class="trow">
-                <td class="tcol"></td>
+                    <form action="/operations/edit/{{ type.id }}" method="post" style="display:inline;">
+                        <td class="tcol">
+                            <input type="text" name="title" value="{{ type.title }}" required>
+                        </td>
+                         <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_type_technique" {% if type.visible_type_technique %}checked{% endif %}>
+                        </td>
+                         <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_canisters" {% if type.visible_canisters %}checked{% endif %}>
+                        </td>
+                         <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_amount" {% if type.visible_amount %}checked{% endif %}>
+                        </td>
+                         <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_cost_fuel" {% if type.visible_cost_fuel %}checked{% endif %}>
+                        </td>
+                         <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_technique" {% if type.visible_technique %}checked{% endif %}>
+                        </td>
+                        <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                            <input type="checkbox" name="visible_description" {% if type.visible_description %}checked{% endif %}>
+                            <button type="submit"  class="tcol-filter-edit"></button>
+                        </td>
+
+                    </form>
+                </td>
+                <td class="tcol">
+                    <form action="/operations/delete/{{ type.id }}" method="post" style="display:inline;">
+                        <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                    </form>
+                </td>
             </tr>
+            {% endfor %}
 
         </tbody>
 

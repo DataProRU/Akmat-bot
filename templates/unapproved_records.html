@@ -55,7 +55,10 @@
             <td class="tcol">{{ record.note }}</td>
             <td>
                 <button class="tcol-filter-edit"></button>
-                <button class="tcol-filter-delete"></button>
+                <form action="/delete_flight/" method="post">
+                    <input type="hidden" name="id" value="{{ record.id }}">
+                    <button type="submit" class="tcol-filter-delete"></button>
+                </form>
             </td>
         </tr>
         {% endfor %}

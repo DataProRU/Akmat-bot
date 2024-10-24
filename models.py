@@ -153,7 +153,16 @@ class TypeExpenses(Base):
     visible_employee = Column(Boolean)
     category_exp_id = Column(Integer)
 
-
+class TypeOperations(Base):
+    __tablename__="type_operations"
+    id = Column(Integer, primary_key=True)
+    title= Column(Text)
+    visible_type_technique = Column(Boolean)
+    visible_canisters = Column(Boolean)
+    visible_amount = Column(Boolean)
+    visible_cost_fuel = Column(Boolean)
+    visible_technique = Column(Boolean)
+    visible_description = Column(Boolean)
 
 
 class FlightTechniqueUpdate(BaseModel):
