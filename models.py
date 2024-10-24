@@ -67,6 +67,12 @@ class Ranks(Base):
     salary = Column(Numeric)
     percent = Column(Numeric)
 
+class Investors(Base):
+    __tablename__ = "investors"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+    tg = Column(Text)
+    percent = Column(Numeric)
 
 class Users(Base):
     __tablename__ = "users"
@@ -113,6 +119,9 @@ class Techniques(Base):
     __tablename__ = "techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+    type_technique_id = Column(Integer)
+    investor_id = Column(Integer)
+    visible = Column(Boolean)
 
 
 class FlightTechniques(Base):
@@ -135,6 +144,16 @@ class TypeTechniques(Base):
     __tablename__ = "type_techniques"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+
+class TypeExpenses(Base):
+    __tablename__ = "type_expenses"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+    visible_investor = Column(Boolean)
+    visible_employee = Column(Boolean)
+    category_exp_id = Column(Integer)
+
+
 
 
 class FlightTechniqueUpdate(BaseModel):

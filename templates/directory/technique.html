@@ -10,34 +10,92 @@
 {% block content %}
 <img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
+    <form action="/technique/add" method="post" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+        <input type="text" name="title" placeholder="Название" required>
+
+        <select name="type_technique_id" id="type_technique_id">
+            {% for technique in type_techniques %}
+                <option value="{{ technique.id }}">{{ technique.title }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="investor_id" id="investor_id">
+            {% for investor in investors %}
+                <option value="{{ investor.id }}">{{ investor.title }}</option>
+            {% endfor %}
+        </select>
+
+        <div>
+            <input type="checkbox" id="visible" name="visible">
+            <label for="visible">Отображать</label>
+        </div>
+
+
+
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
     <table class="table-data" id="table-data">
         <thead>
-            <tr class="trow-head">
-                <th class="trow-head-data">Позиция
-                    <div class="resizer"></div>
-                </th>
-                <th class="trow-head-data">Название
-                    <div class="resizer"></div>
-                </th>
-                <th class="trow-head-data">Тип техники
-                    <div class="resizer"></div>
-                </th>
-                <th class="trow-head-data">Инвестор
-                    <div class="resizer"></div>
-                </th>
-                <th class="trow-head-data">Отображать
-                    <div class="resizer"></div>
-                </th>
-            </tr>
+
+        <tr class="trow-head">
+
+            <th class="trow-head-data">Название
+                <div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Тип техники
+                <div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Инвестор
+                <div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Отображать
+                <div class="resizer"></div>
+            </th>
+            <th class="trow-head-data">Действия
+                <div class="resizer"></div>
+            </th>
+        </tr>
         </thead>
         <tbody class="table-body" id="table-body">
 
-            <tr class="trow">
-                <td class="tcol"></td>
-                <td class="tcol"></td>
-                <td class="tcol"></td>
-                <td class="tcol"></td>
-            </tr>
+        {% for technique in techniques %}
+        <tr class="trow">
+            <form action="/technique/edit/{{ technique.id }}" method="post" style="display:inline;">
+                <td class="tcol">
+                    <input type="text" name="title" value="{{ technique.title }}" required>
+                </td>
+                <td>
+                    <select name="type_technique_id" required>
+                       {% for type_technique in type_techniques %}
+                            <option value="{{ type_technique.id }}" {% if type_technique.id == technique.type_technique_id %}selected{% endif %}>
+                                {{ type_technique.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="investor_id" required>
+                       {% for investor in investors %}
+                            <option value="{{ investor.id }}" {% if investor.id == technique.investor_id %}selected{% endif %}>
+                                {{ investor.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+
+                <td style="text-align: center;">  <!-- Центрируем чекбокс -->
+                    <input type="checkbox" name="visible" {% if technique.visible %}checked{% endif %}>
+                    <button type="submit" class="tcol-filter-edit"></button>
+                </td>
+            </form>
+            <td class="tcol">
+                <form action="/technique/delete/{{ technique.id }}" method="post" style="display:inline;">
+                    <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
 
         </tbody>
 

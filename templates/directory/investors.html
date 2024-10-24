@@ -10,6 +10,12 @@
 {% block content %}
 <img src="/static/img/directory-categories-bg.jpg" class="img-bg" alt="фоновое изображение">
 <div class="opasity-btn-container">
+    <form action="/investors/add" method="post">
+        <input type="text" name="title" placeholder="Имя" required>
+        <input type="text" name="tg" placeholder="Ник в telegram" required>
+        <input type="number" name="percent" placeholder="Процент" required min="0" max="100" step="0.01">
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
     <table class="table-data" id="table-data">
         <thead>
             <tr class="trow-head">
@@ -21,19 +27,36 @@
                     <div class="resizer"></div>
                 </th>
 
-                <th class="trow-head-data">Доля в бизнесе?????
-                    <div class="resizer"></div>
-                </th>
+            <th class="trow-head-data">Процент
+                <div class="resizer"></div>
+            </th>
 
             </tr>
         </thead>
         <tbody class="table-body" id="table-body">
 
-            <tr class="trow">
-                <td class="tcol"></td>
-                <td class="tcol"></td>
-                <td class="tcol"></td>
-            </tr>
+        {% for type in investors %}
+        <tr class="trow">
+            <form action="/investors/edit/{{ type.id }}" method="post" style="display:inline;">
+                <td class="tcol">
+                    <input type="text" name="title" value="{{ type.title }}" required>
+                </td>
+                <td>
+                    <input type="text" name="tg" value="{{ type.tg }}" required>
+                </td>
+                <td>
+                    <input type="text" name="percent" value="{{ type.percent }}" required>
+                    <button type="submit" class="tcol-filter-edit"></button>
+                </td>
+            </form>
+            <td class="tcol">
+                <form action="/investors/delete/{{ type.id }}" method="post" style="display:inline;">
+                    <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
 
         </tbody>
 
