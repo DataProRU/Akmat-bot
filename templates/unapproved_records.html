@@ -53,7 +53,7 @@
             <td class="tcol">{{ record.payment_type }}</td>
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
-            <td>
+            <td class="tcol tcol-filter">
                 <button class="tcol-filter-edit"></button>
                 <form action="/delete_flight/" method="post">
                     <input type="hidden" name="id" value="{{ record.id }}">
