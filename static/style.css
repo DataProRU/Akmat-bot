@@ -70,8 +70,8 @@ p {
 }
 
 .form-checkbox {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border: none;
     cursor: pointer;
 }
@@ -331,6 +331,12 @@ p {
     justify-content: space-between;
 }
 
+.form-element-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 .form-element input,
 .form-element select,
 .form-element textarea {
@@ -488,7 +494,6 @@ p {
     color: #f6f9fb;
 }
 
-
 /*access*/
 
 .small-table-container {
@@ -527,7 +532,7 @@ p {
 .form-new-user-bot {
     display: none;
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 1px 1px 6px #5a5c5e30;
@@ -569,28 +574,6 @@ p {
 
 /*directory*/
 
-#type_of_payments-add {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-}
-
-#type_of_payments-add-container {
-    display: none;
-    animation: fadeIn 0.5s linear;
-    background-color: #d8ecfa;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 1px 1px 6px #5a5c5e30;
-    z-index: 10;
-}
-
-#type_of_payments-add-container.open {
-    display: block;
-    animation: appForm 0.4s linear 0s 1 normal both;
-}
 
 /*pagination*/
 .pagination,

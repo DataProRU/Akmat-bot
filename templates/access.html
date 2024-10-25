@@ -46,7 +46,7 @@
 <section class="big-table-container">
     <div class="header-big-table">
         <h2>Список пользователей бота</h2>
-        <button onclick="" class="add-entry-btn tooltip" onclick="openFormAddBot()">✚
+        <button onclick="openFormAddBot()" class="add-entry-btn tooltip">✚
             <span class="tooltip-text">Добавить пользователя</span>
         </button>
     </div>
@@ -64,10 +64,10 @@
                 <th class="trow-head-data vertical">Отправить кнопки</th>
                 <th class="trow-head-data vertical">Внести доход</th>
                 <th class="trow-head-data vertical">Внести операцию</th>
-                <th class="trow-head-data vertical">Посмотреть зарплату</th>
+                <th class="trow-head-data vertical">Смотреть отчет</th>
                 <th class="trow-head-data vertical">Внести расход</th>
-                <th class="trow-head-data vertical">Комиссия</th>
-                <th class="trow-head-data vertical">Штраф</th>
+                <th class="trow-head-data vertical">Внести комиссию</th>
+                <th class="trow-head-data vertical">Внести штраф</th>
                 <th class="trow-head-data vertical">Изменить зарплату</th>
                 <th class="trow-head-data vertical">Действия</th>
             </tr>
@@ -120,57 +120,96 @@
             <button class="close-form-btn">✖</button>
         </div>
 
-        <form action="/users_tg/add" method="POST">
+        <form action="/users_tg/add" method="POST" class="add-entry-form">
 
-            <label for="tg">Ник в телеграм (tg):</label>
-            <input type="text" id="tg" name="tg" required><br><br>
+            <div class="form-part">
+                <div class="form-element">
+                    <label for="tg">Telegram</label>
+                    <input type="text" id="tg" name="tg" class="middle-element" required>
+                </div>
 
-            <label for="full_name">Имя (full_name):</label>
-            <input type="text" id="full_name" name="full_name" required><br><br>
+                <div class="form-element">
+                    <label for="full_name">Имя</label>
+                    <input type="text" id="full_name" name="full_name" class="middle-element" required>
+                </div>
+            </div>
 
-            <label for="is_manager">Является ли менеджером:</label>
-            <input type="checkbox" id="is_manager" name="is_manager"><br><br>
+            <div class="form-part">
+                <div class="form-element">
+                    <div class="form-element-row">
+                        <input type="checkbox" id="is_investor" name="is_investor" class="form-checkbox">
+                        <label for="is_investor">Инвестор</label>
+                    </div>
 
-            <label for="is_instructor">Является ли инструктором:</label>
-            <input type="checkbox" id="is_instructor" name="is_instructor"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="is_director" name="is_director" class="form-checkbox">
+                        <label for="is_director">Директор</label>
+                    </div>
 
-            <label for="is_assistant">Является ли ассистентом:</label>
-            <input type="checkbox" id="is_assistant" name="is_assistant"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="is_manager" name="is_manager" class="form-checkbox">
+                        <label for="is_manager">Менеджер</label>
+                    </div>
 
-            <label for="send_button">Отправить кнопки:</label>
-            <input type="checkbox" id="send_button" name="send_button"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="is_instructor" name="is_instructor" class="form-checkbox">
+                        <label for="is_instructor">Инструктор</label>
+                    </div>
 
-            <label for="deposit_income">Внести доход:</label>
-            <input type="checkbox" id="deposit_income" name="deposit_income"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="is_assistant" name="is_assistant" class="form-checkbox">
+                        <label for="is_assistant">Ассистент</label>
+                    </div>
 
-            <label for="enter_operation">Внести операции:</label>
-            <input type="checkbox" id="enter_operation" name="enter_operation"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="send_button" name="send_button" class="form-checkbox">
+                        <label for="send_button">Отправить кнопки</label>
+                    </div>
 
-            <label for="view_salary">Посмотреть зарплату:</label>
-            <input type="checkbox" id="view_salary" name="view_salary"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="deposit_income" name="deposit_income" class="form-checkbox">
+                        <label for="deposit_income">Внести доход</label>
+                    </div>
+                </div>
 
-            <label for="contribute_expense">Внести расход:</label>
-            <input type="checkbox" id="contribute_expense" name="contribute_expense"><br><br>
+                <div class="form-element">
+                    <div class="form-element-row">
+                        <input type="checkbox" id="enter_operation" name="enter_operation" class="form-checkbox">
+                        <label for="enter_operation">Внести операцию</label>
+                    </div>
 
-            <label for="is_director">Является ли директором:</label>
-            <input type="checkbox" id="is_director" name="is_director"><br><br>
+                    <div class="form-element-row">
+                        <input type="checkbox" id="view_salary" name="view_salary" class="form-checkbox">
+                        <label for="view_salary">Смотреть отчет</label>
+                    </div>
+
+                    <div class="form-element-row">
+                        <input type="checkbox" id="contribute_expense" name="contribute_expense" class="form-checkbox">
+                        <label for="contribute_expense">Внести расход</label>
+                    </div>
+
+                    <div class="form-element-row">
+                        <input type="checkbox" id="comission" name="comission" class="form-checkbox">
+                        <label for="comission">Внести комиссию</label>
+                    </div>
+
+                    <div class="form-element-row">
+                        <input type="checkbox" id="penalty" name="penalty" class="form-checkbox">
+                        <label for="penalty">Внести штраф</label>
+                    </div>
+
+                    <div class="form-element-row">
+                        <input type="checkbox" id="change_salary" name="change_salary=" class="form-checkbox">
+                        <label for="change_salary">Изменить зарплату</label>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Добавить" class="form-btn-submit align-end">
 
             <label for="chat_id">Идентификатор чата сотрудника (chat_id):</label>
             <input type="number" id="chat_id" name="chat_id"><br><br>
 
-            <label for="comission">Внести комиссию:</label>
-            <input type="checkbox" id="comission" name="comission"><br><br>
-
-            <label for="penalty">Внести штраф:</label>
-            <input type="checkbox" id="penalty" name="penalty"><br><br>
-
-            <label for="is_investor">Является ли инвестором:</label>
-            <input type="checkbox" id="is_investor" name="is_investor"><br><br>
-
-            <label for="change_salary">Изменить зарплату:</label>
-            <input type="checkbox" id="change_salary" name="change_salary="><br><br>
-
-            <input type="submit" value="Добавить" class="form-btn-submit">
         </form>
     </section>
 </section>

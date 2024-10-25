@@ -7,7 +7,6 @@ function openFormAdd() {
     buttonClose.addEventListener('click', () => {
         formAdd.classList.remove('open');
     });
-
 };
 const formEdit = document.querySelector('#edit-form-container');
 
@@ -73,9 +72,8 @@ function openFormAddBot() {
     const buttonClose = document.querySelector('.close-form-btn');
     //закрыть форму для добавления записи
     buttonClose.addEventListener('click', () => {
-        formAdd.classList.remove('open');
+        formAddBot.classList.remove('open');
     });
-
 };
 
 var tableBody = document.querySelector('#table-body');
