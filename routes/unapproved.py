@@ -12,7 +12,6 @@ from models import (
     Users,
     PaymentTypes,
     Sources,
-    FlightTechniqueUpdate,
 )
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
