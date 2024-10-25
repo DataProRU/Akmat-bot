@@ -113,8 +113,13 @@
         </tbody>
     </table>
 
-    <section id="form-new-user-bot">
-        <h3>Добавить нового пользователя</h3>
+    <section id="form-new-user-bot" class="form-new-user-bot">
+
+        <div class="form-header">
+            <h3 class="form-title">Новый пользователь</h3>
+            <button class="close-form-btn">✖</button>
+        </div>
+
         <form action="/users_tg/add" method="POST">
 
             <label for="tg">Ник в телеграм (tg):</label>

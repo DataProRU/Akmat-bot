@@ -503,6 +503,11 @@ p {
     margin-bottom: 10px;
 }
 
+.big-table-container {
+    width: 100%;
+    position: relative;
+}
+
 .header-big-table {
     height: 30px;
     display: flex;
@@ -519,7 +524,7 @@ p {
     align-self: flex-end;
 }
 
-#form-new-user-bot {
+.form-new-user-bot {
     display: none;
     position: absolute;
     top: 10%;
@@ -531,15 +536,11 @@ p {
     z-index: 5;
 }
 
-#form-new-user-bot.open {
+.form-new-user-bot.open {
     display: block;
     animation: appForm 0.4s linear 0s 1 normal both;
 }
 
-.big-table-container {
-    width: 100%;
-    position: relative;
-}
 
 /*unapproved_days*/
 

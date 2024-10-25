@@ -46,7 +46,7 @@ function widthSub(str) {
 //заполнить форму для редактирования записи
 function fillEditForm(btnEdit, data) {
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-date').value = data.date;
+    document.getElementById('edit-date').innerHTML = data.date;
     document.getElementById('edit-flight_id').value = data.flight_number;
     document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
     document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
@@ -66,40 +66,26 @@ function fillEditForm(btnEdit, data) {
     formEdit.classList.add('open');
 };
 
-// directory
-//открыть форму для добавления типа оплаты
-//function openFormAddTOP() {
-//    const formAddTOP = document.querySelector('#type_of_payments-add-container');
-//    formAddTOP.classList.add('open');
-//    const buttonClose = document.querySelector('.close-form-btn');
-
-//закрыть форму для добавления типа оплаты
-//    buttonClose.addEventListener('click', () => {
-//        formAddTOP.classList.remove('open');
-//   });
-
-//};
-
 //открыть форму для добавления пользователя в бот
 function openFormAddBot() {
     const formAddBot = document.querySelector('#form-new-user-bot');
     formAddBot.classList.add('open');
-    //const buttonClose = document.querySelector('.close-form-btn');
+    const buttonClose = document.querySelector('.close-form-btn');
     //закрыть форму для добавления записи
-    //buttonClose.addEventListener('click', () => {
-    //formAdd.classList.remove('open');
-    //});
+    buttonClose.addEventListener('click', () => {
+        formAdd.classList.remove('open');
+    });
 
 };
 
 var tableBody = document.querySelector('#table-body');
 const butttonAddOrder = document.querySelector('#submit');
 
-butttonAddOrder.addEventListener('click', (event) => {
-    formAdd.classList.remove('open');
-    //event.preventDefault();
-    document.querySelector('.add-entry-form').reset();
-});
+//butttonAddOrder.addEventListener('click', (event) => {
+//formAdd.classList.remove('open');
+//event.preventDefault();
+//document.querySelector('.add-entry-form').reset();
+//});
 
 
 const resizers = document.querySelectorAll('.resizer');
