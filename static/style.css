@@ -5,7 +5,7 @@
 }
 
 html {
-    font-size: 13px;
+    font-size: 15px;
 }
 
 h1 {
@@ -208,7 +208,7 @@ p {
 }
 
 .trow {
-    height: 29px;
+    height: calc((100vh - 170px)/20);
     position: relative;
 }
 
@@ -477,8 +477,9 @@ p {
 .opasity-btn-container {
     display: flex;
     flex-direction: column;
-    padding: 30px;
     gap: 20px;
+    padding: 30px;
+    margin: 50px;
     background-color: #f6f9fbdd;
     border-radius: 3px;
 }
@@ -648,5 +649,37 @@ p {
 @keyframes appForm {
     0% {
         top: -50%;
+    }
+}
+
+@media (max-width: 1500px) {
+    html {
+        font-size: 13px;
+    }
+
+    .th-access {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .th-income {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 820px) {
+    .th-access {
+        font-size: 9px;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+    }
+
+    #users_table thead {
+        height: 65px;
+    }
+
+    #users_table .tcol {
+        font-size: 9px;
     }
 }
