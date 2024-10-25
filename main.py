@@ -38,3 +38,6 @@ app.include_router(types_of_expenses.router)
 app.include_router(expenses_categories.router)
 app.include_router(positions.router)
 app.include_router(commissions.router)
+
+
+#update
