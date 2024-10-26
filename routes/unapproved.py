@@ -1,9 +1,6 @@
-import datetime
-
 from fastapi import Query, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
-from sqlalchemy import extract
 from models import (
     FlightTechniques,
     Techniques,
@@ -16,7 +13,6 @@ from models import (
 from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import extract
-from routes.incomes import get_flight_techniques
 from fastapi.responses import JSONResponse
 
 
@@ -33,10 +29,12 @@ def get_db():
 def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, per_page: int, db: Session):
     offset = (page - 1) * per_page
 
-    # Выполняем запрос для получения данных о неподтверждённых записях полётов по дате
+    # Выполняем запрос для получения данных о неподтверждённых записях полётов по дате и confirmed == False
     flights_techniques = (
         db.query(FlightTechniques)
+        .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(
+            Flights.confirmed == False,  # Фильтр по неподтверждённым записям
             extract('day', FlightTechniques.created_at) == day,
             extract('month', FlightTechniques.created_at) == month,
             extract('year', FlightTechniques.created_at) == year
@@ -46,10 +44,12 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         .all()
     )
 
-    # Подсчёт общего числа записей
+    # Подсчёт общего числа записей с confirmed == False
     total_count = (
         db.query(FlightTechniques)
+        .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(
+            Flights.confirmed == False,
             extract('day', FlightTechniques.created_at) == day,
             extract('month', FlightTechniques.created_at) == month,
             extract('year', FlightTechniques.created_at) == year
@@ -58,13 +58,13 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
     )
     total_pages = (total_count + per_page - 1) // per_page
 
-    # Загружаем связанные данные
+    # Загружаем связанные данные и преобразуем результаты, как и ранее
     techniques = {tech.id: tech.title for tech in db.query(Techniques).all()}
     flights = {flight.id: flight for flight in db.query(Flights).all()}
     users = {user.id: user.full_name for user in db.query(Users).all()}
     payment_types = {ptype.id: ptype.title for ptype in db.query(PaymentTypes).all()}
     sources = {source.id: source.title for source in db.query(Sources).all()}
-    routes = {route.id: route.title for route in db.query(Routes).all()}  # Загружаем названия маршрутов
+    routes = {route.id: route.title for route in db.query(Routes).all()}
 
     # Преобразуем данные о полётах и техниках
     results = []
@@ -73,14 +73,14 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         if flight:
             technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
             user_name = users.get(flight.instructor_id, "Unknown User")
-            route_name = routes.get(flight.route_id, "Unknown Route")  # Получаем название маршрута по его ID
+            route_name = routes.get(flight.route_id, "Unknown Route")
 
             results.append(
                 {
                     "id": flight_technique.id,
                     "created_at": flight_technique.created_at,
                     "flight_number": flight.id,
-                    "flight_name": route_name,  # Отображаем название маршрута вместо номера
+                    "flight_name": route_name,
                     "technique_name": technique_name,
                     "user_name": user_name,
                     "discount": flight_technique.discount,
@@ -102,17 +102,23 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
 @router.get("/unapproved-days", response_class=HTMLResponse)
 async def unapproved_days(request: Request, db: Session = Depends(get_db)):
     # Получаем все уникальные даты с неподтверждёнными записями
-    days_with_unapproved = db.query(extract('day', FlightTechniques.created_at).label('day'),
-                                    extract('month', FlightTechniques.created_at).label('month'),
-                                    extract('year', FlightTechniques.created_at).label('year'))\
-                            .filter(FlightTechniques.is_approved == False)\
-                            .group_by('day', 'month', 'year').all()
+    days_with_unapproved = db.query(
+        extract('day', FlightTechniques.created_at).label('day'),
+        extract('month', FlightTechniques.created_at).label('month'),
+        extract('year', FlightTechniques.created_at).label('year')
+    ).join(Flights, Flights.id == FlightTechniques.flight_id) \
+     .filter(
+         Flights.confirmed == False,           # Учитываем поле confirmed в таблице Flights
+         FlightTechniques.is_approved == False
+     ) \
+     .group_by('day', 'month', 'year').all()
 
     # Возвращаем шаблон с кнопками для каждого дня
     return templates.TemplateResponse("unapproved_days.html", {
         "request": request,
         "days_with_unapproved": days_with_unapproved
     })
+
 @router.get("/unapproved-records", response_class=HTMLResponse)
 async def unapproved_records(
     request: Request,
@@ -147,12 +153,12 @@ async def approve_all_records(
     year: int = Form(...),
     db: Session = Depends(get_db)
 ):
-    # Обновляем все записи, соответствующие указанной дате
-    db.query(FlightTechniques).filter(
-        extract('day', FlightTechniques.created_at) == day,
-        extract('month', FlightTechniques.created_at) == month,
-        extract('year', FlightTechniques.created_at) == year
-    ).update({"is_approved": True})
+    # Обновляем записи в Flights и устанавливаем confirmed в True
+    db.query(Flights).filter(
+        extract('day', Flights.flight_date) == day,
+        extract('month', Flights.flight_date) == month,
+        extract('year', Flights.flight_date) == year
+    ).update({"confirmed": True})
 
     # Сохраняем изменения
     db.commit()
