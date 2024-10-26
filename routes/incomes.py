@@ -61,6 +61,7 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
     finally:
         session.close()
 
+
 @router.get("/income", response_class=HTMLResponse)
 async def index(
         request: Request,
@@ -92,11 +93,11 @@ async def index(
     sources = result["sources"]
     total_pages = result["total_pages"]
 
-
     data = []
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
-        if flight:
+        # Проверяем, что flight существует и подтвержден (confirmed)
+        if flight and flight.confirmed:
             technique_name = techniques.get(
                 flight_technique.technique_id, "Неизвестная техника"
             )
@@ -106,6 +107,7 @@ async def index(
                 formatted_created_at = flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
             else:
                 formatted_created_at = "Дата не указана"
+
             data.append(
                 {
                     "id": flight_technique.id,
@@ -124,6 +126,7 @@ async def index(
                     "note": flight_technique.note,
                 }
             )
+
     # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
         "income.html",
@@ -140,6 +143,7 @@ async def index(
             "routes": routes,
         },
     )
+
 
 def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30):
     session = Session()
