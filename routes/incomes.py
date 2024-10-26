@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from fastapi import Query, Request, HTTPException, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -382,10 +382,10 @@ async def submit_form(
     try:
         # Создание новой записи в таблице Flights
         new_flight = Flights(
-            flight_number=flight_number,
+            flight_number=route_id,
             instructor_id=instructor_id,
             flight_date=date,
-            route_id=route_id,
+            route_id=flight_number,
             manager_id=0,
             confirmed=False,
             source_id=source_id,
@@ -397,7 +397,7 @@ async def submit_form(
 
         # Создание новой записи в таблице FlightTechniques
         new_flight_technique = FlightTechniques(
-            created_at=datetime.datetime.now(),
+            created_at=datetime.now(),
             flight_id=new_flight.id,
             technique_id=technique_id,
             discount=discount,
