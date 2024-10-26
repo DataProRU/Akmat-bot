@@ -152,7 +152,10 @@ async def delete_user(data: dict, db: Session = Depends(get_db)):
     if user:
         db.delete(user)
         db.commit()
-        return JSONResponse({"status": "success"})
+        return JSONResponse({
+            "status": "success",
+            "redirect_url": "/users"  # добавьте URL для редиректа
+        })
 
     return JSONResponse({"status": "error", "message": "User not found"})
 

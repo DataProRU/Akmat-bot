@@ -355,42 +355,46 @@
     }
 
     function deleteUserTG(userId) {
-        const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
+    const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
 
-        const userData = {
-            id: userId,
-            tg: row.find('td[data-field="tg"]').text().trim(),
-            full_name: row.find('td[data-field="full_name"]').text().trim(),
-            is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
-            is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
-            is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
-            send_button: row.find('input[data-field="send_button"]').is(':checked'),
-            deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
-            enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
-            view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
-            contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
-            is_director: row.find('input[data-field="is_director"]').is(':checked'),
-            chat_id: row.find('td[data-field="chat_id"]').text().trim(),
-            comission: row.find('input[data-field="comission"]').is(':checked'),
-            penalty: row.find('input[data-field="penalty"]').is(':checked'),
-            is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
-            change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
-        };
+    const userData = {
+        id: userId,
+        tg: row.find('td[data-field="tg"]').text().trim(),
+        full_name: row.find('td[data-field="full_name"]').text().trim(),
+        is_manager: row.find('input[data-field="is_manager"]').is(':checked'),
+        is_instructor: row.find('input[data-field="is_instructor"]').is(':checked'),
+        is_assistant: row.find('input[data-field="is_assistant"]').is(':checked'),
+        send_button: row.find('input[data-field="send_button"]').is(':checked'),
+        deposit_income: row.find('input[data-field="deposit_income"]').is(':checked'),
+        enter_operation: row.find('input[data-field="enter_operation"]').is(':checked'),
+        view_salary: row.find('input[data-field="view_salary"]').is(':checked'),
+        contribute_expense: row.find('input[data-field="contribute_expense"]').is(':checked'),
+        is_director: row.find('input[data-field="is_director"]').is(':checked'),
+        chat_id: row.find('td[data-field="chat_id"]').text().trim(),
+        comission: row.find('input[data-field="comission"]').is(':checked'),
+        penalty: row.find('input[data-field="penalty"]').is(':checked'),
+        is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
+        change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
+    };
 
-        $.ajax({
-            url: '/delete_user_tg/',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(userData),
-            success: function (response) {
-                if (response.status === 'success') {
-                    alert('deleted updated successfully');
-                } else {
-                    alert('Error updating user');
-                }
+    $.ajax({
+        url: '/delete_user_tg/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function(response) {
+            if (response.status === 'success') {
+                // Перенаправляем на страницу пользователей
+                window.location.href = response.redirect_url; // Убедитесь, что это URL
+            } else {
+                alert(response.message);
             }
-        });
-    }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Ошибка при удалении пользователя: ' + errorThrown);
+        }
+    });
+}
 
     async function loadUsers() {
         const response = await fetch('/users/');
