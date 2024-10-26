@@ -176,7 +176,7 @@ async def add_user(
         view_salary: bool = Form(False),
         contribute_expense: bool = Form(False),
         is_director: bool = Form(False),
-        chat_id: Optional[int] = Form(None),
+        chat_id: Optional[int] = Form(1),
         comission: bool = Form(False),
         penalty: bool = Form(False),
         is_investor: bool = Form(False),
