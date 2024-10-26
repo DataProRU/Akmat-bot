@@ -32,7 +32,7 @@ def get_db():
     finally:
         db.close()
 
-cache = TTLCache(maxsize=100, ttl=300)
+cache = TTLCache(maxsize=400, ttl=300)
 
 @cached(cache)
 def get_flight_techniques(page: int = 1, per_page: int = 10):

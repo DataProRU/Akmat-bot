@@ -129,7 +129,6 @@ async def update_user(data: dict, db: Session = Depends(get_db)):
         user.view_salary = data['view_salary']
         user.contribute_expense = data['contribute_expense']
         user.is_director = data['is_director']
-        user.chat_id = data['chat_id']
         user.comission = data['comission']
         user.penalty = data['penalty']
         user.is_investor = data['is_investor']
