@@ -20,6 +20,8 @@ from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import JSONResponse
 from datetime import datetime
+from sqlalchemy.orm import scoped_session
+from cachetools import cached, TTLCache
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -30,20 +32,28 @@ def get_db():
     finally:
         db.close()
 
-def get_flight_techniques(page: int = 1, per_page: int = 10):
-    session = Session()
-    try:
-        offset = (page - 1) * per_page
-        flights_techniques = (
-            session.query(FlightTechniques).offset(offset).limit(per_page).all()
-        )
-        total_count = session.query(FlightTechniques).count()  # Подсчёт общего числа записей
-        total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
+cache = TTLCache(maxsize=100, ttl=300)
 
-        techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
-        flights = {flight.id: flight for flight in session.query(Flights).all()}
-        routes = {route.id: route.title for route in session.query(Routes).all()}
-        users = {user.id: user.full_name for user in session.query(Users).filter(Users.is_instructor == True).all()}
+@cached(cache)
+def get_flight_techniques(page: int = 1, per_page: int = 10):
+    session = scoped_session(Session)
+    try:
+        # Подсчет и извлечение с постраничной навигацией
+        offset = (page - 1) * per_page
+        total_count = session.query(FlightTechniques).count()
+        flights_techniques = (
+            session.query(FlightTechniques)
+            .offset(offset)
+            .limit(per_page)
+            .all()
+        )
+        total_pages = (total_count + per_page - 1) // per_page
+
+        # Единовременные загрузки словарей для всех связанных данных
+        techniques = {tech.id: tech.title for tech in session.query(Techniques)}
+        flights = {flight.id: flight for flight in session.query(Flights)}
+        routes = {route.id: route.title for route in session.query(Routes)}
+        users = {user.id: user.full_name for user in session.query(Users).filter_by(is_instructor=True)}
         payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
         sources = {source.id: source.title for source in session.query(Sources)}
 
@@ -56,10 +66,10 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
             "payment_types": payment_types,
             "sources": sources,
             "total_pages": total_pages,
-            "page": page
+            "page": page,
         }
     finally:
-        session.close()
+        session.remove()
 
 
 @router.get("/income", response_class=HTMLResponse)
@@ -85,8 +95,8 @@ async def index(
     # Получаем данные для отображения на странице
     result = get_flight_techniques(page, per_page)
     flights_techniques = result["flights_techniques"]
-    techniques = result["techniques"]
     flights = result["flights"]
+    techniques = result["techniques"]
     routes = result["routes"]
     users = result["users"]
     payment_types = result["payment_types"]
@@ -96,36 +106,29 @@ async def index(
     data = []
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
-        # Проверяем, что flight существует и подтвержден (confirmed)
         if flight and flight.confirmed:
-            technique_name = techniques.get(
-                flight_technique.technique_id, "Неизвестная техника"
-            )
+            technique_name = techniques.get(flight_technique.technique_id, "Неизвестная техника")
             user_name = users.get(flight.instructor_id, "Неизвестный пользователь")
             flight_name = routes.get(flight.flight_number, "Неизвестный путь")
-            if flight_technique.created_at:
-                formatted_created_at = flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
-            else:
-                formatted_created_at = "Дата не указана"
-
-            data.append(
-                {
-                    "id": flight_technique.id,
-                    "created_at": formatted_created_at,
-                    "flight_number": flight.id,
-                    "flight_name": flight_name,
-                    "technique_name": technique_name,
-                    "user_name": user_name,
-                    "discount": flight_technique.discount,
-                    "prepayment": "Да" if flight_technique.prepayment else "Нет",
-                    "price": flight_technique.price,
-                    "payment_type": payment_types.get(
-                        flight_technique.payment_type_id, "Неизвестный тип оплаты"
-                    ),
-                    "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
-                    "note": flight_technique.note,
-                }
+            formatted_created_at = (
+                flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
+                if flight_technique.created_at else "Дата не указана"
             )
+
+            data.append({
+                "id": flight_technique.id,
+                "created_at": formatted_created_at,
+                "flight_number": flight.id,
+                "flight_name": flight_name,
+                "technique_name": technique_name,
+                "user_name": user_name,
+                "discount": flight_technique.discount,
+                "prepayment": "Да" if flight_technique.prepayment else "Нет",
+                "price": flight_technique.price,
+                "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
+                "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
+                "note": flight_technique.note,
+            })
 
     # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
@@ -143,6 +146,8 @@ async def index(
             "routes": routes,
         },
     )
+
+
 
 
 def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30):
@@ -372,8 +377,8 @@ async def delete_flight_technique(flight_technique_id: int):
 async def submit_form(
     flight_number: int = Form(...),
     instructor_id: int = Form(...),
-    date: str = Form(...),
-    route_id: int = Form(...),  # Добавляем параметр route_id
+    date: str = Form(str(datetime.now())),
+    route_id: int = Form(...),
     technique_id: int = Form(...),
     discount: float = Form(0),
     prepayment: bool = Form(False),
@@ -389,7 +394,7 @@ async def submit_form(
             flight_number=route_id,
             instructor_id=instructor_id,
             flight_date=date,
-            route_id=flight_number,
+            route_id=route_id,
             manager_id=0,
             confirmed=False,
             source_id=source_id,

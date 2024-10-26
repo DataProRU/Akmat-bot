@@ -17,6 +17,7 @@ from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import extract
 from routes.incomes import get_flight_techniques
+from fastapi.responses import JSONResponse
 
 
 router = APIRouter()
@@ -55,7 +56,7 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         )
         .count()
     )
-    total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
+    total_pages = (total_count + per_page - 1) // per_page
 
     # Загружаем связанные данные
     techniques = {tech.id: tech.title for tech in db.query(Techniques).all()}
@@ -63,36 +64,33 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
     users = {user.id: user.full_name for user in db.query(Users).all()}
     payment_types = {ptype.id: ptype.title for ptype in db.query(PaymentTypes).all()}
     sources = {source.id: source.title for source in db.query(Sources).all()}
+    routes = {route.id: route.title for route in db.query(Routes).all()}  # Загружаем названия маршрутов
 
     # Преобразуем данные о полётах и техниках
     results = []
-    data = get_flight_techniques(page, per_page)
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
         if flight:
-            technique_name = techniques.get(
-                flight_technique.technique_id, "Unknown Technique"
-            )
+            technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
             user_name = users.get(flight.instructor_id, "Unknown User")
-            flight_name = data.get(flight.flight_number, "Unknown Route")
+            route_name = routes.get(flight.route_id, "Unknown Route")  # Получаем название маршрута по его ID
+
             results.append(
                 {
                     "id": flight_technique.id,
                     "created_at": flight_technique.created_at,
                     "flight_number": flight.id,
-                    "flight_name": flight_name,
+                    "flight_name": route_name,  # Отображаем название маршрута вместо номера
                     "technique_name": technique_name,
                     "user_name": user_name,
                     "discount": flight_technique.discount,
                     "prepayment": "Yes" if flight_technique.prepayment else "No",
                     "price": flight_technique.price,
-                    "payment_type": payment_types.get(
-                        flight_technique.payment_type_id, "Unknown Payment Type"
-                    ),
+                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Unknown Payment Type"),
                     "source": sources.get(flight_technique.source_id, "Unknown Source"),
                     "note": flight_technique.note,
                 }
-        )
+            )
 
     return {
         "flights_techniques": results,
@@ -161,3 +159,25 @@ async def approve_all_records(
 
     # Перенаправляем обратно на страницу с неподтверждёнными записями
     return RedirectResponse(url=f"/unapproved-days", status_code=303)
+
+@router.post("/delete_unapproved/")
+async def delete_flight(request: Request):
+    form_data = await request.form()
+    flight_id = form_data.get("id")
+
+    page = request.query_params.get("page", 1)
+
+    if not flight_id:
+        return JSONResponse({"status": "error", "message": "ID not provided"})
+
+    session = Session()
+    flight = session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+
+    if flight:
+        session.delete(flight)
+        session.commit()
+        session.close()
+        return RedirectResponse(url=f"/income?page={page}", status_code=303)
+
+    session.close()
+    return JSONResponse({"status": "error", "message": "Flight not found"})
