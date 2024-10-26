@@ -81,7 +81,7 @@ async def update_users(
         view_salary: bool = Form(False),
         contribute_expense: bool = Form(False),
         is_director: bool = Form(False),
-        chat_id: int = Form(1),
+        chat_id: int = Form(...),
         comission: bool = Form(False),
         penalty: bool = Form(False),
         is_investor: bool = Form(False),
