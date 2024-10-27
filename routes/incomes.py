@@ -39,15 +39,19 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
     session = scoped_session(Session)
     try:
         # Подсчет и извлечение с постраничной навигацией
-        offset = (page - 1) * per_page
         total_count = session.query(FlightTechniques).count()
+        total_pages = (total_count + per_page - 1) // per_page
+
+        # Преобразуем номер страницы так, чтобы последняя страница стала первой
+        inverted_page = total_pages - page + 1
+        offset = (inverted_page - 1) * per_page
+
         flights_techniques = (
             session.query(FlightTechniques)
             .offset(offset)
             .limit(per_page)
             .all()
         )
-        total_pages = (total_count + per_page - 1) // per_page
 
         # Единовременные загрузки словарей для всех связанных данных
         techniques = {tech.id: tech.title for tech in session.query(Techniques)}
