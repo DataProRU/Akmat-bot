@@ -15,6 +15,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import extract
 from fastapi.responses import JSONResponse
 from fastapi import Form
+from datetime import datetime
 
 
 router = APIRouter()
@@ -96,7 +97,13 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
     return {
         "flights_techniques": results,
         "total_pages": total_pages,
-        "page": page
+        "page": page,
+        "techniques": techniques,
+        "flights": flights,
+        "routes": routes,
+        "users": users,
+        "payment_types": payment_types,
+        "sources": sources,
     }
 
 
@@ -134,6 +141,12 @@ async def unapproved_records(
     result = get_filtered_flight_techniques(day=day, month=month, year=year, page=page, per_page=per_page, db=db)
 
     flights_techniques = result["flights_techniques"]
+    techniques = result["techniques"]
+    routes = result["routes"]
+    users = result["users"]
+    payment_types = result["payment_types"]
+    sources = result["sources"]
+
 
     # Передаём отфильтрованные записи в шаблон
     return templates.TemplateResponse("unapproved_records.html", {
@@ -144,7 +157,12 @@ async def unapproved_records(
         "year": year,
         "page": page,
         "per_page": per_page,
-        "total_pages": result["total_pages"]
+        "total_pages": result["total_pages"],
+        "users": users,
+        "techniques": techniques,
+        "payment_types": payment_types,
+        "sources": sources,
+        "routes": routes,
     })
 
 @router.post("/approve-all", response_class=RedirectResponse)
@@ -180,7 +198,63 @@ async def delete_flight(
     if flight:
         db.delete(flight)
         db.commit()
-        # Перенаправляем обратно на страницу с сохраненными параметрами
         return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
 
     return JSONResponse({"status": "error", "message": "Flight not found"})
+
+@router.post("/submit_unapproved")
+async def submit_form(
+    flight_number: int = Form(...),
+    instructor_id: int = Form(...),
+    date: str = Form(str(datetime.now())),
+    route_id: int = Form(...),
+    technique_id: int = Form(...),
+    discount: float = Form(0),
+    prepayment: bool = Form(False),
+    price: float = Form(...),
+    payment_type_id: int = Form(...),
+    source_id: int = Form(...),
+    note: str = Form(""),
+    day: int = Form(...), #для того что бы остаться на той же странице
+    month: int = Form(...),
+    year: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    try:
+        # Создание новой записи в таблице Flights
+        new_flight = Flights(
+            flight_number=route_id,
+            instructor_id=instructor_id,
+            flight_date=date,
+            route_id=route_id,
+            manager_id=0,
+            confirmed=False,
+            source_id=source_id,
+            source_data=note,
+            created_at=date,
+        )
+        db.add(new_flight)
+        db.flush()  # Это нужно для получения id нового рейса
+
+        # Создание новой записи в таблице FlightTechniques
+        new_flight_technique = FlightTechniques(
+            created_at=date,
+            flight_id=new_flight.id,
+            technique_id=technique_id,
+            discount=discount,
+            prepayment=prepayment,
+            price=price,
+            payment_type_id=payment_type_id,
+            source_id=source_id,
+            note=note,
+            is_approved=False,
+            transfer=0,
+        )
+        db.add(new_flight_technique)
+        db.commit()
+        return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}
+    finally:
+        db.close()

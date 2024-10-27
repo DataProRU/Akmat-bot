@@ -79,97 +79,110 @@
 </section>
 
 <!--Добавленеие новой записи-->
-<section id="add-form-unapproved" class="add-form-container">
+<section id="add-form-container" class="add-form-container">
 
     <div class="form-header">
         <h3 class="form-title">Новая запись</h3>
         <button class="close-form-btn">✖</button>
     </div>
 
-    <form action="" class="add-entry-form">
+    <form action="/submit_unapproved" method="POST" class="add-entry-form">
 
         <div class="form-part">
             <div class="form-element">
-                <label for="date-unapproved">Выбор даты</label>
-                <input type="date" id="date-unapproved" name="date" class="middle-element">
+                <label for="date">Выбор даты</label>
+                <input type="date" id="date" name="date" class="middle-element">
             </div>
+
             <div class="form-element">
-                <label for="flight_number-unapproved">Номер рейса</label>
-                <input type="number" id="flight_number-unapproved" name="flight_number" class="middle-element" required>
+                <label for="flight_number">Номер рейса</label>
+                <input type="number" id="flight_number" name="flight_number" class="middle-element" required>
             </div>
         </div>
 
         <div class="form-element">
-            <label for="type-of-route-unapproved">Вид маршрута</label>
-            <select name="route_id" id="type-of-route-unapproved">
+            <label for="type-of-route">Вид маршрута</label>
+            <select name="route_id" id="type-of-route">
                 <option selected disabled hidden></option>
-                <option value="">Опции</option>
+                {% for route_id, route_name in routes.items() %}
+                <option value="{{ route_id }}">{{ route_name }}</option>
+                {% endfor %}
             </select>
         </div>
 
         <div class="form-part">
             <div class="form-element">
-                <label for="technique_id-unapproved">Вид техники</label>
-                <select name="technique_id" id="technique_id-unapproved" class="middle-element">
+                <label for="technique_id">Вид техники</label>
+                <select name="technique_id" id="technique_id" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="">Опции</option>
+                    {% for technique_id, technique_name in techniques.items() %}
+                    <option value="{{ technique_id }}">{{ technique_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div class="form-element">
-                <label for="instructor_id-unapproved">Инструктор</label>
-                <select name="instructor_id" id="instructor_id-unapproved" class="middle-element">
+                <label for="instructor_id">Инструктор</label>
+                <select name="instructor_id" id="instructor_id" class="middle-element">
                     <option selected disabled hidden></option>
-                    <option value="">Опции</option>
+                    {% for user_id, user_name in users.items() %}
+                    <option value="{{ user_id }}">{{ user_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
 
         <div class="form-part">
             <div class="form-element">
-                <label for="price-unapproved">Стоимость</label>
-                <input type="number" id="price-unapproved" name="price" class="small-element" step="1" required>
+                <label for="price">Стоимость</label>
+                <input type="number" id="price" name="price" class="small-element" step="0.01" required>
             </div>
 
             <div class="form-element">
-                <label for="discount-unapproved">Скидка</label>
-                <input type="number" id="discount-unapproved" name="discount" class="small-element" step="1">
+                <label for="discount">Скидка</label>
+                <input type="number" id="discount" name="discount" class="small-element" step="0.01">
             </div>
 
             <div class="form-element">
-                <label for="prepayment-unapproved">Предоплата</label>
-                <input type="checkbox" id="prepayment-unapproved" name="prepayment" class="form-checkbox">
+                <label for="prepayment">Предоплата</label>
+                <input type="checkbox" id="prepayment" name="prepayment" class="form-checkbox">
             </div>
         </div>
 
         <div class="form-part">
             <div class="form-element">
-                <label for="payment_type_id-unapproved">Вид оплаты</label>
-                <select name="payment_type_id" id="payment_type_id-unapproved" class="middle-element" required>
+                <label for="payment_type_id">Вид оплаты</label>
+                <select name="payment_type_id" id="payment_type_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="">Опции</option>
+                    {% for pay_id, pay_name in payment_types.items() %}
+                    <option value="{{ pay_id }}">{{ pay_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
             <div class="form-element">
-                <label for="source_id-unapproved">Источник</label>
-                <select name="source_id" id="source_id-unapproved" class="middle-element" required>
+                <label for="source_id">Источник</label>
+                <select name="source_id" id="source_id" class="middle-element" required>
                     <option selected disabled hidden></option>
-                    <option value="">Опции</option>
+                    {% for source_id, source_name in sources.items() %}
+                    <option value="{{ source_id }}">{{ source_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
 
         <div class="form-element">
-            <label for="note-unapproved">Комментарий</label>
-            <textarea id="note-unapproved" name="note"></textarea>
+            <label for="note">Комментарий</label>
+            <textarea id="note" name="note"></textarea>
         </div>
 
         <div class="form-btns">
             <input type="reset" class="form-btn-reset">
+             <input type="hidden" name="day" value="{{ day }}">
+            <input type="hidden" name="month" value="{{ month }}">
+            <input type="hidden" name="year" value="{{ year }}">
             <input type="submit" value="Добавить" class="form-btn-submit">
         </div>
-
     </form>
 </section>
 
