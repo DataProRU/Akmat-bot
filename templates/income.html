@@ -100,6 +100,7 @@
     <tbody class="table-body" id="table-body">
         {% for item in data %}
         <tr class="trow">
+            <td class="tcol" hidden>{{ item.id }}</td>
             <td class="tcol">{{ item.created_at }}</td>
             <td class="tcol tcol-num">{{ item.flight_number }}</td>
             <td class="tcol">{{ item.flight_name }}</td>
@@ -114,8 +115,9 @@
 
             <!-- Здесь кнопки редактирования и удаления -->
             <td class="tcol tcol-filter">
+                <button type="button" class="tcol-filter-edit"></button>
                 <!-- Кнопка для редактирования -->
-                <button type="button" class="tcol-filter-edit" onclick="fillEditForm(this, {
+                <!--button type="button" class="tcol-filter-edit" onclick="fillEditForm(this, {
                     id: '{{ item.id }}',
                     date: '{{ item.created_at }}',
                     flight_number: '{{ item.flight_number }}',
@@ -128,7 +130,7 @@
                     payment_type: '{{ item.payment_type }}',
                     source: '{{ item.source }}',
                     note: '{{ item.note }}'
-                })"></button>
+                })"></button-->
                 <!-- Форма для удаления -->
                 <form action="/delete_flight/" method="post">
                     <input type="hidden" name="id" value="{{ item.id }}">
@@ -249,7 +251,7 @@
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 
-        <input type="datetime-local" id="edit-date" name="date" class="">
+        <input type="date" id="edit-date" name="date" class="">
         <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
@@ -292,7 +294,7 @@
 
         <input id="edit-note" name="note">
 
-        <input type="submit" value="Сохранить" class="form-btn-edit">
+        <input type="submit" id="submit-edit" value="Сохранить" class="form-btn-edit">
 
     </form>
 </section>
