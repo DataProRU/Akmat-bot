@@ -258,3 +258,50 @@ async def submit_form(
         return {"error": str(e)}
     finally:
         db.close()
+
+@router.post("/update_unapproved_flight/")
+async def update_flight(request: Request):
+    form_data = await request.form()
+    flight_id = form_data.get("id")
+
+    # Извлечение данных из формы
+    flight_date = form_data.get("date")
+    flight_number = form_data.get("flight_number")
+    technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
+    instructor = form_data.get("edit-instructor")
+    route_type = form_data.get("type-of-route")
+    price = form_data.get("price")
+    discount = form_data.get("discount")
+    prepayment = form_data.get("prepayment") == "on"
+    payment_type = form_data.get("payment_type")
+    source_id = form_data.get("source_id")
+    note = form_data.get("note")
+
+    # Обновление записи в базе данных
+    session = Session()
+    flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
+
+    if flight_techniques:
+        flight_techniques.created_at = flight_date
+        flight_techniques.flight_number = flight_number
+        flight_techniques.technique_id = technique_id
+        flight_techniques.price = price
+        flight_techniques.discount = discount
+        flight_techniques.prepayment = prepayment
+        flight_techniques.payment_type = payment_type
+        flight_techniques.source_id = source_id
+        flight_techniques.note = note
+
+        session.commit()
+        session.close()
+
+    flight_technique = session.query(Flights).filter_by(id=flight_id).first()
+    if flight_technique:
+        flight_technique.technique_id = technique_id
+        flight_technique.instructor_id = instructor
+        flight_technique.route_id = route_type
+
+        session.commit()
+        session.close()
+
+    return RedirectResponse(url="/unapproved-days", status_code=303)
