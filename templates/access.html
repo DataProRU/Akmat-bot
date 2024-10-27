@@ -284,33 +284,37 @@
     }
 
     document.getElementById('createUserForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const role = document.getElementById('role').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
 
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', password);
-        formData.append('role', role);
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('role', role);
 
-        try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
+    try {
+        const createResponse = await fetch('/register', {
+            method: 'POST',
+            body: formData
+        });
 
-            if (response.ok) {
-                alert('User created successfully!');
-            } else {
-                alert(`Error: ${result.detail || 'Failed to create user'}`);
-            }
-        } catch (error) {
-            alert(`Request failed: ${error.message}`);
+        if (createResponse.ok) {
+            alert('User created successfully!');
+            // Переход на страницу пользователей
+            window.location.href = '/users';
+        } else {
+            const result = await createResponse.json();
+            alert(`Error: ${result.detail || 'Failed to create user'}`);
         }
-    });
+    } catch (error) {
+        alert(`An error occurred: ${error.message}`);
+        // Переход на страницу пользователей
+        window.location.href = '/users';
+    }
+});
 
     function saveUser(userId) {
         const row = $(`tr td:first-child:contains(${userId})`).closest('tr');

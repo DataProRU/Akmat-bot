@@ -22,7 +22,7 @@ async def register_user(
             "role": user.role,
         }
         await db.execute(query=query, values=values)
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/users", status_code=303)
     except Exception as e:
         return templates.TemplateResponse(
             "register.html", {"request": request, "error": str(e)}

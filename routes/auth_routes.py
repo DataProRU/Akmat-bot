@@ -22,7 +22,8 @@ async def post_register(
     role: str = Form(),
     db: databases.Database = Depends(get_db),
 ):
-    return await register_user(request, username, password, role, db, templates)
+    await register_user(request, username, password, role, db, templates)
+    return RedirectResponse(url="/users", status_code=303)
 
 
 
