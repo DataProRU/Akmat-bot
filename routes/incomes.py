@@ -232,10 +232,14 @@ async def filtered_income(
             technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
             user_name = users.get(flight.instructor_id, "Unknown User")
             flight_name = routes.get(flight.flight_number, "Unknown Route")
+            formatted_created_at = (
+                flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
+                if flight_technique.created_at else "Дата не указана"
+            )
             data.append(
                 {
                     "id": flight_technique.id,
-                    "created_at": flight_technique.created_at,
+                    "created_at": formatted_created_at,
                     "flight_number": flight.id,
                     "flight_name": flight_name,
                     "technique_name": technique_name,

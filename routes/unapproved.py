@@ -14,6 +14,7 @@ from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import extract
 from fastapi.responses import JSONResponse
+from fastapi import Form
 
 
 router = APIRouter()
@@ -167,23 +168,19 @@ async def approve_all_records(
     return RedirectResponse(url=f"/unapproved-days", status_code=303)
 
 @router.post("/delete_unapproved/")
-async def delete_flight(request: Request):
-    form_data = await request.form()
-    flight_id = form_data.get("id")
-
-    page = request.query_params.get("page", 1)
-
-    if not flight_id:
-        return JSONResponse({"status": "error", "message": "ID not provided"})
-
-    session = Session()
-    flight = session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+async def delete_flight(
+    id: int = Form(...),
+    day: int = Form(...),
+    month: int = Form(...),
+    year: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    flight = db.query(FlightTechniques).filter(FlightTechniques.id == id).first()
 
     if flight:
-        session.delete(flight)
-        session.commit()
-        session.close()
-        return RedirectResponse(url=f"/income?page={page}", status_code=303)
+        db.delete(flight)
+        db.commit()
+        # Перенаправляем обратно на страницу с сохраненными параметрами
+        return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
 
-    session.close()
     return JSONResponse({"status": "error", "message": "Flight not found"})

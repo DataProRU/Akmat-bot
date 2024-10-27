@@ -140,10 +140,10 @@ async def update_user(data: dict, db: Session = Depends(get_db)):
 
 
 @router.delete("/users/{user_id}")
-async def delete_user(user_id: int):
+async def delete_user(user_id: int, request: Request):
     query = web_users.delete().where(web_users.c.id == user_id)
     await database.execute(query)
-    return RedirectResponse("/users", status_code=303)
+    return RedirectResponse(request.url_for("get_users"), status_code=303)
 
 
 @router.post("/delete_user_tg/")
@@ -154,7 +154,7 @@ async def delete_user(data: dict, db: Session = Depends(get_db)):
         db.commit()
         return JSONResponse({
             "status": "success",
-            "redirect_url": "/users"  # добавьте URL для редиректа
+            "redirect_url": "/users"
         })
 
     return JSONResponse({"status": "error", "message": "User not found"})

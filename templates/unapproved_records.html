@@ -54,9 +54,12 @@
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
             <td class="tcol tcol-filter">
-                <button class="tcol-filter-edit"></button>
+
                 <form action="/delete_unapproved/" method="post">
                     <input type="hidden" name="id" value="{{ record.id }}">
+                    <input type="hidden" name="day" value="{{ day }}">
+                    <input type="hidden" name="month" value="{{ month }}">
+                    <input type="hidden" name="year" value="{{ year }}">
                     <button type="submit" class="tcol-filter-delete"></button>
                 </form>
             </td>
@@ -64,6 +67,7 @@
         {% endfor %}
     </tbody>
 </table>
+
 
 <section class="bottom">
     <form method="post" action="/approve-all">
