@@ -32,16 +32,19 @@ def get_db():
         db.close()
 
 
-def get_flight_techniques(page: int = 1, per_page: int = 10):
+def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = scoped_session(Session)
     try:
         # Подсчет и извлечение с постраничной навигацией
+        if page == 1 or page == 2:
+            per_page+=3
         total_count = session.query(FlightTechniques).count()
         total_pages = (total_count + per_page - 1) // per_page
 
         # Преобразуем номер страницы так, чтобы последняя страница стала первой
         inverted_page = total_pages - page + 1
         offset = (inverted_page - 1) * per_page
+
 
         flights_techniques = (
             session.query(FlightTechniques)
@@ -77,7 +80,7 @@ def get_flight_techniques(page: int = 1, per_page: int = 10):
 async def index(
         request: Request,
         page: int = Query(1, ge=1),
-        per_page: int = Query(20, ge=1, le=100),
+        per_page: int = Query(20, ge=20, le=30),
 ):
     # Получаем токен
     token = get_token_from_cookie(request)
@@ -130,7 +133,7 @@ async def index(
                 "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
                 "note": flight_technique.note,
             })
-
+    data.sort(key=lambda x: x["created_at"], reverse=True)
     # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
         "income.html",
@@ -245,7 +248,7 @@ async def filtered_income(
                     "prepayment": "Yes" if flight_technique.prepayment else "Нет",
                     "price": flight_technique.price,
                     "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
-                    "source": sources.get(flight_technique.source_id, "неизвесттный источник"),
+                    "source": sources.get(flight_technique.source_id, "Неизвесттный источник"),
                     "note": flight_technique.note,
                 }
             )
