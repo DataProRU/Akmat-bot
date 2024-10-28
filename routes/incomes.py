@@ -21,7 +21,6 @@ from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from sqlalchemy.orm import scoped_session
-from cachetools import cached, TTLCache
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -32,9 +31,7 @@ def get_db():
     finally:
         db.close()
 
-cache = TTLCache(maxsize=400, ttl=300)
 
-@cached(cache)
 def get_flight_techniques(page: int = 1, per_page: int = 10):
     session = scoped_session(Session)
     try:
@@ -371,7 +368,6 @@ async def delete_flight_technique(flight_technique_id: int):
 
         session.delete(flight_technique)
         session.commit()
-        cache.clear()
 
         return RedirectResponse(url="/income", status_code=303)
     except Exception as e:
@@ -412,7 +408,6 @@ async def submit_form(
         )
         db.add(new_flight)
         db.flush()  # Это нужно для получения id нового рейса
-        cache.clear()
 
         # Создание новой записи в таблице FlightTechniques
         new_flight_technique = FlightTechniques(
@@ -458,7 +453,6 @@ async def delete_flight(request: Request):
         return RedirectResponse(url=f"/income?page={page}", status_code=303)
 
     session.close()
-    cache.clear()
     return JSONResponse({"status": "error", "message": "Flight not found"})
 
 
@@ -496,7 +490,6 @@ async def update_flight(request: Request):
         flight_techniques.note = note
 
         session.commit()
-        cache.clear()
         session.close()
 
     flight_technique = session.query(Flights).filter_by(id=flight_id).first()
@@ -507,5 +500,4 @@ async def update_flight(request: Request):
 
         session.commit()
         session.close()
-
     return RedirectResponse(url="/income", status_code=303)

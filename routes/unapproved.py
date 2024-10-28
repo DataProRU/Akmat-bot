@@ -177,7 +177,13 @@ async def approve_all_records(
         extract('day', Flights.flight_date) == day,
         extract('month', Flights.flight_date) == month,
         extract('year', Flights.flight_date) == year
-    ).update({"confirmed": True})
+    ).update({"confirmed": True}, synchronize_session="fetch")
+
+    db.query(FlightTechniques).filter(
+        extract('day', FlightTechniques.created_at) == day,
+        extract('month', FlightTechniques.created_at) == month,
+        extract('year', FlightTechniques.created_at) == year
+    ).update({"is_approved": True}, synchronize_session="fetch")
 
     # Сохраняем изменения
     db.commit()
