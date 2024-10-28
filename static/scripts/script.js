@@ -37,7 +37,7 @@ function setWidthEditForm(data) {
     document.getElementById('edit-payment_type').style.width = widthSub(data[9].offsetWidth);
     document.getElementById('edit-source_id').style.width = widthSub(data[10].offsetWidth);
     document.getElementById('edit-note').style.width = widthSub(data[11].offsetWidth);
-    document.getElementById('submit-edit').style.width = widthSub(data[12].offsetWidth);
+    //document.getElementById('submit-edit').style.width = widthSub(data[12].offsetWidth);
 };
 
 function widthSub(str) {
