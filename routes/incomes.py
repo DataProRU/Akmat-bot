@@ -35,13 +35,11 @@ def get_db():
 def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = scoped_session(Session)
     try:
-        # Подсчет и извлечение с постраничной навигацией
         if page == 1 or page == 2:
             per_page+=3
         total_count = session.query(FlightTechniques).count()
         total_pages = (total_count + per_page - 1) // per_page
 
-        # Преобразуем номер страницы так, чтобы последняя страница стала первой
         inverted_page = total_pages - page + 1
         offset = (inverted_page - 1) * per_page
 
