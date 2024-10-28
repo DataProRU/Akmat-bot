@@ -242,10 +242,10 @@ async def filtered_income(
                     "technique_name": technique_name,
                     "user_name": user_name,
                     "discount": flight_technique.discount,
-                    "prepayment": "Yes" if flight_technique.prepayment else "No",
+                    "prepayment": "Yes" if flight_technique.prepayment else "Нет",
                     "price": flight_technique.price,
-                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Unknown Payment Type"),
-                    "source": sources.get(flight_technique.source_id, "Unknown Source"),
+                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
+                    "source": sources.get(flight_technique.source_id, "неизвесттный источник"),
                     "note": flight_technique.note,
                 }
             )
