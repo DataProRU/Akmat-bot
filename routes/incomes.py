@@ -478,6 +478,8 @@ async def update_flight(request: Request):
     # Обновление записи в базе данных
     session = Session()
     flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
+    if flight_date == "":
+        flight_date=flight_techniques.created_at
 
     if flight_techniques:
         flight_techniques.created_at = flight_date
