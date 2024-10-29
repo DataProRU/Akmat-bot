@@ -117,20 +117,7 @@
             <td class="tcol tcol-filter">
                 <!-- Кнопка для редактирования -->
                 <button type="button" class="tcol-filter-edit"></button>
-                <!--button type="button" class="tcol-filter-edit" onclick="fillEditForm(this, {
-                    id: '{{ item.id }}',
-                    date: '{{ item.created_at }}',
-                    flight_number: '{{ item.flight_number }}',
-                    flight_name: '{{ item.flight_name }}',
-                    technique_name: '{{ item.technique_name }}',
-                    instructor: '{{ item.user_name }}',
-                    price: '{{ item.price }}',
-                    discount: '{{ item.discount }}',
-                    prepayment: '{{ item.prepayment }}',
-                    payment_type: '{{ item.payment_type }}',
-                    source: '{{ item.source }}',
-                    note: '{{ item.note }}'
-                })"></button-->
+
                 <!-- Форма для удаления -->
                 <form action="/delete_flight/" method="post">
                     <input type="hidden" name="id" value="{{ item.id }}">

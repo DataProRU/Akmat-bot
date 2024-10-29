@@ -43,6 +43,8 @@
     <tbody class="table-body" id="table-body">
         {% for record in flights_techniques %}
         <tr class="trow">
+            <td class="tcol" hidden>{{ record.id }}</td>
+            <td class="tcol" hidden>{{ record.created_at }}</td>
             <td class="tcol tcol-num">{{ record.flight_number }}</td>
             <td class="tcol">{{ record.flight_name }}</td>
             <td class="tcol">{{ record.technique_name }}</td>
@@ -54,6 +56,7 @@
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
             <td class="tcol tcol-filter">
+                <button class="tcol-filter-edit"></button>
 
                 <form action="/delete_unapproved/" method="post">
                     <input type="hidden" name="id" value="{{ record.id }}">
@@ -178,7 +181,7 @@
 
         <div class="form-btns">
             <input type="reset" class="form-btn-reset">
-             <input type="hidden" name="day" value="{{ day }}">
+            <input type="hidden" name="day" value="{{ day }}">
             <input type="hidden" name="month" value="{{ month }}">
             <input type="hidden" name="year" value="{{ year }}">
             <input type="submit" value="Добавить" class="form-btn-submit">

@@ -17,7 +17,7 @@
     <table class="table-data">
         <thead>
             <tr>
-                <th class="trow-head-data">ID</th>
+                <th class="trow-head-data" hidden>ID</th>
                 <th class="trow-head-data">Имя пользователя</th>
                 <th class="trow-head-data">Роль</th>
                 <th class="trow-head-data">Действия</th>
@@ -26,7 +26,7 @@
         <tbody id="userTable">
             {% for user in users %}
             <tr class="trow">
-                <td class="tcol tcol-num">{{ user.id }}</td>
+                <td class="tcol tcol-num" hidden>{{ user.id }}</td>
                 <td class="tcol">{{ user.username }}</td>
                 <td class="tcol">
                     <select onchange="updateUserRole({{ user.id }}, this.value)">
@@ -212,7 +212,7 @@
 </section>
 
 
-<section id="userModal" class="add-form-container access-new-site">
+<section id="userModal" class="access-new-site add-form-container">
     <div class="form-header">
         <h3>Новый пользователь</h3>
         <span class="close-form-btn" onclick="closeModal()">✖</span>
@@ -276,45 +276,46 @@
         });
     });
     function openModal_tg() {
-        document.getElementById('userModal_tg').style.display = 'block';
         document.getElementById('userModal_tg').classList.add('open');
+        document.getElementById('userModal_tg').style.display = 'block';
+
     }
     function closeModal_tg() {
         document.getElementById('userModal_tg').style.display = 'none';
     }
 
     document.getElementById('createUserForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
+        event.preventDefault();
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
 
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('role', role);
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('role', role);
 
-    try {
-        const createResponse = await fetch('/register', {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            const createResponse = await fetch('/register', {
+                method: 'POST',
+                body: formData
+            });
 
-        if (createResponse.ok) {
-            alert('User created successfully!');
+            if (createResponse.ok) {
+                alert('User created successfully!');
+                // Переход на страницу пользователей
+                window.location.href = '/users';
+            } else {
+                const result = await createResponse.json();
+                alert(`Error: ${result.detail || 'Failed to create user'}`);
+            }
+        } catch (error) {
+            alert(`An error occurred: ${error.message}`);
             // Переход на страницу пользователей
             window.location.href = '/users';
-        } else {
-            const result = await createResponse.json();
-            alert(`Error: ${result.detail || 'Failed to create user'}`);
         }
-    } catch (error) {
-        alert(`An error occurred: ${error.message}`);
-        // Переход на страницу пользователей
-        window.location.href = '/users';
-    }
-});
+    });
 
     function saveUser(userId) {
         const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
@@ -432,25 +433,25 @@
         alert('User role updated');
     }
 
-async function deleteUser(userId) {
-    if (confirm('Вы уверены, что хотите удалить пользователя?')) {
-        $.ajax({
-            url: `/users/${userId}`, // Используйте обратные кавычки для интерполяции
-            method: 'DELETE',
-            contentType: 'application/json',
-            success: function (response) {
-                if (response.status === 'success') {
-                    window.location.href = response.redirect_url;
-                } else {
-                    alert(response.message);
+    async function deleteUser(userId) {
+        if (confirm('Вы уверены, что хотите удалить пользователя?')) {
+            $.ajax({
+                url: `/users/${userId}`, // Используйте обратные кавычки для интерполяции
+                method: 'DELETE',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.status === 'success') {
+                        window.location.href = response.redirect_url;
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Ошибка при удалении пользователя: ' + errorThrown);
                 }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('Ошибка при удалении пользователя: ' + errorThrown);
-            }
-        });
+            });
+        }
     }
-}
 
     function openModal() {
         document.getElementById('userModal').style.display = 'block';
