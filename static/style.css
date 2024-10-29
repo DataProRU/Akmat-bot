@@ -418,7 +418,8 @@ p {
 }
 
 .edit-entry-form {
-    height: calc(100% - 2px);
+    height: calc(100% - 8px);
+    margin-top: 4px;
     display: flex;
     align-items: center;
 }
@@ -427,7 +428,15 @@ p {
 .edit-entry-form input {
     border: none;
     outline: none;
+    height: 100%;
     margin: 0 2px;
+    box-shadow: 1px 1px 6px #b0b6b950;
+    border-radius: 3px;
+    resize: none;
+}
+
+#edit-checkbox-td {
+    height: 100%;
 }
 
 .edit-checkbox-td {
@@ -445,10 +454,7 @@ p {
     cursor: pointer;
     background-color: #66ccf3;
     box-shadow: 1px 1px 6px #b0b6b950;
-}
-
-#edit-transfer {
-    width: 10px;
+    flex-grow: 1;
 }
 
 /*welcome*/

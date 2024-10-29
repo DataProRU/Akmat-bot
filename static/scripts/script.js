@@ -8,10 +8,21 @@ function openFormAdd() {
         formAdd.classList.remove('open');
     });
 };
-const formEdit = document.querySelector('#edit-form-container');
 
 //открыть форму для редактирования записи
 var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
+const formEdit = document.querySelector('#edit-form-container');
+var editDate = document.getElementById('edit-date');
+var editFlightId = document.getElementById('edit-flight_id');
+var editTypeOfRoute = document.getElementById('edit-type-of-route');
+var editTechniqueId = document.getElementById('edit-technique_id');
+var editInstructor = document.getElementById('edit-instructor');
+var editDiscount = document.getElementById('edit-discount');
+var editCheckboxTd = 0;
+var editPrice = document.getElementById('edit-price');
+var editPaymentType = document.getElementById('edit-payment_type');
+var editSourceId = document.getElementById('edit-source_id');
+var editNote = document.getElementById('edit-note');
 
 btnsEditIncome.forEach(function (btnEdit) {
     btnEdit.addEventListener('click', () => {
@@ -25,19 +36,19 @@ btnsEditIncome.forEach(function (btnEdit) {
     });
 });
 
+//ширина полей формы для редактирования
 function setWidthEditForm(data) {
-    document.getElementById('edit-date').style.width = widthSub(data[1].offsetWidth);
-    document.getElementById('edit-flight_id').style.width = widthSub(data[2].offsetWidth);
-    document.getElementById('edit-type-of-route').style.width = widthSub(data[3].offsetWidth);
-    document.getElementById('edit-technique_id').style.width = widthSub(data[4].offsetWidth);
-    document.getElementById('edit-instructor').style.width = widthSub(data[5].offsetWidth);
-    document.getElementById('edit-discount').style.width = widthSub(data[6].offsetWidth);
+    editDate.style.width = widthSub(data[1].offsetWidth);
+    editFlightId.style.width = widthSub(data[2].offsetWidth);
+    editTypeOfRoute.style.width = widthSub(data[3].offsetWidth);
+    editTechniqueId.style.width = widthSub(data[4].offsetWidth);
+    editInstructor.style.width = widthSub(data[5].offsetWidth);
+    editDiscount.style.width = widthSub(data[6].offsetWidth);
     document.getElementById('edit-checkbox-td').style.width = widthSub(data[7].offsetWidth);
-    document.getElementById('edit-price').style.width = widthSub(data[8].offsetWidth);
-    document.getElementById('edit-payment_type').style.width = widthSub(data[9].offsetWidth);
-    document.getElementById('edit-source_id').style.width = widthSub(data[10].offsetWidth);
-    document.getElementById('edit-note').style.width = widthSub(data[11].offsetWidth);
-    //document.getElementById('submit-edit').style.width = widthSub(data[12].offsetWidth);
+    editPrice.style.width = widthSub(data[8].offsetWidth);
+    editPaymentType.style.width = widthSub(data[9].offsetWidth);
+    editSourceId.style.width = widthSub(data[10].offsetWidth);
+    editNote.style.width = widthSub(data[11].offsetWidth);
 };
 
 function widthSub(str) {
@@ -47,42 +58,18 @@ function widthSub(str) {
 //заполнить форму для редактирования записи
 function fillEditForm(data) {
     document.getElementById('edit-id').value = data[0].innerHTML;
-    console.log(data[1].innerHTML.slice(0, 10));
-    document.getElementById('edit-date').value = data[1].innerHTML.slice(0, 10);
-    document.getElementById('edit-flight_id').value = data[2].innerHTML;
-    document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data[3].innerHTML;
-    document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data[4].innerHTML;
-    document.getElementById('edit-instructor').options[document.getElementById('edit-instructor').selectedIndex].text = data[5].innerHTML;
-    document.getElementById('edit-discount').value = data[6].innerHTML;
+    editDate.value = data[1].innerHTML.slice(6, 10) + '-' + data[1].innerHTML.slice(3, 5) + '-' + data[1].innerHTML.slice(0, 2);
+    editFlightId.value = data[2].innerHTML;
+    editTypeOfRoute.options[editTypeOfRoute.selectedIndex].text = data[3].innerHTML;
+    editTechniqueId.options[editTechniqueId.selectedIndex].text = data[4].innerHTML;
+    editInstructor.options[editInstructor.selectedIndex].text = data[5].innerHTML;
+    editDiscount.value = data[6].innerHTML;
     document.getElementById('edit-prepayment').checked = data[7].innerHTML === 'Да';
-    document.getElementById('edit-price').value = data[8].innerHTML;
-    document.getElementById('edit-payment_type').options[document.getElementById('edit-payment_type').selectedIndex].text = data[9].innerHTML;
-    document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data[10].innerHTML;
-    document.getElementById('edit-note').value = data[11].innerHTML;
+    editPrice.value = data[8].innerHTML;
+    editPaymentType.options[editPaymentType.selectedIndex].text = data[9].innerHTML;
+    editSourceId.options[editSourceId.selectedIndex].text = data[10].innerHTML;
+    editNote.value = data[11].innerHTML;
 };
-
-//заполнить форму для редактирования записи
-//function fillEditForm(btnEdit, data) {
-//    document.getElementById('edit-id').value = data.id;
-//    document.getElementById('edit-date').innerHTML = data.date;
-//    document.getElementById('edit-flight_id').value = data.flight_number;
-//    document.getElementById('edit-type-of-route').options[document.getElementById('edit-type-of-route').selectedIndex].text = data.flight_name;
-//    document.getElementById('edit-technique_id').options[document.getElementById('edit-technique_id').selectedIndex].text = data.technique_name;
-//    document.getElementById('edit-instructor').options[document.getElementById('edit-instructor').selectedIndex].text = data.instructor;
-//    document.getElementById('edit-discount').value = data.discount;
-//    document.getElementById('edit-prepayment').checked = data.prepayment === 'Yes';
-//    document.getElementById('edit-price').value = data.price;
-//    document.getElementById('edit-payment_type').options[document.getElementById('edit-payment_type').selectedIndex].text = data.payment_type;
-//    document.getElementById('edit-source_id').options[document.getElementById('edit-source_id').selectedIndex].text = data.source;
-//    document.getElementById('edit-note').value = data.note;
-
-//    let trEdit = btnEdit.parentNode.parentNode;
-//    trEdit.append(formEdit);
-//    const tdsEditForm = trEdit.children;
-//    console.log(tdsEditForm);
-//    setWidthEditForm(tdsEditForm);
-//    formEdit.classList.add('open');
-//};
 
 //открыть форму для добавления пользователя в бот
 function openFormAddBot() {
@@ -103,7 +90,6 @@ const butttonAddOrder = document.querySelector('#submit');
 //event.preventDefault();
 //document.querySelector('.add-entry-form').reset();
 //});
-
 
 const resizers = document.querySelectorAll('.resizer');
 
