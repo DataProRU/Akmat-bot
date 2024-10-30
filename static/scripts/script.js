@@ -11,7 +11,7 @@ function openFormAdd() {
 
 //открыть форму для редактирования записи
 var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
-const formEdit = document.querySelector('#edit-form-container');
+const formEdit = document.querySelector('.edit-form-container');
 var editDate = document.getElementById('edit-date');
 var editFlightId = document.getElementById('edit-flight_id');
 var editTypeOfRoute = document.getElementById('edit-type-of-route');
@@ -71,17 +71,16 @@ function fillEditForm(data) {
     editNote.value = data[11].innerHTML;
 };
 
-document.addEventListener('click', (event) => {
-    btnsEditIncome.forEach(function (btnEdit) {
-        if (!formEdit.contains(event.target) && !btnEdit.contains(event.target)) {
-            formEdit.classList.remove('open');
-        }
-    });
-    formEdit.addEventListener('click', (event) => {
-        event.stopPropagation();
-
-    });
-});
+//document.addEventListener('click', (event) => {
+//    btnsEditIncome.forEach(function (btnEdit) {
+//        if (!formEdit.contains(event.target) && !btnEdit.contains(event.target)) {
+//            formEdit.classList.remove('open');
+//        }
+//    });
+//    formEdit.addEventListener('click', (event) => {
+//        event.stopPropagation();
+//    });
+//});
 
 //открыть форму для добавления пользователя в бот
 function openFormAddBot() {
