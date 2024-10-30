@@ -56,20 +56,30 @@ async def get_users(request: Request, db: Session = Depends(get_db)):
 
 
 @router.put("/users/{user_id}")
-async def update_user_role(user_id: int, role_update: UpdateUserRole):
+async def update_user_role(request: Request,user_id: int, role_update: UpdateUserRole):
+
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+        # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if not database.is_connected:
+        await database.connect()
     query = (
         web_users.update()
         .where(web_users.c.id == user_id)
         .values(role=role_update.role)
     )
-    if not database.is_connected:
-        await database.connect()
     await database.execute(query)
     return RedirectResponse("/users", status_code=303)
 
 
 @router.post("/users_tg/edit/{id}", response_class=HTMLResponse)
 async def update_users(
+        request: Request,
         id: int,
         tg: str = Form(...),
         full_name: str = Form(...),
@@ -89,6 +99,13 @@ async def update_users(
         change_salary: bool = Form(False),
         db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     user = db.query(Users).filter(Users.id == id).first()
     if not user:
         return {"error": "User not found"}
@@ -134,25 +151,10 @@ async def delete_positions(request: Request, id: int, db: Session = Depends(get_
 
 
 
-@router.delete("/users/{user_id}")
-async def delete_user(user_id: int):
-    query = web_users.delete().where(web_users.c.id == user_id)
-    await database.execute(query)
-    return JSONResponse({
-        "status": "success",
-        "redirect_url": "/users"
-    })
-
-
-
-
-@router.get("/users_tg/add")
-async def get_user_form():
-    return {"message": "Страница формы доступна"}
-
 
 @router.post("/users_tg/add")
 async def add_user(
+        request: Request,
         tg: str = Form(...),
         full_name: str = Form(...),
         is_manager: bool = Form(False),
@@ -189,6 +191,16 @@ async def add_user(
         is_investor=is_investor,
         change_salary=change_salary
     )
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+        # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if not database.is_connected:
+        await database.connect()
 
     db.add(user)
     db.commit()
