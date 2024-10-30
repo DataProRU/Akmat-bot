@@ -404,7 +404,7 @@ p {
 #edit-form-container {
     display: none;
     width: 100%;
-    height: 100%;
+    height: calc((100vh - 170px)/20);
     position: absolute;
     top: 0px;
     left: 0px;
@@ -448,7 +448,7 @@ p {
     border: none;
     line-height: 23px;
     border-radius: 3px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     color: #f6f9fb;
     cursor: pointer;
