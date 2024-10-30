@@ -70,43 +70,69 @@
                 <th class="trow-head-data th-access">Внести штраф</th>
                 <th class="trow-head-data th-access">Изменить зарплату</th>
                 <th class="trow-head-data th-access">Действия</th>
+                <th class="trow-head-data th-access"></th>
             </tr>
         </thead>
         <tbody>
             {% for user in users_tg %}
             <tr class="trow">
-                <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="tg">{{ user.tg }}</td>
-                <td class="tcol" contenteditable="true" data-user-id="{{ user.id }}" data-field="full_name">{{
-                    user.full_name }}</td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_investor" {% if user.is_investor %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_director" {% if user.is_director %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_manager" {% if user.is_manager %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_instructor" {% if user.is_instructor %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="is_assistant" {% if user.is_assistant %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="send_button" {% if user.send_button %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="deposit_income" {% if user.deposit_income %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="enter_operation" {% if user.enter_operation %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="view_salary" {% if user.view_salary %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="contribute_expense" {% if user.contribute_expense %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="comission" {% if user.comission %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="penalty" {% if user.penalty %}checked{% endif %}></td>
-                <td class="tcol tcol-num"><input class="form-checkbox" type="checkbox" data-user-id="{{ user.id }}"
-                        data-field="change_salary" {% if user.change_salary %}checked{% endif %}></td>
+                <form action="/users_tg/edit/{{ user.id }}" method="post" style="display:inline;">
+
+                     <td>
+                        <input type="text" name="tg" value="{{ user.tg }}" required>
+                    </td>
+                    <td>
+                        <input type="text" name="full_name" value="{{ user.full_name }}" required>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_manager" {% if user.is_manager %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_instructor" {% if user.is_investor %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_assistant" {% if user.is_assistant %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="send_button" {% if user.send_button %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="deposit_income" {% if user.deposit_income %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="enter_operation" {% if user.enter_operation %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="view_salary" {% if user.view_salary %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="contribute_expense" {% if user.contribute_expense %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_director" {% if user.is_director %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="comission" {% if user.comission %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="penalty" {% if user.penalty %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_investor" {% if user.is_investor %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="change_salary" {% if user.change_salary %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <button type="submit" class="tcol-filter-edit"></button>
+                    </td>
+                </form>
+
                 <td class="tcol-filter">
-                    <button class="tcol-filter-save" onclick="saveUser({{ user.id }})"></button>
-                    <button class="tcol-filter-delete" onclick="deleteUserTG({{ user.id }})"></button>
+                   <form action="/users_tg/delete/{{ user.id }}" method="post" style="display:inline;">
+                        <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}
@@ -317,7 +343,7 @@
         }
     });
 
-    function saveUser(userId) {
+    /*function saveUser(userId) {
         const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
 
         const userData = {
@@ -354,9 +380,9 @@
                 }
             }
         });
-    }
+    }*/
 
-    function deleteUserTG(userId) {
+   /* function deleteUserTG(userId) {
         const row = $(`tr td:first-child:contains(${userId})`).closest('tr');
 
         const userData = {
@@ -396,7 +422,7 @@
                 alert('Ошибка при удалении пользователя: ' + errorThrown);
             }
         });
-    }
+    }*/
 
     async function loadUsers() {
         const response = await fetch('/users/');
