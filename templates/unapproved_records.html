@@ -72,10 +72,10 @@
 </table>
 
 <section id="edit-form-container-un" class="edit-form-container">
-    <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
+    <form action="/update_unapproved_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 
-        <input type="date" id="edit-date" name="date" class="" hidden>
+        <input type="hidden" id="edit-date" name="date">
         <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
 
         <select name="type-of-route" id="edit-type-of-route">
