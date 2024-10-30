@@ -71,6 +71,18 @@ function fillEditForm(data) {
     editNote.value = data[11].innerHTML;
 };
 
+document.addEventListener('click', (event) => {
+    btnsEditIncome.forEach(function (btnEdit) {
+        if (!formEdit.contains(event.target) && !btnEdit.contains(event.target)) {
+            formEdit.classList.remove('open');
+        }
+    });
+    formEdit.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+    });
+});
+
 //открыть форму для добавления пользователя в бот
 function openFormAddBot() {
     const formAddBot = document.querySelector('#form-new-user-bot');

@@ -71,6 +71,57 @@
     </tbody>
 </table>
 
+<section id="edit-form-container">
+    <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
+        <input type="hidden" id="edit-id" name="id">
+
+        <input type="date" id="edit-date" name="date" class="" hidden>
+        <input type="number" id="edit-flight_id" name="flight_number" class="tcol-num" required>
+
+        <select name="type-of-route" id="edit-type-of-route">
+            {% for route_id, route_name in routes.items() %}
+            <option value="{{ route_id }}">{{ route_name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="technique_id" id="edit-technique_id" class="" required>
+            {% for technique_id, technique_name in techniques.items() %}
+            <option value="{{ technique_id }}">{{ technique_name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="edit-instructor" id="edit-instructor" class="">
+            {% for user_id, user_name in users.items() %}
+            <option value="{{ user_id }}">{{ user_name }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="number" id="edit-discount" name="discount" class="tcol-num" step="1">
+
+        <div id="edit-checkbox-td" class="edit-checkbox-td">
+            <input type="checkbox" id="edit-prepayment" name="prepayment" class="form-checkbox">
+        </div>
+
+        <input type="number" id="edit-price" name="price" class="tcol-num" step="1" required>
+
+        <select name="payment_type" id="edit-payment_type" class="" required>
+            {% for pay_id, pay_name in payment_types.items() %}
+            <option value="{{ pay_id }}">{{ pay_name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="source_id" id="edit-source_id" class="" required>
+            {% for source_id, source_name in sources.items() %}
+            <option value="{{ source_id }}">{{ source_name }}</option>
+            {% endfor %}
+        </select>
+
+        <input id="edit-note" name="note">
+
+        <input type="submit" id="submit_edit" value="Сохранить" class="form-btn-edit">
+
+    </form>
+</section>
 
 <section class="bottom">
     <form method="post" action="/approve-all">
