@@ -115,8 +115,9 @@
 
             <!-- Здесь кнопки редактирования и удаления -->
             <td class="tcol tcol-filter">
-                <!-- Кнопка для редактирования -->
                 <button type="button" class="tcol-filter-edit"></button>
+                <!-- Кнопка для редактирования -->
+
 
                 <!-- Форма для удаления -->
                 <form action="/delete_flight/" method="post">
@@ -234,7 +235,7 @@
     </form>
 </section>
 
-<section id="edit-form-container">
+<section id="edit-form-container" class="edit-form-container">
     <form action="/update_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 

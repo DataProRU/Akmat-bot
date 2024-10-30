@@ -401,7 +401,7 @@ p {
     transition: 0.3s;
 }
 
-#edit-form-container {
+.edit-form-container {
     display: none;
     width: 100%;
     height: calc((100vh - 170px)/20);
@@ -413,7 +413,7 @@ p {
     z-index: 5;
 }
 
-#edit-form-container.open {
+.edit-form-container.open {
     display: block;
 }
 
