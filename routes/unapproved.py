@@ -16,6 +16,7 @@ from sqlalchemy import extract
 from fastapi.responses import JSONResponse
 from fastapi import Form
 from datetime import datetime
+from dependencies import get_token_from_cookie, get_current_user
 
 
 router = APIRouter()
@@ -109,6 +110,14 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
 
 @router.get("/unapproved-days", response_class=HTMLResponse)
 async def unapproved_days(request: Request, db: Session = Depends(get_db)):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Получаем все уникальные даты с неподтверждёнными записями
     days_with_unapproved = db.query(
         extract('day', FlightTechniques.created_at).label('day'),
@@ -137,6 +146,14 @@ async def unapproved_records(
     per_page: int = Query(30, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Передаем объект сессии в функцию get_filtered_flight_techniques
     result = get_filtered_flight_techniques(day=day, month=month, year=year, page=page, per_page=per_page, db=db)
 
@@ -167,11 +184,20 @@ async def unapproved_records(
 
 @router.post("/approve-all", response_class=RedirectResponse)
 async def approve_all_records(
+    request: Request,
     day: int = Form(...),
     month: int = Form(...),
     year: int = Form(...),
     db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Обновляем записи в Flights и устанавливаем confirmed в True
     db.query(Flights).filter(
         extract('day', Flights.flight_date) == day,
@@ -193,12 +219,21 @@ async def approve_all_records(
 
 @router.post("/delete_unapproved/")
 async def delete_flight(
+request: Request,
     id: int = Form(...),
     day: int = Form(...),
     month: int = Form(...),
     year: int = Form(...),
     db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
     flight = db.query(FlightTechniques).filter(FlightTechniques.id == id).first()
 
     if flight:
@@ -210,6 +245,7 @@ async def delete_flight(
 
 @router.post("/submit_unapproved")
 async def submit_form(
+request: Request,
     flight_number: int = Form(...),
     instructor_id: int = Form(...),
     date: str = Form(str(datetime.now())),
@@ -226,6 +262,14 @@ async def submit_form(
     year: int = Form(...),
     db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+    # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
     try:
         # Создание новой записи в таблице Flights
         new_flight = Flights(
@@ -267,13 +311,20 @@ async def submit_form(
 
 @router.post("/update_unapproved_flight/")
 async def update_flight(request: Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     form_data = await request.form()
     flight_id = form_data.get("id")
 
     # Извлечение данных из формы
     flight_date = form_data.get("date")
     flight_number = form_data.get("flight_number")
-    technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
+    technique_id = form_data.get("technique_id") # может падать, если не ввести данные формы вручную
     instructor = form_data.get("edit-instructor")
     route_type = form_data.get("type-of-route")
     price = form_data.get("price")
@@ -283,9 +334,26 @@ async def update_flight(request: Request):
     source_id = form_data.get("source_id")
     note = form_data.get("note")
 
-    # Обновление записи в базе данных
+    day = ""
+    month = ""
+    year = ""
     session = Session()
     flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
+
+    if flight_date == "":
+        flight_date=flight_techniques.created_at
+
+    # Преобразование даты из строки в объект datetime
+    if flight_date:
+        try:
+            flight_date_obj = datetime.fromisoformat(str(flight_date))
+            day = flight_date_obj.day
+            month = flight_date_obj.month
+            year = flight_date_obj.year
+        except ValueError:
+            return {"error": "Неверный формат даты"}
+
+    # Обновление записи в базе данных
 
     if flight_techniques:
         flight_techniques.created_at = flight_date
@@ -299,15 +367,15 @@ async def update_flight(request: Request):
         flight_techniques.note = note
 
         session.commit()
-        session.close()
 
-    flight_technique = session.query(Flights).filter_by(id=flight_id).first()
-    if flight_technique:
-        flight_technique.technique_id = technique_id
-        flight_technique.instructor_id = instructor
-        flight_technique.route_id = route_type
+    flight = session.query(Flights).filter_by(id=flight_id).first()
+    if flight:
+        flight.technique_id = technique_id
+        flight.instructor_id = instructor
+        flight.route_id = route_type
 
         session.commit()
-        session.close()
+    session.close()
 
-    return RedirectResponse(url="/unapproved-days", status_code=303)
+    # Редирект с параметрами даты
+    return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
