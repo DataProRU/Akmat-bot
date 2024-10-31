@@ -324,7 +324,7 @@ async def update_flight(request: Request):
     # Извлечение данных из формы
     flight_date = form_data.get("date")
     flight_number = form_data.get("flight_number")
-    technique_id = form_data.get("technique_id") # может падать, если не ввести данные формы вручную
+    technique_id = form_data.get("technique_id")
     instructor = form_data.get("edit-instructor")
     route_type = form_data.get("type-of-route")
     price = form_data.get("price")
@@ -334,29 +334,13 @@ async def update_flight(request: Request):
     source_id = form_data.get("source_id")
     note = form_data.get("note")
 
-    day = ""
-    month = ""
-    year = ""
     session = Session()
     flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
-
-    if flight_date == "":
-        flight_date=flight_techniques.created_at
-
-    # Преобразование даты из строки в объект datetime
-    if flight_date:
-        try:
-            flight_date_obj = datetime.fromisoformat(str(flight_date))
-            day = flight_date_obj.day
-            month = flight_date_obj.month
-            year = flight_date_obj.year
-        except ValueError:
-            return {"error": "Неверный формат даты"}
 
     # Обновление записи в базе данных
 
     if flight_techniques:
-        flight_techniques.created_at = flight_date
+        flight_techniques.created_at = flight_techniques.created_at
         flight_techniques.flight_number = flight_number
         flight_techniques.technique_id = technique_id
         flight_techniques.price = price
@@ -375,6 +359,19 @@ async def update_flight(request: Request):
         flight.route_id = route_type
 
         session.commit()
+
+    day = ""
+    month = ""
+    year = ""
+    if flight_techniques.created_at:
+        try:
+            flight_date_obj = datetime.fromisoformat(str(flight_techniques.created_at))
+            day = flight_date_obj.day
+            month = flight_date_obj.month
+            year = flight_date_obj.year
+        except ValueError:
+            return {"error": "Неверный формат даты"}
+
     session.close()
 
     # Редирект с параметрами даты

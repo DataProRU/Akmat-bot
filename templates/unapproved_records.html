@@ -56,6 +56,7 @@
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
             <td class="tcol tcol-filter">
+                 <input type="hidden" name="id" value="{{ record.id }}">
                 <button class="tcol-filter-edit"></button>
 
                 <form action="/delete_unapproved/" method="post">

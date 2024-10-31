@@ -395,17 +395,18 @@ async def submit_form(
     db: Session = Depends(get_db)
 ):
     try:
+        print(datetime.now())
         # Создание новой записи в таблице Flights
         new_flight = Flights(
             flight_number=route_id,
             instructor_id=instructor_id,
-            flight_date=date,
+            flight_date=datetime.now(),
             route_id=route_id,
             manager_id=0,
             confirmed=False,
             source_id=source_id,
             source_data=note,
-            created_at=date,
+            created_at=datetime.now(),
         )
         db.add(new_flight)
         db.flush()  # Это нужно для получения id нового рейса
