@@ -223,7 +223,7 @@ db_session: Session = Depends(get_db),
     year = int(year) if year else None
 
     # Вызов функции фильтрации с обработанными значениями
-    result = get_filtered_flight_techniques(db_session=db_session,year=year, month=month, day=day, page=page, per_page=per_page)
+    result = get_filtered_flight_techniques(db_session=db_session,year=year, month=month, day=day, page=page, per_page=10000)
 
     flights_techniques = result["flights_techniques"]
     techniques = result["techniques"]
