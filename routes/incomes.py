@@ -189,7 +189,7 @@ def get_filtered_flight_techniques( db_session: Session, day: Optional[int], mon
             "payment_types": payment_types,
             "sources": sources,
             "total_pages": total_pages,
-            "page": page
+            "page": page,
         }
 
 @router.get("/filtered-income", response_class=HTMLResponse)
@@ -269,6 +269,9 @@ db_session: Session = Depends(get_db),
             "users": users,
             "payment_types": payment_types,
             "sources": sources,
+            "day": day,
+            "month": month,
+            "year": year,
         },
     )
 
