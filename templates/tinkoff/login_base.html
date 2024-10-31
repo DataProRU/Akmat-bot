@@ -1,0 +1,12 @@
+{% extends "tinkoff/tinkoff_base.html" %}
+
+{% block content %}
+    <!-- Ввод информации -->
+    <div class="input-wrapper">
+        <input-control label="{% block input_label %} {% endblock %}" type="{% block input_type %} {% endblock %}"></input-control>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/scripts/tinkoff/controls/inputControl.js" defer></script>
+{% endblock %}

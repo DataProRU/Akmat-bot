@@ -1,0 +1,2 @@
+[16:16:1031/234947.791213:WARNING:chrome_main_delegate.cc(744)] This is Chrome version 130.0.6723.69 (not a warning)
+[16:16:1031/234947.798725:ERROR:zygote_host_impl_linux.cc(101)] Running as root without --no-sandbox is not supported. See https://crbug.com/638180.

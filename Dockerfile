@@ -4,12 +4,17 @@ FROM python:3.12-slim
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Устанавливаем зависимости для сборки некоторых библиотек
+# Устанавливаем зависимости для сборки некоторых библиотек и Chromium
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     libffi-dev \
     libssl-dev \
+    wget \
+    gnupg \
+    unzip \
+    chromium \
+    chromium-driver \
     && rm -rf /var/lib/apt/lists/*
 
 # Обновляем pip
