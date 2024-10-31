@@ -56,17 +56,10 @@
 {% block content %}
 <script>
     document.querySelectorAll('.nav-select').forEach(select => {
-        select.addEventListener('change', function () {
-            const day = document.getElementById('day').value;
-            const month = document.getElementById('month').value;
-            const year = document.getElementById('year').value;
-
-            // Проверяем, что все поля заполнены
-            if (day && month && year) {
-                document.getElementById('filter-form').submit();
-            }
-        });
+    select.addEventListener('change', function () {
+        document.getElementById('filter-form').submit();
     });
+});
 
 </script>
 <table class="table-data" id="table-data">

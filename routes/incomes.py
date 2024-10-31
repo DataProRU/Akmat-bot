@@ -152,35 +152,35 @@ async def index(
 
 
 
-def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30):
+def get_filtered_flight_techniques( db_session: Session, day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30, ):
     session = Session()
-    try:
-        offset = (page - 1) * per_page
-        query = session.query(FlightTechniques)
 
-        # Фильтрация по дате
-        if year is not None:
-            query = query.filter(extract('year', FlightTechniques.created_at) == year)
+    # Старт запроса с использованием сессии
+    query = db_session.query(FlightTechniques)
 
-            if month is not None:
-                query = query.filter(extract('month', FlightTechniques.created_at) == month)
+    # Применяем фильтры в зависимости от переданных параметров
+    if year:
+        query = query.filter(extract('year', FlightTechniques.created_at) == year)
+    if month:
+        query = query.filter(extract('month', FlightTechniques.created_at) == month)
+    if day:
+        query = query.filter(extract('day', FlightTechniques.created_at) == day)
 
-                if day is not None:
-                    query = query.filter(extract('day', FlightTechniques.created_at) == day)
+    # Пагинация
+    flights_techniques = query.offset(100).limit(per_page).all()
+    total_count = query.count()  # Подсчёт общего числа записей
+    total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
 
-        # Пагинация
-        flights_techniques = query.offset(offset).limit(per_page).all()
-        total_count = query.count()  # Подсчёт общего числа записей
-        total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
+    techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
+    flights = {flight.id: flight for flight in session.query(Flights).all()}
+    routes = {route.id: route.title for route in session.query(Routes).all()}
+    users = {user.id: user.full_name for user in session.query(Users).all()}
+    payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
+    sources = {source.id: source.title for source in session.query(Sources)}
 
-        techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
-        flights = {flight.id: flight for flight in session.query(Flights).all()}
-        routes = {route.id: route.title for route in session.query(Routes).all()}
-        users = {user.id: user.full_name for user in session.query(Users).all()}
-        payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
-        sources = {source.id: source.title for source in session.query(Sources)}
+    session.close()
 
-        return {
+    return {
             "flights_techniques": flights_techniques,
             "techniques": techniques,
             "flights": flights,
@@ -191,29 +191,34 @@ def get_filtered_flight_techniques(day: Optional[int], month: Optional[int], yea
             "total_pages": total_pages,
             "page": page
         }
-    finally:
-        session.close()
-
 
 @router.get("/filtered-income", response_class=HTMLResponse)
 async def filtered_income(
-    request: Request,
-    day: Optional[int] = Query(None),
-    month: Optional[int] = Query(None),
-    year: Optional[int] = Query(None),
-    page: int = Query(1, ge=1),
-    per_page: int = Query(30, ge=1, le=100),
-):
-    # Получаем токен и проверяем пользователя
+            request: Request,
+            day: Optional[str] = Query(None),
+            month: Optional[str] = Query(None),
+            year: Optional[str] = Query(None),
+            page: int = Query(1, ge=1),
+            per_page: int = Query(30, ge=1, le=100),
+db_session: Session = Depends(get_db),
+    ):
+    # Проверка токена и пользователя
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
+        return token
 
     payload = get_current_user(token)
     if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+        return payload
 
-    result = get_filtered_flight_techniques(day, month, year, page, per_page)
+    # Преобразуем пустые строки в None, если поля не были выбраны
+    day = int(day) if day else None
+    month = int(month) if month else None
+    year = int(year) if year else None
+
+    # Вызов функции фильтрации с обработанными значениями
+    result = get_filtered_flight_techniques(db_session=db_session,year=year, month=month, day=day, page=page, per_page=per_page)
+
     flights_techniques = result["flights_techniques"]
     techniques = result["techniques"]
     flights = result["flights"]
@@ -251,7 +256,6 @@ async def filtered_income(
                 }
             )
 
-    # Возвращаем HTML-шаблон с отфильтрованными данными
     return templates.TemplateResponse(
         "income.html",
         {
@@ -261,14 +265,12 @@ async def filtered_income(
             "per_page": per_page,
             "total_pages": total_pages,
             "techniques": techniques,
-            "routes":routes,
+            "routes": routes,
             "users": users,
             "payment_types": payment_types,
             "sources": sources,
         },
     )
-
-
 
 @router.get("/api/flight_techniques")
 async def flight_techniques_api(
