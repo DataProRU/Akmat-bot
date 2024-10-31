@@ -152,45 +152,51 @@ async def index(
 
 
 
-def get_filtered_flight_techniques( db_session: Session, day: Optional[int], month: Optional[int], year: Optional[int], page: int = 1, per_page: int = 30, ):
-    session = Session()
-
+def get_filtered_flight_techniques(
+    db_session: Session,
+    day: Optional[int] = None,
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    page: int = 1,
+    per_page: int = 2000
+):
     # Старт запроса с использованием сессии
     query = db_session.query(FlightTechniques)
 
     # Применяем фильтры в зависимости от переданных параметров
-    if year:
+    if year is not None:
         query = query.filter(extract('year', FlightTechniques.created_at) == year)
-    if month:
+
+    if month is not None:
         query = query.filter(extract('month', FlightTechniques.created_at) == month)
-    if day:
+
+    if day is not None:
         query = query.filter(extract('day', FlightTechniques.created_at) == day)
 
     # Пагинация
-    flights_techniques = query.offset(100).limit(per_page).all()
+    flights_techniques = query.offset((page - 1) * per_page).limit(per_page).all()
     total_count = query.count()  # Подсчёт общего числа записей
     total_pages = (total_count + per_page - 1) // per_page  # Подсчёт числа страниц
 
-    techniques = {tech.id: tech.title for tech in session.query(Techniques).all()}
-    flights = {flight.id: flight for flight in session.query(Flights).all()}
-    routes = {route.id: route.title for route in session.query(Routes).all()}
-    users = {user.id: user.full_name for user in session.query(Users).all()}
-    payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
-    sources = {source.id: source.title for source in session.query(Sources)}
-
-    session.close()
+    # Получаем дополнительные данные
+    techniques = {tech.id: tech.title for tech in db_session.query(Techniques).all()}
+    flights = {flight.id: flight for flight in db_session.query(Flights).all()}
+    routes = {route.id: route.title for route in db_session.query(Routes).all()}
+    users = {user.id: user.full_name for user in db_session.query(Users).all()}
+    payment_types = {ptype.id: ptype.title for ptype in db_session.query(PaymentTypes).all()}
+    sources = {source.id: source.title for source in db_session.query(Sources).all()}
 
     return {
-            "flights_techniques": flights_techniques,
-            "techniques": techniques,
-            "flights": flights,
-            "routes": routes,
-            "users": users,
-            "payment_types": payment_types,
-            "sources": sources,
-            "total_pages": total_pages,
-            "page": page,
-        }
+        "flights_techniques": flights_techniques,
+        "techniques": techniques,
+        "flights": flights,
+        "routes": routes,
+        "users": users,
+        "payment_types": payment_types,
+        "sources": sources,
+        "total_pages": total_pages,
+        "page": page,
+    }
 
 @router.get("/filtered-income", response_class=HTMLResponse)
 async def filtered_income(
