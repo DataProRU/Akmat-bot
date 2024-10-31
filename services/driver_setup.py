@@ -18,45 +18,56 @@ last_interaction_time = time.time()
 
 # Функция с созданием и настройкой драйвера на хром
 def create_chrome_driver(path_to_chrome_profile, path_to_chrome_driver, timeout):
-    # Настраиваем параметры Chrome
     chrome_options = Options()
-    chrome_options.add_argument(path_to_chrome_profile)  # Путь к папке профиля
-    chrome_options.add_argument("--headless")   # Включаем headless-режим (без открытия окна)
-    chrome_options.add_argument("--disable-gpu")  # Отключаем GPU (ускорение)
-    chrome_options.add_argument("--window-size=1920x1080")  # Задаем размер окна для корректного рендеринга
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Отключить автоматизацию
+
+    # Путь к профилю Chrome
+    if path_to_chrome_profile:
+        chrome_options.add_argument(f"--user-data-dir={path_to_chrome_profile}")
+
+    # Настройки для headless-режима и Docker
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--window-size=1920x1080")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
+    chrome_options.add_argument("--remote-debugging-port=9222")  # Порт для удалённой отладки
 
-    # Отключаем всплывающие уведомления
+    # Отключение уведомлений
     chrome_options.add_experimental_option("prefs", {
-        "profile.default_content_setting_values.notifications": 2  # 2 - блокировать
+        "profile.default_content_setting_values.notifications": 2
     })
-    chrome_options.add_argument("--disable-notifications")  # отключение всех уведомлений
-    chrome_options.add_argument("--disable-popup-blocking")  # блокировка всплывающих окон
-    chrome_options.add_argument("--disable-infobars")  # убирает информационные панели
+    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--disable-infobars")
 
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36")  # Чтобы запросы не выглядели как от селениума
+    # Установка User-Agent
+    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36")
 
-    # Устанавливаем настройки для загрузки файлов
+    # Настройки загрузки
     prefs = {
-        "download.default_directory": config.DOWNLOAD_DIRECTORY,  # Директория для загрузки
-        "download.prompt_for_download": False,        # Отключить запрос на подтверждение загрузки
-        "download.directory_upgrade": True,           # Убедиться, что директория обновляется
-        "safebrowsing.enabled": True                   # Включить безопасный просмотр
+        "download.default_directory": config.DOWNLOAD_DIRECTORY,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True
     }
     chrome_options.add_experimental_option("prefs", prefs)
 
-    #chrome_options.add_argument("--disable-extensions")  # Включаем безопасный режим
+    # Запуск ChromeDriver
+    try:
+        driver_service = Service(executable_path=path_to_chrome_driver)
+        config.driver = webdriver.Chrome(service=driver_service, options=chrome_options)
 
-    # Запускаем браузер с заданными параметрами
-    config.driver = webdriver.Chrome(service=Service(executable_path=path_to_chrome_driver), options=chrome_options) # webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options) # 
+        # Запускаем таймер для закрытия браузера
+        timer_thread = threading.Thread(target=close_browser_after_timeout, args=(config.driver, timeout))
+        reset_interaction_time()
+        timer_thread.start()
 
-    # Запускаем таймер для закрытия браузера
-    timer_thread = threading.Thread(target=close_browser_after_timeout, args=(config.driver, timeout))
-    reset_interaction_time()
-    timer_thread.start()
-    
+    except Exception as e:
+        print(f"Ошибка при запуске ChromeDriver: {e}")
+
     return config.driver
 
 # Функция для закрытия драйвера (например, если бездействует долго)
