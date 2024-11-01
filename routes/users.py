@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import RedirectResponse, JSONResponse
 from typing import Optional
+from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -55,21 +56,31 @@ async def get_users(request: Request, db: Session = Depends(get_db)):
 
 
 @router.put("/users/{user_id}")
-async def update_user_role(user_id: int, role_update: UpdateUserRole):
+async def update_user_role(request: Request,user_id: int, role_update: UpdateUserRole):
+
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+        # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if not database.is_connected:
+        await database.connect()
     query = (
         web_users.update()
         .where(web_users.c.id == user_id)
         .values(role=role_update.role)
     )
-    if not database.is_connected:
-        await database.connect()
     await database.execute(query)
     return RedirectResponse("/users", status_code=303)
 
 
-@router.post("/update_tg_users")
+@router.post("/users_tg/edit/{id}", response_class=HTMLResponse)
 async def update_users(
-        user_id: int = Form(...),
+        request: Request,
+        id: int,
         tg: str = Form(...),
         full_name: str = Form(...),
         is_manager: bool = Form(False),
@@ -81,14 +92,20 @@ async def update_users(
         view_salary: bool = Form(False),
         contribute_expense: bool = Form(False),
         is_director: bool = Form(False),
-        chat_id: int = Form(...),
         comission: bool = Form(False),
         penalty: bool = Form(False),
         is_investor: bool = Form(False),
         change_salary: bool = Form(False),
         db: Session = Depends(get_db)
 ):
-    user = db.query(Users).filter(Users.id == user_id).first()
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
+    user = db.query(Users).filter(Users.id == id).first()
     if not user:
         return {"error": "User not found"}
 
@@ -103,7 +120,7 @@ async def update_users(
     user.view_salary = view_salary
     user.contribute_expense = contribute_expense
     user.is_director = is_director
-    user.chat_id = chat_id
+    user.chat_id = user.chat_id #не меняем chat id
     user.comission = comission
     user.penalty = penalty
     user.is_investor = is_investor
@@ -113,63 +130,30 @@ async def update_users(
 
     return RedirectResponse("/users", status_code=303)
 
+@router.post("/users_tg/delete/{id}", response_class=HTMLResponse)
+async def delete_positions(request: Request, id: int, db: Session = Depends(get_db)):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
 
-@router.post("/update_user_tg/")
-async def update_user(data: dict, db: Session = Depends(get_db)):
-    user = db.query(Users).filter(Users.id == data["id"]).first()
-    if user:
-        user.tg = data['tg']
-        user.full_name = data['full_name']
-        user.is_manager = data['is_manager']
-        user.is_instructor = data['is_instructor']
-        user.is_assistant = data['is_assistant']
-        user.send_button = data['send_button']
-        user.deposit_income = data['deposit_income']
-        user.enter_operation = data['enter_operation']
-        user.view_salary = data['view_salary']
-        user.contribute_expense = data['contribute_expense']
-        user.is_director = data['is_director']
-        user.comission = data['comission']
-        user.penalty = data['penalty']
-        user.is_investor = data['is_investor']
-        user.change_salary = data['change_salary']
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
+
+    type_to_delete = db.query(Users).filter(Users.id == id).first()
+    if type_to_delete:
+        db.delete(type_to_delete)
         db.commit()
-        return RedirectResponse("/users", status_code=303)
 
-    return JSONResponse({"status": "error"})
-
-
-@router.delete("/users/{user_id}")
-async def delete_user(user_id: int):
-    query = web_users.delete().where(web_users.c.id == user_id)
-    await database.execute(query)
-    return JSONResponse({
-        "status": "success",
-        "redirect_url": "/users"
-    })
+    return RedirectResponse(url="/users", status_code=303)
 
 
-@router.post("/delete_user_tg/")
-async def delete_user(data: dict, db: Session = Depends(get_db)):
-    user = db.query(Users).filter(Users.id == data["id"]).first()
-    if user:
-        db.delete(user)
-        db.commit()
-        return JSONResponse({
-            "status": "success",
-            "redirect_url": "/users"
-        })
 
-    return JSONResponse({"status": "error", "message": "User not found"})
-
-
-@router.get("/users_tg/add")
-async def get_user_form():
-    return {"message": "Страница формы доступна"}
 
 
 @router.post("/users_tg/add")
 async def add_user(
+        request: Request,
         tg: str = Form(...),
         full_name: str = Form(...),
         is_manager: bool = Form(False),
@@ -206,6 +190,16 @@ async def add_user(
         is_investor=is_investor,
         change_salary=change_salary
     )
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token  # Если токен отсутствует, перенаправляем на страницу логина
+
+        # Получаем информацию о текущем пользователе
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if not database.is_connected:
+        await database.connect()
 
     db.add(user)
     db.commit()

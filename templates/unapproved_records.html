@@ -56,6 +56,7 @@
             <td class="tcol">{{ record.source }}</td>
             <td class="tcol">{{ record.note }}</td>
             <td class="tcol tcol-filter">
+                 <input type="hidden" name="id" value="{{ record.id }}">
                 <button class="tcol-filter-edit"></button>
 
                 <form action="/delete_unapproved/" method="post">
@@ -71,7 +72,9 @@
     </tbody>
 </table>
 
+
 <section id="edit-form-container-un" class="edit-form-container">
+
     <form action="/update_unapproved_flight/" method="POST" class="edit-entry-form" id="edit-entry-form">
         <input type="hidden" id="edit-id" name="id">
 
@@ -117,7 +120,6 @@
         </select>
 
         <input id="edit-note" name="note">
-
         <input type="submit" id="submit_edit" value="Сохранить" class="form-btn-edit">
 
     </form>
