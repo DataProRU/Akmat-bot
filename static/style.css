@@ -179,6 +179,7 @@ p {
     color: #000a0e;
     background-color: #e7e8ed;
     border-collapse: collapse;
+    position: relative;
 }
 
 .trow-head-data {
@@ -187,11 +188,12 @@ p {
     line-height: 1.2rem;
     font-size: 1.2rem;
     padding: 10px;
-    position: relative;
+    position: sticky;
+    top: 66px;
     overflow: hidden;
     color: #f6f9fb;
     text-align: left;
-
+    z-index: 3;
 }
 
 .th-filter {
