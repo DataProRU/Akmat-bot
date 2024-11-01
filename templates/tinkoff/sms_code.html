@@ -1,0 +1,19 @@
+{% extends "tinkoff/login_base.html" %}
+
+{% block title %}Введите СМС-код{% endblock %}
+
+{% block input_label %}Введите СМС-код:{% endblock %}
+
+{% block input_type %}number{% endblock %}
+
+{% block content %}
+    {{ super() }}
+
+    <sms-timer></sms-timer>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+
+    <script src="/static/scripts/tinkoff/controls/sms-timer.js" defer></script>
+{% endblock %}
