@@ -1,2 +1,3 @@
-2024/11/01-09:42:12.332 26 Creating DB /app/chrome_data/Default/Local Storage/leveldb since it was missing.
-2024/11/01-09:42:12.337 26 Reusing MANIFEST /app/chrome_data/Default/Local Storage/leveldb/MANIFEST-000001
+2024/11/01-10:12:24.649 75 Reusing MANIFEST /app/chrome_data/Default/Local Storage/leveldb/MANIFEST-000001
+2024/11/01-10:12:24.671 75 Recovering log #3
+2024/11/01-10:12:24.673 75 Reusing old log /app/chrome_data/Default/Local Storage/leveldb/000003.log 

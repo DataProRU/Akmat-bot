@@ -1,228 +1,161 @@
-[16:16:1101/094212.234750:WARNING:chrome_main_delegate.cc(744)] This is Chrome version 130.0.6723.69 (not a warning)
-[16:41:1101/094212.272958:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:44:1101/094212.275876:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:44:1101/094212.276077:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:41:1101/094212.283204:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:41:1101/094212.283503:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:41:1101/094212.283838:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:41:1101/094212.283983:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:41:1101/094212.284134:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:16:1101/094212.289656:WARNING:audio_manager_linux.cc(54)] Falling back to ALSA for audio output. PulseAudio is not available or could not be initialized.
-[16:16:1101/094212.296510:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
-[16:52:1101/094212.314966:WARNING:viz_main_impl.cc(85)] VizNullHypothesis is disabled (not a warning)
-[16:41:1101/094212.333383:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:41:1101/094212.333526:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
-[16:16:1101/094212.335845:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
-[16:16:1101/094212.349172:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
-[16:80:1101/094212.400728:WARNING:runtime_features.cc(687)] AttributionReporting cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement in addition.
-[16:80:1101/094212.400867:WARNING:runtime_features.cc(701)] AttributionReportingCrossAppWeb cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb in addition.
-[16:16:1101/094212.412163:WARNING:bluez_dbus_manager.cc(234)] Floss manager service not available, cannot set Floss enable/disable.
-[16:84:1101/094212.421941:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:84:1101/094212.422386:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:84:1101/094212.422765:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:84:1101/094212.423305:WARNING:property.cc(149)] DaemonVersion: GetAndBlock: failed.
-[16:84:1101/094212.423503:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:84:1101/094212.424734:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-[16:80:1101/094214.108098:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:16:1101/094214.758754:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
- Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/accounts-accountsevents/platform.1b63babe7263d40f.js (1)
-[16:80:1101/094215.952678:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:80:1101/094215.954762:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:56:1101/094216.496359:WARNING:spdy_session.cc(2975)] Received HEADERS for invalid stream 13
-[16:56:1101/094216.510999:WARNING:spdy_session.cc(2975)] Received HEADERS for invalid stream 41
-[16:56:1101/094216.515830:WARNING:spdy_session.cc(2975)] Received HEADERS for invalid stream 43
-[16:16:1101/094216.647200:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
+[93:93:1101/101224.602191:WARNING:chrome_main_delegate.cc(744)] This is Chrome version 130.0.6723.69 (not a warning)
+[93:119:1101/101224.628597:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:122:1101/101224.629522:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:122:1101/101224.629652:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:119:1101/101224.631819:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:119:1101/101224.632124:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:119:1101/101224.632368:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:119:1101/101224.632438:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:119:1101/101224.632689:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:93:1101/101224.633348:WARNING:audio_manager_linux.cc(54)] Falling back to ALSA for audio output. PulseAudio is not available or could not be initialized.
+[93:93:1101/101224.636738:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
+[93:130:1101/101224.645311:WARNING:viz_main_impl.cc(85)] VizNullHypothesis is disabled (not a warning)
+[93:119:1101/101224.648126:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:119:1101/101224.648225:ERROR:bus.cc(407)] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[93:93:1101/101224.648366:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
+[93:93:1101/101224.655301:ERROR:system_network_context_manager.cc(882)] Cannot use V8 Proxy resolver in single process mode.
+[93:158:1101/101224.689583:WARNING:runtime_features.cc(687)] AttributionReporting cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement in addition.
+[93:158:1101/101224.689766:WARNING:runtime_features.cc(701)] AttributionReportingCrossAppWeb cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb in addition.
+[93:93:1101/101224.699579:WARNING:bluez_dbus_manager.cc(234)] Floss manager service not available, cannot set Floss enable/disable.
+[93:162:1101/101224.706264:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:162:1101/101224.706463:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:162:1101/101224.706561:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:162:1101/101224.706623:WARNING:property.cc(149)] DaemonVersion: GetAndBlock: failed.
+[93:162:1101/101224.706718:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:162:1101/101224.706800:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[93:157:1101/101224.732577:WARNING:backend_impl.cc(1764)] Destroying invalid entry.
+[93:93:1101/101225.214481:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
  Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/sso-newauth/platform.401b82f5bd04988f.js (1)
-[16:52:1101/094230.170456:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0D8A10344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094230.178691:ERROR:gles2_cmd_decoder_passthrough.cc(933)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
-[16:52:1101/094230.186830:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A004A20344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094230.193471:ERROR:gles2_cmd_decoder_passthrough.cc(933)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
-[16:16:1101/094230.199533:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0D8A10344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094230.199695:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A004A20344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:80:1101/094231.581475:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.581842:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.581917:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582039:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582149:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582305:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582408:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582552:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582776:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582831:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582894:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.582976:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583082:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583178:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583266:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583381:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583475:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583561:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583675:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583778:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583860:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.583952:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584054:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584120:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584238:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584284:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584358:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584433:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584532:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584635:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584720:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584810:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.584927:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585019:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585209:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585320:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585409:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585465:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585517:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585580:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585687:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585730:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585807:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585860:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.585944:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.586055:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.586148:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094231.586234:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:16:1101/094231.586725:INFO:CONSOLE(1)] "GeolocationCollector: calling getRawData() before calling init(). This is probably not intended.", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
-[16:52:1101/094231.589191:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0402C0844000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094231.605105:ERROR:gl_utils.cc(426)] [.WebGL-0x44082ba800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-[16:52:1101/094231.659749:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A06C2C0844000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094231.671433:ERROR:gl_utils.cc(426)] [.WebGL-0x4405885480]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-[16:16:1101/094231.721372:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0402C0844000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094231.721756:INFO:CONSOLE(0)] "[.WebGL-0x44082ba800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094231.721888:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A06C2C0844000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094231.722083:INFO:CONSOLE(0)] "[.WebGL-0x4405885480]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094344.119318:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://id.tbank.ru/auth/step?cid=4MpXdF6heFgU (0)
-[16:16:1101/094445.486276:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
- Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/sso-newauth/platform.401b82f5bd04988f.js (1)
-[16:80:1101/094446.576589:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:16:1101/094446.819173:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
+[93:158:1101/101226.694848:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:93:1101/101226.763924:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
  Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/accounts-accountsevents/platform.1b63babe7263d40f.js (1)
-[16:80:1101/094447.035627:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:52:1101/094448.037636:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0D8A10344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094448.046084:ERROR:gl_utils.cc(426)] [.WebGL-0x4408282080]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-[16:16:1101/094448.099703:INFO:CONSOLE(1)] "%c undefined", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
-[16:129:1101/094448.102381:INFO:peer_connection_dependency_factory.cc(750)] Running WebRTC with a combined Network and Worker thread.
-[16:80:1101/094448.126680:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.126881:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127077:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127168:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127392:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127454:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127544:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127703:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127782:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.127891:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128040:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128215:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128288:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128389:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128457:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128515:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128601:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128696:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128789:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.128905:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129021:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129104:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129176:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129333:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129438:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129524:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129657:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129708:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129781:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.129879:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130025:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130114:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130207:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130337:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130406:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130480:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130576:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130727:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130829:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130919:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.130974:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131011:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131089:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131212:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131294:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131391:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131538:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.131654:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:16:1101/094448.131952:INFO:CONSOLE(1)] "GeolocationCollector: calling getRawData() before calling init(). This is probably not intended.", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
-[16:52:1101/094448.133870:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A004A20344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094448.148582:ERROR:gl_utils.cc(426)] [.WebGL-0x44047d9380]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
-[16:52:1101/094448.183471:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0409D0544000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:16:1101/094448.246986:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A004A20344000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=2vtc6LFV8DnF (0)
-[16:16:1101/094448.247224:INFO:CONSOLE(0)] "[.WebGL-0x44047d9380]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)", source: https://id.tbank.ru/auth/step?cid=2vtc6LFV8DnF (0)
-[16:16:1101/094448.247447:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0409D0544000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=2vtc6LFV8DnF (0)
-[16:80:1101/094448.271889:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272085:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272226:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272335:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272381:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272427:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272471:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272514:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272563:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272609:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272651:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272693:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272746:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272787:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272828:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272869:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.272917:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273010:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273079:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273123:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273165:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273206:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273247:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273289:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273332:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273375:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273417:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273458:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273498:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273571:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273611:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273654:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273695:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273735:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273775:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273815:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273867:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273908:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273948:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.273989:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274030:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274070:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274115:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274166:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274215:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274262:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274308:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:80:1101/094448.274353:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
-[16:16:1101/094448.274624:INFO:CONSOLE(1)] "GeolocationCollector: calling getRawData() before calling init(). This is probably not intended.", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
-[16:52:1101/094448.276355:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0C49D0544000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:52:1101/094448.320885:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A06C9D0544000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
-[16:16:1101/094505.372755:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/ (0)
-[16:130:1101/094509.511821:WARNING:webrtc_voice_engine.cc(812)] Attempting to stop aecdump when no audio processing module is present
-[16:16:1101/094509.951636:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/ (0)
-[16:80:1101/094532.570939:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:16:1101/094532.824854:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
+[93:158:1101/101226.894825:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:158:1101/101227.980926:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981389:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981502:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981601:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981709:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981791:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981852:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.981952:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982010:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982069:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982148:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982237:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982338:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982415:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982489:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982603:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982649:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982766:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982861:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.982937:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983112:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983182:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983273:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983394:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983470:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983569:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983680:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983761:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983873:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.983991:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984102:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984173:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984292:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984388:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984468:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984572:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984673:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984750:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984844:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.984934:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985028:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985106:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985205:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985290:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985372:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985462:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985620:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101227.985730:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:93:1101/101227.986192:INFO:CONSOLE(1)] "GeolocationCollector: calling getRawData() before calling init(). This is probably not intended.", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
+[93:130:1101/101227.989383:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0D883052C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
+[93:130:1101/101228.010719:ERROR:gl_utils.cc(426)] [.WebGL-0x2c03365580]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[93:130:1101/101228.073554:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0C437002C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
+[93:130:1101/101228.086761:ERROR:gl_utils.cc(426)] [.WebGL-0x2c07582280]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[93:93:1101/101228.161556:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0D883052C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=YHbhgKQ0yCsB (0)
+[93:93:1101/101228.162362:INFO:CONSOLE(0)] "[.WebGL-0x2c03365580]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels", source: https://id.tbank.ru/auth/step?cid=YHbhgKQ0yCsB (0)
+[93:93:1101/101228.162924:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0C437002C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=YHbhgKQ0yCsB (0)
+[93:93:1101/101228.163244:INFO:CONSOLE(0)] "[.WebGL-0x2c07582280]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels", source: https://id.tbank.ru/auth/step?cid=YHbhgKQ0yCsB (0)
+[93:158:1101/101228.186726:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187071:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187285:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187365:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187486:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187584:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187674:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187753:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187826:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.187938:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188047:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188149:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188239:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188293:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188369:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188426:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188536:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188661:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188703:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188761:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188862:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.188956:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189040:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189140:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189266:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189345:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189402:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189488:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189562:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189673:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189773:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189900:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.189971:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190045:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190099:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190237:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190322:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190480:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190562:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190661:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190752:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190827:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190912:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.190978:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.191066:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.191157:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.191245:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:158:1101/101228.191336:ERROR:font_unique_name_lookup_linux.cc(21)] @font-face src: local() instantiation only available when connected to browser process.
+[93:93:1101/101228.191641:INFO:CONSOLE(1)] "GeolocationCollector: calling getRawData() before calling init(). This is probably not intended.", source: https://sso-forms-prod.cdn-tinkoff.ru/client/releases/2.51.0/assetsSolid/FormTemplate-PHvKG7h_.js (1)
+[93:130:1101/101228.193445:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A06C37002C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
+[93:130:1101/101228.219144:ERROR:gl_utils.cc(426)] [.WebGL-0x2c0cc1fc80]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[93:130:1101/101228.252558:ERROR:gles2_cmd_decoder_passthrough.cc(1053)] [GroupMarkerNotSet(crbug.com/242999)!:A0AC95052C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.
+[93:130:1101/101228.264886:ERROR:gl_utils.cc(426)] [.WebGL-0x2c0dd48e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[93:93:1101/101228.315397:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A06C37002C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=VBPaT9pAbqa7 (0)
+[93:93:1101/101228.315542:INFO:CONSOLE(0)] "[.WebGL-0x2c0cc1fc80]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels", source: https://id.tbank.ru/auth/step?cid=VBPaT9pAbqa7 (0)
+[93:93:1101/101228.315881:INFO:CONSOLE(0)] "[GroupMarkerNotSet(crbug.com/242999)!:A0AC95052C000000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.", source: https://id.tbank.ru/auth/step?cid=VBPaT9pAbqa7 (0)
+[93:93:1101/101228.316065:INFO:CONSOLE(0)] "[.WebGL-0x2c0dd48e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)", source: https://id.tbank.ru/auth/step?cid=VBPaT9pAbqa7 (0)
+[93:93:1101/101239.202450:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/ (0)
+[93:158:1101/101244.841501:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:93:1101/101244.946143:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
  Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/accounts-accountsevents/platform.1b63babe7263d40f.js (1)
-[16:80:1101/094533.036742:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
-[16:16:1101/094542.299507:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
-[16:16:1101/094545.984137:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
-[16:16:1101/094551.277590:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
-[16:16:1101/094554.846230:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
-[16:16:1101/094642.244006:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
-[16:16:1101/094736.157896:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:158:1101/101245.097880:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:158:1101/101251.310556:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:93:1101/101251.389360:INFO:CONSOLE(1)] "%c Обнаружил ошибку? Нам важно знать – fb@tinkoff.ru 
+ Хочешь присоединиться к команде профессионалов? Расскажи о себе – frontend@tinkoff.ru background-color: #ffdd2d; color: #333; ", source: https://unic-cdn-prod.cdn-tinkoff.ru/static/accounts-accountsevents/platform.1b63babe7263d40f.js (1)
+[93:158:1101/101251.508993:INFO:document_style_environment_variables.cc(78)] E2E_Used SafeAreaInsetBottom
+[93:93:1101/101254.590209:INFO:CONSOLE(0)] "Notifications permission has been blocked as the user has ignored the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the tune icon next to the URL. See https://www.chromestatus.com/feature/6443143280984064 for more information.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:93:1101/101303.269269:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:93:1101/101309.613337:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:93:1101/101313.110128:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:93:1101/101400.587125:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)
+[93:93:1101/101454.576808:INFO:CONSOLE(0)] "The resource https://www.cdn-tinkoff.ru/platform/fonts/pfhighway/v6/PFHighwaySansPro-Thin.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://www.tbank.ru/events/feed/?preset=week (0)

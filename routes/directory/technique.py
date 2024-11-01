@@ -103,6 +103,8 @@ async def delete_technique(request: Request, id: int, db: Session = Depends(get_
     if isinstance(payload, RedirectResponse):
         return payload
 
+    print("delete")
+
     tech_to_delete = db.query(Techniques).filter(Techniques.id == id).first()
     if tech_to_delete:
         db.delete(tech_to_delete)
