@@ -14,23 +14,25 @@
         <input type="text" name="title" placeholder="Название" required>
 
         <select name="type_technique_id" id="type_technique_id">
+            <option selected disabled hidden></option>
             {% for technique in type_techniques %}
             <option value="{{ technique.id }}">{{ technique.title }}</option>
             {% endfor %}
         </select>
 
         <select name="investor_id" id="investor_id">
+            <option selected disabled hidden></option>
             {% for investor in investors %}
             <option value="{{ investor.id }}">{{ investor.title }}</option>
             {% endfor %}
         </select>
 
         <div>
-            <input type="checkbox" id="visible" name="visible">
+            <input type="checkbox" id="visible" name="visible" class="form-checkbox">
             <label for="visible">Отображать</label>
         </div>
 
-        <button type="submit" class="add-entry-btn tooltip">✚</button>
+        <button type="submit" class="add-entry-btn">✚</button>
     </form>
 
     <table class="table-data" id="table-data">
@@ -62,11 +64,11 @@
                 <form action="/technique/edit/{{ technique.id }}" method="post" style="display:inline;">
 
                     <td class="tcol">
-                        <input type="text" name="title" value="{{ technique.title }}" required>
+                        <input type="text" class="directory-input" name="title" value="{{ technique.title }}" required>
                     </td>
 
-                    <td>
-                        <select name="type_technique_id" required>
+                    <td class="tcol">
+                        <select name="type_technique_id" class="directory-input" required>
                             {% for type_technique in type_techniques %}
                             <option value="{{ type_technique.id }}" {% if type_technique.id==technique.type_technique_id
                                 %}selected{% endif %}>
@@ -76,8 +78,8 @@
                         </select>
                     </td>
 
-                    <td>
-                        <select name="investor_id" required>
+                    <td class="tcol">
+                        <select name="investor_id" class="directory-input" required>
                             {% for investor in investors %}
                             <option value="{{ investor.id }}" {% if investor.id==technique.investor_id %}selected{%
                                 endif %}>
@@ -87,8 +89,9 @@
                         </select>
                     </td>
 
-                    <td style="text-align: center;"> <!-- Центрируем чекбокс -->
-                        <input type="checkbox" name="visible" {% if technique.visible %}checked{% endif %}>
+                    <td class="tcol tcol-num">
+                        <input type="checkbox" class="form-checkbox" name="visible" {% if technique.visible %}checked{%
+                            endif %}>
                     </td>
 
                     <td class="tcol tcol-filter">
