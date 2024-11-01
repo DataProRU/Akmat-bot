@@ -420,10 +420,13 @@ p {
 }
 
 .edit-entry-form {
-    height: calc(100% - 8px);
     margin-top: 4px;
     display: flex;
     align-items: center;
+}
+
+.edit-form-container.open .edit-entry-form {
+    height: calc(100% - 8px);
 }
 
 .edit-entry-form select,
