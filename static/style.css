@@ -406,7 +406,6 @@ p {
 .edit-form-container {
     display: none;
     width: 100%;
-    height: calc((100vh - 170px)/20);
     position: absolute;
     top: 0px;
     left: 0px;
@@ -417,6 +416,7 @@ p {
 
 .edit-form-container.open {
     display: block;
+    height: 100%;
 }
 
 .edit-entry-form {
