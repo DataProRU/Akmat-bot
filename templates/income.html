@@ -9,6 +9,8 @@
         <span class="tooltip-text">Добавить запись</span>
     </div>
     <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
+
+
     <select name="day" id="day" class="nav-select">
         <option value="">День</option>
         {% for d in range(1, 32) %}
@@ -60,8 +62,8 @@
 
 </script>
 <table class="table-data" id="table-data">
-    <thead>
-        <tr>
+    <thead class="table-head">
+        <tr class="trow-head">
             <th class="trow-head-data th-income">Дата<div class="resizer"></div>
             </th>
             <th class="trow-head-data th-income">Номер рейса<div class="resizer"></div>
@@ -177,12 +179,12 @@
         <div class="form-part">
             <div class="form-element">
                 <label for="price">Стоимость</label>
-                <input type="number" id="price" name="price" class="small-element" step="0.01" required>
+                <input type="number" id="price" name="price" class="small-element" step="1" required>
             </div>
 
             <div class="form-element">
                 <label for="discount">Скидка</label>
-                <input type="number" id="discount" name="discount" class="small-element" step="0.01">
+                <input type="number" id="discount" name="discount" class="small-element" step="1">
             </div>
 
             <div class="form-element">
