@@ -20,33 +20,28 @@ last_interaction_time = time.time()
 def create_chrome_driver(path_to_chrome_profile, path_to_chrome_driver, timeout):
     chrome_options = Options()
 
-    # Путь к профилю Chrome
+    # Указание пути к профилю Chrome
     if path_to_chrome_profile:
         chrome_options.add_argument(f"--user-data-dir={path_to_chrome_profile}")
 
-    # Настройки для headless-режима и Docker
+    # Параметры для работы в Docker
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920x1080")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option('useAutomationExtension', False)
-    chrome_options.add_argument("--remote-debugging-port=9222")  # Порт для удалённой отладки
+    chrome_options.add_argument("--single-process")  # Попытка использовать один процесс для устранения ошибок в Docker
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
 
     # Отключение уведомлений
     chrome_options.add_experimental_option("prefs", {
         "profile.default_content_setting_values.notifications": 2
     })
-    chrome_options.add_argument("--disable-notifications")
-    chrome_options.add_argument("--disable-popup-blocking")
-    chrome_options.add_argument("--disable-infobars")
 
-    # Установка User-Agent
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36")
-
-    # Настройки загрузки
+    # Настройки для загрузки файлов
     prefs = {
         "download.default_directory": config.DOWNLOAD_DIRECTORY,
         "download.prompt_for_download": False,
@@ -60,7 +55,7 @@ def create_chrome_driver(path_to_chrome_profile, path_to_chrome_driver, timeout)
         driver_service = Service(executable_path=path_to_chrome_driver)
         config.driver = webdriver.Chrome(service=driver_service, options=chrome_options)
 
-        # Запускаем таймер для закрытия браузера
+        # Запуск таймера для закрытия браузера
         timer_thread = threading.Thread(target=close_browser_after_timeout, args=(config.driver, timeout))
         reset_interaction_time()
         timer_thread.start()
