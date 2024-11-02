@@ -254,7 +254,7 @@ db_session: Session = Depends(get_db),
                     "technique_name": technique_name,
                     "user_name": user_name,
                     "discount": flight_technique.discount,
-                    "prepayment": "Yes" if flight_technique.prepayment else "Нет",
+                    "prepayment": "Да" if flight_technique.prepayment else "Нет",
                     "price": flight_technique.price,
                     "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
                     "source": sources.get(flight_technique.source_id, "Неизвесттный источник"),
@@ -496,12 +496,11 @@ async def update_flight(request: Request):
 
     if flight_techniques:
         flight_techniques.created_at = flight_date
-        flight_techniques.flight_number = flight_number
+        #flight_techniques.flight_number = flight_number
         flight_techniques.technique_id = technique_id
         flight_techniques.price = price
         flight_techniques.discount = discount
         flight_techniques.prepayment = prepayment
-        flight_techniques.payment_type = payment_type
         flight_techniques.source_id = source_id
         flight_techniques.note = note
         flight_techniques.payment_type_id = payment_type
@@ -509,11 +508,11 @@ async def update_flight(request: Request):
 
     flight_technique = session.query(Flights).filter_by(id=flight_techniques.flight_id).first()
     if flight_technique:
-        print(route_type)
-        flight_technique.technique_id = technique_id #correct
-        flight_technique.instructor_id = instructor #correct
-        flight_techniques.route_id = 3
+        flight_technique.technique_id = technique_id
+        flight_technique.instructor_id = instructor
+        flight_technique.flight_number = route_type
 
-        session.commit()
-        session.close()
+
+    session.commit()
+    session.close()
     return RedirectResponse(url="/income", status_code=303)
