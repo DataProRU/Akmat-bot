@@ -63,7 +63,7 @@ def create_chrome_driver(path_to_chrome_profile, path_to_chrome_driver, timeout)
     except Exception as e:
         print(f"Ошибка при запуске ChromeDriver: {e}")
 
-    return config.driver
+    return config.driv
 
 # Функция для закрытия драйвера (например, если бездействует долго)
 def close_driver():

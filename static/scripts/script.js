@@ -18,6 +18,7 @@ var editTypeOfRoute = document.getElementById('edit-type-of-route');
 var editTechniqueId = document.getElementById('edit-technique_id');
 var editInstructor = document.getElementById('edit-instructor');
 var editDiscount = document.getElementById('edit-discount');
+var editPrepayment = document.getElementById('edit-prepayment');
 var editCheckboxTd = 0;
 var editPrice = document.getElementById('edit-price');
 var editPaymentType = document.getElementById('edit-payment_type');

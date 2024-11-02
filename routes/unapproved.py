@@ -329,7 +329,7 @@ async def update_flight(request: Request):
     route_type = form_data.get("type-of-route")
     price = form_data.get("price")
     discount = form_data.get("discount")
-    prepayment = form_data.get("prepayment") == "on"
+    prepayment = form_data.get("prepayment")=="no"
     payment_type = form_data.get("payment_type")
     source_id = form_data.get("source_id")
     note = form_data.get("note")
@@ -357,6 +357,7 @@ async def update_flight(request: Request):
         flight.technique_id = technique_id
         flight.instructor_id = instructor
         flight.route_id = route_type
+        flight.flight_number = route_type
 
         session.commit()
 
