@@ -4,15 +4,15 @@
 from fastapi import APIRouter
 
 # Собственные модули
-from services.driver_setup import stop_interaction_time
+from routes.tinkoff.auth_tinkoff import get_browser
 
 router = APIRouter()
 
 # Пользователь перешел на другую страницу
 @router.post("/tinkoff/disconnect/")
-def disconnect():
-    global driver
-    print("Пользователь покинул страницу. Закрываем браузер.")
-    stop_interaction_time()
-    driver = None
+async def disconnect():
+    print("Пользователь покинул страницу. Закрываем context.")
+    browser = get_browser()
+    if browser:
+        await browser.close_context_and_page()
     return {"message": "Браузер закрыт"}
