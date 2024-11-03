@@ -12,7 +12,7 @@ from sqlalchemy import (
 )
 from sqlalchemy import BigInteger
 from typing import List, Optional, Dict, Union
-from services.browser_utils import PageType
+from utils.tinkoff.browser_utils import PageType
 
 Base = declarative_base()
 

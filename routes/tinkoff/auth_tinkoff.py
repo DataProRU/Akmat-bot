@@ -1,11 +1,10 @@
 # auth_tinkoff.py
 
 # Стандартные библиотеки Python
-import os, asyncio
+import  asyncio
 
 # Сторонние библиотеки
 from fastapi import APIRouter, HTTPException, Body, Request, Query
-from dotenv import load_dotenv
 from fastapi.templating import Jinja2Templates
 
 # Собственные модули
@@ -30,9 +29,6 @@ templates = Jinja2Templates(directory="templates")
 async def get_login_type(request: Request):
     global browser
 
-    load_dotenv()  # Загрузка .env файла
-    config.DOWNLOAD_DIRECTORY = os.getenv("DOWNLOAD_DIRECTORY")
-    config.PATH_TO_CHROME_PROFILE = os.getenv("PATH_TO_CHROME_PROFILE")
 
     # Открытие браузера если закрыт, если открыт обновление времени выключения
     if browser and await browser.is_page_active():
