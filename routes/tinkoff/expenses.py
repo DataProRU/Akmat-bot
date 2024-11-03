@@ -2,19 +2,18 @@
 
 # Библиотеки Python
 import time
-from typing import List
 
 # Сторонние библиотеки
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse
 from typing import Optional
 from fastapi.templating import Jinja2Templates
+from playwright.async_api import Page
 
 # Собственные модули
-import config as config
-from services.driver_setup import is_browser_active, reset_interaction_time
-from services.browser_utils import download_csv_from_expenses_page
-from services.general_utils import (
+from routes.tinkoff.auth_tinkoff import get_browser, save_browser_cache
+from utils.tinkoff.browser_utils import click_button
+from utils.tinkoff.general_utils import (
     wait_for_new_download, 
     expenses_redirect, 
     get_expense_categories_with_description,
@@ -33,37 +32,36 @@ keywords_db = {}  # id: ключевые слова
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# Эндпоинт для отображения страницы расходов
-@router.get("/tinkoff/expenses/page", response_class=HTMLResponse)
-async def show_expenses_page(request: Request):
-    # Передаем начальные параметры для рендеринга шаблона
-    return templates.TemplateResponse("tinkoff/expenses.html", {"request": request})
-
 # Эндпоинт для получения расходов за выбранный период
 @router.get("/tinkoff/expenses/")
-def get_expenses( 
+async def get_expenses( 
     period: Optional[str] = Query("month"),  # Необязательный период
     rangeStart: Optional[str] = None,  # Необязательное начало периода
     rangeEnd: Optional[str] = None  # Необязательный конец периода
 ):
-    if not is_browser_active():
+    browser = get_browser()
+    if not await  browser.is_browser_active() or not await  browser.is_page_active():
         raise HTTPException(status_code=307, detail="Сессия истекла. Перенаправление на основную страницу.")
     else:
-        reset_interaction_time()
+        browser.reset_interaction_time()
+        await save_browser_cache()
     
-    if expenses_redirect(period, rangeStart, rangeEnd):  # Перенаправление на страницу по соответствующему периоду
+    page = browser.page
+
+    if await expenses_redirect(page, period, rangeStart, rangeEnd):  # Перенаправление на страницу по соответствующему периоду
+        await save_browser_cache()
         time.sleep(1)  # Если было перенаправление, то небольшое ожидание
 
     start_time = time.time()  # Засекаем время, начиная с которого надо искать csv
-    download_csv_from_expenses_page(config.driver)  # Качаем csv
+    await download_csv_from_expenses_page(page, 20)  # Качаем csv
 
     # Ждём появления нового CSV-файла
-    file_path = wait_for_new_download(start_time=start_time)
+    file_path = await wait_for_new_download(start_time=start_time, timeout=20)
 
     # Получаем словарь с категориями из бд
-    categories_dict = get_expense_categories_with_description()
+    categories_dict = await get_expense_categories_with_description()
 
-    return get_json_expense_from_csv(file_path, categories_dict)
+    return await get_json_expense_from_csv(file_path, categories_dict)
     
 
 # Эндпоинт для получения всех категорий
@@ -101,3 +99,9 @@ async def save_keywords(request: KeywordsUpdateRequest):
             raise HTTPException(status_code=400, detail="Некорректные данные")
         keywords_db[description] = category_id  # Обновляем или добавляем
     return {"message": "Ключевые слова сохранены"}
+
+
+# Асинхронная функция для загрузки CSV со страницы расходов
+async def download_csv_from_expenses_page(page: Page, timeout=5):
+    await click_button(page, '[data-qa-id="export"]', timeout)
+    await click_button(page, '//span[text()="Выгрузить все операции в CSV"]', timeout)
