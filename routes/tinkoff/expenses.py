@@ -37,8 +37,9 @@ templates = Jinja2Templates(directory="templates")
 async def get_expenses( 
     period: Optional[str] = Query("month"),  # Необязательный период
     rangeStart: Optional[str] = None,  # Необязательное начало периода
-    rangeEnd: Optional[str] = None  # Необязательный конец периода
+    rangeEnd: Optional[str] = None , # Необязательный конец периода
 ):
+
     browser = get_browser()
     if not await  browser.is_browser_active() or not await  browser.is_page_active():
         raise HTTPException(status_code=307, detail="Сессия истекла. Перенаправление на основную страницу.")

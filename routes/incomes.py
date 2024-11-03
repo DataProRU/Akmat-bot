@@ -331,8 +331,15 @@ async def flight_techniques_api(
 
 @router.put("/flight_techniques/{flight_technique_id}")
 async def update_flight_technique(
+        request: Request,
     flight_technique_id: int, data: FlightTechniqueUpdate
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     session = Session()
     try:
         flight_technique = (
@@ -366,7 +373,13 @@ async def update_flight_technique(
 
 
 @router.post("/flight_techniques/{flight_technique_id}")
-async def delete_flight_technique(flight_technique_id: int):
+async def delete_flight_technique(request: Request, flight_technique_id: int):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     session = Session()
     try:
         flight_technique = (
@@ -392,6 +405,7 @@ async def delete_flight_technique(flight_technique_id: int):
 
 @router.post("/submit")
 async def submit_form(
+        request: Request,
     flight_number: int = Form(...),
     instructor_id: int = Form(...),
     date: str = Form(str(datetime.now())),
@@ -405,8 +419,13 @@ async def submit_form(
     note: str = Form(""),
     db: Session = Depends(get_db)
 ):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     try:
-        print(datetime.now())
         # Создание новой записи в таблице Flights
         new_flight = Flights(
             flight_number=route_id,
@@ -448,6 +467,12 @@ async def submit_form(
 
 @router.post("/delete_flight/")
 async def delete_flight(request: Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     form_data = await request.form()
     flight_id = form_data.get("id")
 
@@ -471,6 +496,12 @@ async def delete_flight(request: Request):
 
 @router.post("/update_flight/")
 async def update_flight(request: Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     form_data = await request.form()
     flight_id = form_data.get("id")
 

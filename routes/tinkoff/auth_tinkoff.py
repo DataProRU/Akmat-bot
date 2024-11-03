@@ -6,6 +6,7 @@ import  asyncio
 # Сторонние библиотеки
 from fastapi import APIRouter, HTTPException, Body, Request, Query
 from fastapi.templating import Jinja2Templates
+from dependencies import get_token_from_cookie, get_current_user
 
 # Собственные модули
 from models import LoginResponse
@@ -20,6 +21,7 @@ from config import (
 from utils.tinkoff.browser_manager import BrowserManager
 from utils.tinkoff.tinkoff_auth import paged_login, close_login_via_sms_page, get_user_name_from_otp_login
 from utils.tinkoff.browser_utils import get_text, detect_page_type, PageType, click_button
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -27,6 +29,12 @@ templates = Jinja2Templates(directory="templates")
 # Вход в тинькофф
 @router.get("/tinkoff/")
 async def get_login_type(request: Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     global browser
 
 
@@ -71,6 +79,12 @@ async def get_login_type(request: Request):
 # Обработка всех страниц входа
 @router.post("/tinkoff/login/", response_model=LoginResponse)
 async def login(request: Request, data: str = Body(...)):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     if not await browser.is_page_active():
         raise HTTPException(status_code=440, detail="Сессия истекла. Пожалуйста, войдите заново.")
     
@@ -86,6 +100,12 @@ async def login(request: Request, data: str = Body(...)):
 # Универсальный эндпоинт для загрузки следующей страницы
 @router.get("/tinkoff/next/")
 async def next_page(request: Request, step: str | None = Query(default=None)):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     # Определяем `page_type`, пытаясь преобразовать `step` в `PageType`
     if step:
         try:
@@ -109,7 +129,13 @@ async def next_page(request: Request, step: str | None = Query(default=None)):
 
 # Эндпоинт для получения таймера при вводе смс
 @router.get("/tinkoff/get_sms_timer/")
-async def get_sms_timer():
+async def get_sms_timer(request: Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     try:
         await asyncio.sleep(1)
         # Получаем оставшееся время в секундах
@@ -122,7 +148,13 @@ async def get_sms_timer():
 
 # Эндпоинт для повторной отправки смс
 @router.post("/tinkoff/resend_sms/")
-async def resend_sms():
+async def resend_sms(request:Request):
+    token = get_token_from_cookie(request)
+    if isinstance(token, RedirectResponse):
+        return token
+    payload = get_current_user(token)
+    if isinstance(payload, RedirectResponse):
+        return payload
     try:
         # Нажимаем на кнопку повторной отправки
         await click_button(browser.page, resend_sms_button_selector)
