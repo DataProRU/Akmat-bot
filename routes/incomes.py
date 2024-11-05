@@ -21,6 +21,7 @@ from dependencies import get_token_from_cookie, get_current_user
 from fastapi.responses import JSONResponse
 from datetime import datetime
 from sqlalchemy.orm import scoped_session
+from sqlalchemy import or_
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -36,16 +37,22 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = scoped_session(Session)
     try:
         if page == 1 or page == 2:
-            per_page+=3
-        total_count = session.query(FlightTechniques).count()
+            per_page += 3
+
+        # Получаем количество записей, исключая те, у которых is_approved == False
+        total_count = session.query(FlightTechniques).filter(
+            or_(FlightTechniques.is_approved == True, FlightTechniques.is_approved.is_(None))
+        ).count()
+
         total_pages = (total_count + per_page - 1) // per_page
 
         inverted_page = total_pages - page + 1
         offset = (inverted_page - 1) * per_page
 
-
+        # Добавляем фильтр для исключения записей, где is_approved == False
         flights_techniques = (
             session.query(FlightTechniques)
+            .filter(or_(FlightTechniques.is_approved == True, FlightTechniques.is_approved.is_(None)))
             .offset(offset)
             .limit(per_page)
             .all()

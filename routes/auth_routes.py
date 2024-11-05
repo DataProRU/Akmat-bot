@@ -10,9 +10,9 @@ from database import get_db
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-@router.get("/register", response_class=HTMLResponse)
-async def get_register(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+#@router.get("/register", response_class=HTMLResponse)
+#async def get_register(request: Request):
+#    return templates.TemplateResponse("register.html", {"request": request})
 
 @router.post("/register")
 async def post_register(

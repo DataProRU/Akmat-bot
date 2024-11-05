@@ -37,7 +37,7 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         db.query(FlightTechniques)
         .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(
-            Flights.confirmed == False,  # Фильтр по неподтверждённым записям
+            FlightTechniques.is_approved == False, # Фильтр по неподтверждённым записям
             extract('day', FlightTechniques.created_at) == day,
             extract('month', FlightTechniques.created_at) == month,
             extract('year', FlightTechniques.created_at) == year
@@ -125,7 +125,6 @@ async def unapproved_days(request: Request, db: Session = Depends(get_db)):
         extract('year', FlightTechniques.created_at).label('year')
     ).join(Flights, Flights.id == FlightTechniques.flight_id) \
      .filter(
-         Flights.confirmed == False,           # Учитываем поле confirmed в таблице Flights
          FlightTechniques.is_approved == False
      ) \
      .group_by('day', 'month', 'year').all()
@@ -167,6 +166,7 @@ async def unapproved_records(
 
     # Передаём отфильтрованные записи в шаблон
     return templates.TemplateResponse("unapproved_records.html", {
+
         "request": request,
         "flights_techniques": flights_techniques,
         "day": day,
