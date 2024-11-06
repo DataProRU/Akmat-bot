@@ -281,11 +281,13 @@ p {
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 1px 1px 6px #5a5c5e30;
+    z-index:5;
 }
 
 .add-form-container.open {
     display: block;
     animation: appForm 0.4s linear 0s 1 normal both;
+    z-index:5;
 }
 
 .form-header {
@@ -512,6 +514,7 @@ p {
 .small-table-container {
     min-width: 450px;
     margin: 20px 0;
+    z-index:5;
 }
 
 .header-smal-table {
