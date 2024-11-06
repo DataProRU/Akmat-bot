@@ -64,64 +64,64 @@
 <table class="table-data" id="table-data">
     <thead class="table-head">
         <tr class="trow-head">
-            <th class="trow-head-data th-income">Дата<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Номер рейса<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Вид маршрута<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Вид техники<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Инструктор<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Скидка<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Предоплата<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Стоимость<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Вид оплаты<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Источник<div class="resizer"></div>
-            </th>
-            <th class="trow-head-data th-income">Примечание<div class="resizer"></div>
-            </th>
+            <th class="trow-head-data th-income">Дата<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Номер рейса<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Вид маршрута<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Вид техники<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Инструктор<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Скидка<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Предоплата<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Стоимость<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Вид оплаты<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Источник<div class="resizer"></div></th>
+            <th class="trow-head-data th-income">Примечание<div class="resizer"></div></th>
             <th class="trow-head-data th-filter th-income"></th>
         </tr>
     </thead>
     <tbody class="table-body" id="table-body">
+        {% set previous_date = "" %}
         {% for item in data %}
-        <tr class="trow">
-            <td class="tcol" hidden>{{ item.id }}</td>
-            <td class="tcol">{{ item.created_at }}</td>
-            <td class="tcol tcol-num">{{ item.flight_number }}</td>
-            <td class="tcol">{{ item.flight_name }}</td>
-            <td class="tcol">{{ item.technique_name }}</td>
-            <td class="tcol">{{ item.user_name }}</td>
-            <td class="tcol tcol-num">{{ item.discount }}</td>
-            <td class="tcol tcol-num">{{ item.prepayment }}</td>
-            <td class="tcol tcol-num">{{ item.price }}</td>
-            <td class="tcol">{{ item.payment_type }}</td>
-            <td class="tcol">{{ item.source }}</td>
-            <td class="tcol">{{ item.note }}</td>
+            {% set current_date = item.created_at[:10] %} <!-- Используем только дату -->
 
-            <!-- Здесь кнопки редактирования и удаления -->
-            <td class="tcol tcol-filter">
-                <button type="button" class="tcol-filter-edit"></button>
-                <!-- Кнопка для редактирования -->
+            <!-- Проверяем, если текущая дата отличается от предыдущей, значит, мы находимся в начале нового дня -->
+            {% if previous_date and current_date != previous_date %}
+                <!-- Разделитель после записей за предыдущий день -->
+                <tr><td colspan="12" class="day-separator"></td></tr>
+            {% endif %}
 
+            <!-- Запись за текущую дату -->
+            <tr class="trow">
+                <td class="tcol">{{ current_date }}</td>
+                <td class="tcol">{{ item.flight_number }}</td>
+                <td class="tcol">{{ item.flight_name }}</td>
+                <td class="tcol">{{ item.technique_name }}</td>
+                <td class="tcol">{{ item.user_name }}</td>
+                <td class="tcol tcol-num">{{ item.discount }}</td>
+                <td class="tcol tcol-num">{{ item.prepayment }}</td>
+                <td class="tcol tcol-num">{{ item.price }}</td>
+                <td class="tcol">{{ item.payment_type }}</td>
+                <td class="tcol">{{ item.source }}</td>
+                <td class="tcol">{{ item.note }}</td>
+                <td class="tcol tcol-filter">
+                    <button type="button" class="tcol-filter-edit"></button>
+                    <form action="/delete_flight/" method="post">
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        <button type="submit" class="tcol-filter-delete"></button>
+                    </form>
+                </td>
+            </tr>
 
-                <!-- Форма для удаления -->
-                <form action="/delete_flight/" method="post">
-                    <input type="hidden" name="id" value="{{ item.id }}">
-                    <button type="submit" class="tcol-filter-delete"></button>
-                </form>
-            </td>
-        </tr>
+            {% set previous_date = current_date %} <!-- Обновляем дату для следующего сравнения -->
+
+            <!-- Разделитель после последней записи дня (проверка на последнюю запись дня) -->
+            {% if loop.last or current_date != data[loop.index].created_at[:10] %}
+                <tr><td colspan="12" class="day-separator"></td></tr>
+            {% endif %}
         {% endfor %}
     </tbody>
-
 </table>
+
+
 
 <section id="add-form-container" class="add-form-container">
 

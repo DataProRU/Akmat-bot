@@ -717,6 +717,25 @@ p {
     }
 }
 
+.day-group-header {
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-top: 2px solid #ccc;
+}
+
+.day-group-header + .trow .tcol {
+    border-top: 1px solid #ccc;
+}
+.day-separator {
+    height: 2px;
+    background-color: #ccc; /* Цвет разделительной линии */
+    border-bottom: 1px solid #999; /* Опционально: граница снизу для разделителя */
+    margin: 4px 0; /* Опционально: добавление отступов сверху и снизу */
+}
+
+
 @media (pointer: coarse) {
     select, option, input[type="date"] {
         font-size: 18px;
