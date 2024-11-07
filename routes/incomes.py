@@ -138,7 +138,9 @@ async def index(
                 "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
                 "note": flight_technique.note,
             })
+
     data.sort(key=lambda x: x["created_at"], reverse=True)
+
     # Возвращаем HTML-шаблон с данными
     return templates.TemplateResponse(
         "income.html",
@@ -155,8 +157,6 @@ async def index(
             "routes": routes,
         },
     )
-
-
 
 
 def get_filtered_flight_techniques(

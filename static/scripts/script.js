@@ -9,9 +9,10 @@ function openFormAdd() {
     });
 };
 
-//открыть форму для редактирования записи
 var btnsEditIncome = document.querySelectorAll('.tcol-filter-edit');
 const formEdit = document.querySelector('.edit-form-container');
+
+// Получение элементов формы редактирования
 var editDate = document.getElementById('edit-date');
 var editFlightId = document.getElementById('edit-flight_id');
 var editTypeOfRoute = document.getElementById('edit-type-of-route');
@@ -19,7 +20,6 @@ var editTechniqueId = document.getElementById('edit-technique_id');
 var editInstructor = document.getElementById('edit-instructor');
 var editDiscount = document.getElementById('edit-discount');
 var editPrepayment = document.getElementById('edit-prepayment');
-var editCheckboxTd = 0;
 var editPrice = document.getElementById('edit-price');
 var editPaymentType = document.getElementById('edit-payment_type');
 var editSourceId = document.getElementById('edit-source_id');
@@ -58,19 +58,77 @@ function widthSub(str) {
 
 //заполнить форму для редактирования записи
 function fillEditForm(data) {
-    document.getElementById('edit-id').value = data[0].innerHTML;
-    editDate.value = data[1].innerHTML.slice(6, 10) + '-' + data[1].innerHTML.slice(3, 5) + '-' + data[1].innerHTML.slice(0, 2);
-    editFlightId.value = data[2].innerHTML;
-    editTypeOfRoute.options[editTypeOfRoute.selectedIndex].text = data[3].innerHTML;
-    editTechniqueId.options[editTechniqueId.selectedIndex].text = data[4].innerHTML;
-    editInstructor.options[editInstructor.selectedIndex].text = data[5].innerHTML;
-    editDiscount.value = data[6].innerHTML;
-    document.getElementById('edit-prepayment').checked = data[7].innerHTML === 'Да';
-    editPrice.value = data[8].innerHTML;
-    editPaymentType.options[editPaymentType.selectedIndex].text = data[9].innerHTML;
-    editSourceId.options[editSourceId.selectedIndex].text = data[10].innerHTML;
-    editNote.value = data[11].innerHTML;
-};
+    // Установка ID
+    document.getElementById('edit-id').value = data[0].innerText.trim();
+
+    // Преобразование даты в формат YYYY-MM-DD
+    const dateParts = data[1].innerText.trim().split('.');
+    if (dateParts.length === 3) {
+        editDate.value = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    } else {
+        console.error('Неверный формат даты');
+    }
+
+    // Установка значения Flight ID
+    editFlightId.value = data[2].innerText.trim();
+
+    // Установка значения Type of Route с использованием value
+    const routeValue = data[3].innerText.trim();
+    for (let option of editTypeOfRoute.options) {
+        if (option.text === routeValue) {
+            editTypeOfRoute.value = option.value;
+            break;
+        }
+    }
+
+    // Установка значения Technique ID
+    const techniqueValue = data[4].innerText.trim();
+    for (let option of editTechniqueId.options) {
+        if (option.text === techniqueValue) {
+            editTechniqueId.value = option.value;
+            break;
+        }
+    }
+
+    // Установка значения Instructor
+    const instructorValue = data[5].innerText.trim();
+    for (let option of editInstructor.options) {
+        if (option.text === instructorValue) {
+            editInstructor.value = option.value;
+            break;
+        }
+    }
+
+    // Установка Discount
+    editDiscount.value = data[6].innerText.trim();
+
+    // Установка значения Prepayment
+    document.getElementById('edit-prepayment').checked = data[7].innerText.trim() === 'Да';
+
+    // Установка Price
+    editPrice.value = data[8].innerText.trim();
+
+    // Установка Payment Type
+    const paymentTypeValue = data[9].innerText.trim();
+    for (let option of editPaymentType.options) {
+        if (option.text === paymentTypeValue) {
+            editPaymentType.value = option.value;
+            break;
+        }
+    }
+
+    // Установка Source
+    const sourceValue = data[10].innerText.trim();
+    for (let option of editSourceId.options) {
+        if (option.text === sourceValue) {
+            editSourceId.value = option.value;
+            break;
+        }
+    }
+
+    // Установка Note
+    editNote.value = data[11].innerText.trim();
+}
 
 //document.addEventListener('click', (event) => {
 //    btnsEditIncome.forEach(function (btnEdit) {

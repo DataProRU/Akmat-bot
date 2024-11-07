@@ -755,3 +755,8 @@ p {
 .edit-form-container.open .edit-entry-form {
     height: calc(10% + 15px);
 }
+
+.last-of-day {
+    font-weight: bold;
+background-color: lightskyblue !important;
+}
