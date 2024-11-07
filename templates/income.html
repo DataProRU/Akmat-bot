@@ -10,45 +10,44 @@
     </div>
     <form action="/filtered-income" method="get" class="nav-form-filter" id="filter-form">
 
-        <select name="day" id="day" class="nav-select">
-            <option value="" selected disabled hidden>День</option>
-            {% for day in range(1, 32) %}
-            <option value="{{ day }}">{{ day }}</option>
-            {% endfor %}
-        </select>
+
+    <select name="day" id="day" class="nav-select">
+        <option value="">День</option>
+        {% for d in range(1, 32) %}
+            <option value="{{ d }}" {% if day == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+    </select>
 
         <select name="month" id="month" class="nav-select">
-            <option value="" selected disabled hidden>Месяц</option>
-            <option value="1">Январь</option>
-            <option value="2">Февраль</option>
-            <option value="3">Март</option>
-            <option value="4">Апрель</option>
-            <option value="5">Май</option>
-            <option value="6">Июнь</option>
-            <option value="7">Июль</option>
-            <option value="8">Август</option>
-            <option value="9">Сентябрь</option>
-            <option value="10">Октябрь</option>
-            <option value="11">Ноябрь</option>
-            <option value="12">Декабрь</option>
-        </select>
+        <option value="">Месяц</option>
+        <option value="1" {% if month == 1 %}selected{% endif %}>Январь</option>
+        <option value="2" {% if month == 2 %}selected{% endif %}>Февраль</option>
+        <option value="3" {% if month == 3 %}selected{% endif %}>Март</option>
+        <option value="4" {% if month == 4 %}selected{% endif %}>Апрель</option>
+        <option value="5" {% if month == 5 %}selected{% endif %}>Май</option>
+        <option value="6" {% if month == 6 %}selected{% endif %}>Июнь</option>
+        <option value="7" {% if month == 7 %}selected{% endif %}>Июль</option>
+        <option value="8" {% if month == 8 %}selected{% endif %}>Август</option>
+        <option value="9" {% if month == 9 %}selected{% endif %}>Сентябрь</option>
+        <option value="10" {% if month == 10 %}selected{% endif %}>Октябрь</option>
+        <option value="11" {% if month == 11 %}selected{% endif %}>Ноябрь</option>
+        <option value="12" {% if month == 12 %}selected{% endif %}>Декабрь</option>
+    </select>
 
-        <select name="year" id="year" class="nav-select">
-            <option value="" selected disabled hidden>Год</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-        </select>
+    <select name="year" id="year" class="nav-select">
+        <option value="">Год</option>
+        {% for y in range(2020, 2027) %}
+            <option value="{{ y }}" {% if year == y %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+    </select>
 
-        <div class="reset-filter tooltip">
-            <input class="reset-filter-btn" type="reset" value=""><!--✖-->
-            <span class="tooltip-text">Сбросить фильтры</span>
-        </div>
-    </form>
+   <div class="reset-filter tooltip">
+    <a href="/income" class="reset-filter-btn">
+        <button href="/income" type="button">Сбросить фильтры</button>
+        <span class="tooltip-text">Сбросить фильтры</span>
+    </a>
+</div>
+</form>
 </nav>
 {% endblock %}
 
@@ -56,19 +55,11 @@
 {% block content %}
 <script>
     document.querySelectorAll('.nav-select').forEach(select => {
-        select.addEventListener('change', function () {
-            const day = document.getElementById('day').value;
-            const month = document.getElementById('month').value;
-            const year = document.getElementById('year').value;
-
-            // Проверяем, что все поля заполнены
-            if (day && month && year) {
-                document.getElementById('filter-form').submit();
-            }
-        });
+    select.addEventListener('change', function () {
+        document.getElementById('filter-form').submit();
     });
-
-    window.onload = function() {
+});
+ window.onload = function() {
         let rows = document.querySelectorAll('#table-body .trow');
         let lastDate = null;
 
@@ -141,6 +132,7 @@
 {% endfor %}
     </tbody>
 </table>
+
 
 
 <section id="add-form-container" class="add-form-container">
