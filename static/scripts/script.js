@@ -28,7 +28,7 @@ btnsEditIncome.forEach(function (btnEdit) {
     btnEdit.addEventListener('click', () => {
         let trEdit = btnEdit.parentNode.parentNode;
         trEdit.append(formEdit);
-        formEdit.style.height = '100%';
+        formEdit.style.height = "calc((100vh - 170px)/20)";
         const tdsEditForm = trEdit.children;
         console.log(tdsEditForm);
         setWidthEditForm(tdsEditForm);

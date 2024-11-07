@@ -4,11 +4,6 @@
 
 {% block nav %}
 <h2 class="welcome-title">Дни с неподтверждёнными записями</h2>
-{% if not days_with_unapproved %}
-<button onclick="openFormAdd()" class="add-entry-btn tooltip">✚
-    <span class="tooltip-text">Добавить запись</span>
-</button>
-{% endif %}
 {% endblock %}
 
 {% block content %}
