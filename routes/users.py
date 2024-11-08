@@ -56,7 +56,7 @@ async def get_users(request: Request, db: Session = Depends(get_db)):
 
 
 @router.put("/users/{user_id}")
-async def update_user_role(request: Request,user_id: int, role_update: UpdateUserRole):
+async def update_user_role(request: Request, user_id: int, role_update: UpdateUserRole):
 
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -79,24 +79,24 @@ async def update_user_role(request: Request,user_id: int, role_update: UpdateUse
 
 @router.post("/users_tg/edit/{id}", response_class=HTMLResponse)
 async def update_users(
-        request: Request,
-        id: int,
-        tg: str = Form(...),
-        full_name: str = Form(...),
-        is_manager: bool = Form(False),
-        is_instructor: bool = Form(False),
-        is_assistant: bool = Form(False),
-        send_button: bool = Form(False),
-        deposit_income: bool = Form(False),
-        enter_operation: bool = Form(False),
-        view_salary: bool = Form(False),
-        contribute_expense: bool = Form(False),
-        is_director: bool = Form(False),
-        comission: bool = Form(False),
-        penalty: bool = Form(False),
-        is_investor: bool = Form(False),
-        change_salary: bool = Form(False),
-        db: Session = Depends(get_db)
+    request: Request,
+    id: int,
+    tg: str = Form(...),
+    full_name: str = Form(...),
+    is_manager: bool = Form(False),
+    is_instructor: bool = Form(False),
+    is_assistant: bool = Form(False),
+    send_button: bool = Form(False),
+    deposit_income: bool = Form(False),
+    enter_operation: bool = Form(False),
+    view_salary: bool = Form(False),
+    contribute_expense: bool = Form(False),
+    is_director: bool = Form(False),
+    comission: bool = Form(False),
+    penalty: bool = Form(False),
+    is_investor: bool = Form(False),
+    change_salary: bool = Form(False),
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -120,7 +120,7 @@ async def update_users(
     user.view_salary = view_salary
     user.contribute_expense = contribute_expense
     user.is_director = is_director
-    user.chat_id = user.chat_id #не меняем chat id
+    user.chat_id = user.chat_id  # не меняем chat id
     user.comission = comission
     user.penalty = penalty
     user.is_investor = is_investor
@@ -129,6 +129,7 @@ async def update_users(
     db.commit()
 
     return RedirectResponse("/users", status_code=303)
+
 
 @router.post("/users_tg/delete/{id}", response_class=HTMLResponse)
 async def delete_positions(request: Request, id: int, db: Session = Depends(get_db)):
@@ -148,29 +149,26 @@ async def delete_positions(request: Request, id: int, db: Session = Depends(get_
     return RedirectResponse(url="/users", status_code=303)
 
 
-
-
-
 @router.post("/users_tg/add")
 async def add_user(
-        request: Request,
-        tg: str = Form(...),
-        full_name: str = Form(...),
-        is_manager: bool = Form(False),
-        is_instructor: bool = Form(False),
-        is_assistant: bool = Form(False),
-        send_button: bool = Form(False),
-        deposit_income: bool = Form(False),
-        enter_operation: bool = Form(False),
-        view_salary: bool = Form(False),
-        contribute_expense: bool = Form(False),
-        is_director: bool = Form(False),
-        chat_id: Optional[int] = Form(1),
-        comission: bool = Form(False),
-        penalty: bool = Form(False),
-        is_investor: bool = Form(False),
-        change_salary: bool = Form(False),
-        db: Session = Depends(get_db)
+    request: Request,
+    tg: str = Form(...),
+    full_name: str = Form(...),
+    is_manager: bool = Form(False),
+    is_instructor: bool = Form(False),
+    is_assistant: bool = Form(False),
+    send_button: bool = Form(False),
+    deposit_income: bool = Form(False),
+    enter_operation: bool = Form(False),
+    view_salary: bool = Form(False),
+    contribute_expense: bool = Form(False),
+    is_director: bool = Form(False),
+    chat_id: Optional[int] = Form(1),
+    comission: bool = Form(False),
+    penalty: bool = Form(False),
+    is_investor: bool = Form(False),
+    change_salary: bool = Form(False),
+    db: Session = Depends(get_db),
 ):
     user = Users(
         tg=tg,
@@ -188,7 +186,7 @@ async def add_user(
         comission=comission,
         penalty=penalty,
         is_investor=is_investor,
-        change_salary=change_salary
+        change_salary=change_salary,
     )
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):

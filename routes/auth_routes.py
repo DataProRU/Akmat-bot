@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends, Form
-from fastapi.responses import HTMLResponse,  RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 import databases
@@ -10,9 +10,10 @@ from database import get_db
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-#@router.get("/register", response_class=HTMLResponse)
-#async def get_register(request: Request):
+# @router.get("/register", response_class=HTMLResponse)
+# async def get_register(request: Request):
 #    return templates.TemplateResponse("register.html", {"request": request})
+
 
 @router.post("/register")
 async def post_register(
@@ -26,11 +27,9 @@ async def post_register(
     return RedirectResponse(url="/users", status_code=303)
 
 
-
 @router.get("/login", response_class=HTMLResponse)
 async def get_login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
-
 
 
 @router.post("/login", response_class=HTMLResponse)

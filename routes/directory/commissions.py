@@ -8,6 +8,7 @@ from models import Commisions
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+
 def get_db():
     db = Session()
     try:
@@ -20,7 +21,7 @@ def get_db():
 async def directory(
     request: Request,
     db: Session = Depends(get_db),
-    user: dict = Depends(get_authenticated_user)
+    user: dict = Depends(get_authenticated_user),
 ):
     if isinstance(user, RedirectResponse):
         return user  # Если пользователь не аутентифицирован
@@ -31,12 +32,13 @@ async def directory(
         {"request": request, "type_commisions": type_commissions},
     )
 
+
 @router.post("/commissions/add", response_class=HTMLResponse)
 async def add_commissions(
     request: Request,
     title: str = Form(...),
     db: Session = Depends(get_db),
-    user: dict = Depends(get_authenticated_user)
+    user: dict = Depends(get_authenticated_user),
 ):
     if isinstance(user, RedirectResponse):
         return user
@@ -47,13 +49,14 @@ async def add_commissions(
 
     return RedirectResponse(url="/commissions", status_code=303)
 
+
 @router.post("/commissions/edit/{id}", response_class=HTMLResponse)
 async def edit_commissions(
     request: Request,
     id: int,
     title: str = Form(...),
     db: Session = Depends(get_db),
-    user: dict = Depends(get_authenticated_user)
+    user: dict = Depends(get_authenticated_user),
 ):
     if isinstance(user, RedirectResponse):
         return user
@@ -66,12 +69,13 @@ async def edit_commissions(
 
     return RedirectResponse(url="/commissions", status_code=303)
 
+
 @router.post("/commissions/delete/{id}", response_class=HTMLResponse)
 async def delete_commissions(
     request: Request,
     id: int,
     db: Session = Depends(get_db),
-    user: dict = Depends(get_authenticated_user)
+    user: dict = Depends(get_authenticated_user),
 ):
     if isinstance(user, RedirectResponse):
         return user

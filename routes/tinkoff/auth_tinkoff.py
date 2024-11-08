@@ -1,7 +1,7 @@
 # auth_tinkoff.py
 
 # Стандартные библиотеки Python
-import  asyncio
+import asyncio
 
 # Сторонние библиотеки
 from fastapi import APIRouter, HTTPException, Body, Request, Query
@@ -12,19 +12,29 @@ from dependencies import get_token_from_cookie, get_current_user
 from models import LoginResponse
 import config as config
 from config import (
-    timer_selector, 
-    resend_sms_button_selector, 
-    cancel_button_selector, 
-    browser_instance as browser
+    timer_selector,
+    resend_sms_button_selector,
+    cancel_button_selector,
+    browser_instance as browser,
 )
 
 from utils.tinkoff.browser_manager import BrowserManager
-from utils.tinkoff.tinkoff_auth import paged_login, close_login_via_sms_page, get_user_name_from_otp_login
-from utils.tinkoff.browser_utils import get_text, detect_page_type, PageType, click_button
+from utils.tinkoff.tinkoff_auth import (
+    paged_login,
+    close_login_via_sms_page,
+    get_user_name_from_otp_login,
+)
+from utils.tinkoff.browser_utils import (
+    get_text,
+    detect_page_type,
+    PageType,
+    click_button,
+)
 from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
 
 # Вход в тинькофф
 @router.get("/tinkoff/")
@@ -37,21 +47,24 @@ async def get_login_type(request: Request):
         return payload
     global browser
 
-
     # Открытие браузера если закрыт, если открыт обновление времени выключения
     if browser and await browser.is_page_active():
         browser.reset_interaction_time()
     elif browser and await browser.is_browser_active():
         await browser.create_context_and_page()
     else:
-        browser = BrowserManager(config.PATH_TO_CHROME_PROFILE,
-                                 config.DOWNLOAD_DIRECTORY,
-                                 config.BROWSER_TIMEOUT)
+        browser = BrowserManager(
+            config.PATH_TO_CHROME_PROFILE,
+            config.DOWNLOAD_DIRECTORY,
+            config.BROWSER_TIMEOUT,
+        )
         await browser.create_context_and_page()
 
     try:
         await browser.page.goto(config.EXPENSES_URL)  # Переход на страницу расходов
-        detected_type = await detect_page_type(browser, 5)  # Асинхронное определение типа страницы
+        detected_type = await detect_page_type(
+            browser, 5
+        )  # Асинхронное определение типа страницы
 
         if detected_type:
             # Отмена входа по смс, переход на вход через номер телефона
@@ -65,17 +78,26 @@ async def get_login_type(request: Request):
 
             # Вход по временному паролю
             if detected_type == PageType.LOGIN_OTP:
-                return templates.TemplateResponse(page_path, {"request": request, "name": await get_user_name_from_otp_login(browser)})
+                return templates.TemplateResponse(
+                    page_path,
+                    {
+                        "request": request,
+                        "name": await get_user_name_from_otp_login(browser),
+                    },
+                )
 
             return templates.TemplateResponse(page_path, {"request": request})
         else:
             await browser.close_context_and_page()
-            raise HTTPException(status_code=400, detail="Не удалось определить тип страницы.")
+            raise HTTPException(
+                status_code=400, detail="Не удалось определить тип страницы."
+            )
     except Exception as e:
         print(e)
         await browser.close_context_and_page()
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+
 # Обработка всех страниц входа
 @router.post("/tinkoff/login/", response_model=LoginResponse)
 async def login(request: Request, data: str = Body(...)):
@@ -86,16 +108,21 @@ async def login(request: Request, data: str = Body(...)):
     if isinstance(payload, RedirectResponse):
         return payload
     if not await browser.is_page_active():
-        raise HTTPException(status_code=440, detail="Сессия истекла. Пожалуйста, войдите заново.")
-    
+        raise HTTPException(
+            status_code=440, detail="Сессия истекла. Пожалуйста, войдите заново."
+        )
+
     try:
-        result = await paged_login(browser, data, 10)  # Отправка данных, получает тип следующей страницы
+        result = await paged_login(
+            browser, data, 10
+        )  # Отправка данных, получает тип следующей страницы
         await save_browser_cache()
         if result:
-            return LoginResponse(status="success", next_page_type=result) 
+            return LoginResponse(status="success", next_page_type=result)
         return LoginResponse(status="failed", next_page_type=None)
     except:
         raise
+
 
 # Универсальный эндпоинт для загрузки следующей страницы
 @router.get("/tinkoff/next/")
@@ -115,7 +142,7 @@ async def next_page(request: Request, step: str | None = Query(default=None)):
     else:
         page_type = await detect_page_type(browser, 5)
 
-     # Отмена входа по смс, переход на вход через номер телефона
+    # Отмена входа по смс, переход на вход через номер телефона
     if page_type == PageType.LOGIN_SMS_CODE:
         page_type = await close_login_via_sms_page(browser)
 
@@ -123,9 +150,13 @@ async def next_page(request: Request, step: str | None = Query(default=None)):
     template_path = page_type.template_path()
 
     if page_type == PageType.LOGIN_OTP:
-        return templates.TemplateResponse(template_path, {"request": request, "name": await get_user_name_from_otp_login(browser)})
-    
+        return templates.TemplateResponse(
+            template_path,
+            {"request": request, "name": await get_user_name_from_otp_login(browser)},
+        )
+
     return templates.TemplateResponse(template_path, {"request": request})
+
 
 # Эндпоинт для получения таймера при вводе смс
 @router.get("/tinkoff/get_sms_timer/")
@@ -146,9 +177,10 @@ async def get_sms_timer(request: Request):
         print(f"Ошибка при получении таймера: {e}")
         raise HTTPException(status_code=500, detail="Не удалось получить таймер")
 
+
 # Эндпоинт для повторной отправки смс
 @router.post("/tinkoff/resend_sms/")
-async def resend_sms(request:Request):
+async def resend_sms(request: Request):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
         return token
@@ -165,6 +197,7 @@ async def resend_sms(request:Request):
         print(f"Ошибка при нажатии на кнопку: {e}")
         raise HTTPException(status_code=500, detail="Не удалось отправить SMS повторно")
 
+
 # Эндпоинт для отмены входа по временному паролю
 @router.post("/tinkoff/cancel_otp/")
 async def cancel_otp():
@@ -179,10 +212,14 @@ async def cancel_otp():
 
     except Exception as e:
         print(f"Ошибка при нажатии на кнопку: {e}")
-        raise HTTPException(status_code=500, detail="Не удалось отменить вход по временному паролю.")
+        raise HTTPException(
+            status_code=500, detail="Не удалось отменить вход по временному паролю."
+        )
+
 
 def get_browser():
     return browser
+
 
 async def save_browser_cache():
     if browser:

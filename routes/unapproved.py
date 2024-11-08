@@ -22,6 +22,7 @@ from dependencies import get_token_from_cookie, get_current_user
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+
 def get_db():
     db = Session()
     try:
@@ -29,7 +30,10 @@ def get_db():
     finally:
         db.close()
 
-def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, per_page: int, db: Session):
+
+def get_filtered_flight_techniques(
+    day: int, month: int, year: int, page: int, per_page: int, db: Session
+):
     offset = (page - 1) * per_page
 
     # Выполняем запрос для получения данных о неподтверждённых записях полётов по дате и confirmed == False
@@ -37,10 +41,10 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         db.query(FlightTechniques)
         .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(
-            FlightTechniques.is_approved == False, # Фильтр по неподтверждённым записям
-            extract('day', FlightTechniques.created_at) == day,
-            extract('month', FlightTechniques.created_at) == month,
-            extract('year', FlightTechniques.created_at) == year
+            FlightTechniques.is_approved == False,  # Фильтр по неподтверждённым записям
+            extract("day", FlightTechniques.created_at) == day,
+            extract("month", FlightTechniques.created_at) == month,
+            extract("year", FlightTechniques.created_at) == year,
         )
         .offset(offset)
         .limit(per_page)
@@ -53,9 +57,9 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
         .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(
             Flights.confirmed == False,
-            extract('day', FlightTechniques.created_at) == day,
-            extract('month', FlightTechniques.created_at) == month,
-            extract('year', FlightTechniques.created_at) == year
+            extract("day", FlightTechniques.created_at) == day,
+            extract("month", FlightTechniques.created_at) == month,
+            extract("year", FlightTechniques.created_at) == year,
         )
         .count()
     )
@@ -74,7 +78,9 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
         if flight:
-            technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
+            technique_name = techniques.get(
+                flight_technique.technique_id, "Unknown Technique"
+            )
             user_name = users.get(flight.instructor_id, "Unknown User")
             route_name = routes.get(flight.route_id, "Unknown Route")
 
@@ -89,7 +95,9 @@ def get_filtered_flight_techniques(day: int, month: int, year: int, page: int, p
                     "discount": flight_technique.discount,
                     "prepayment": "Yes" if flight_technique.prepayment else "No",
                     "price": flight_technique.price,
-                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Unknown Payment Type"),
+                    "payment_type": payment_types.get(
+                        flight_technique.payment_type_id, "Unknown Payment Type"
+                    ),
                     "source": sources.get(flight_technique.source_id, "Unknown Source"),
                     "note": flight_technique.note,
                 }
@@ -119,21 +127,24 @@ async def unapproved_days(request: Request, db: Session = Depends(get_db)):
     if isinstance(payload, RedirectResponse):
         return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Получаем все уникальные даты с неподтверждёнными записями
-    days_with_unapproved = db.query(
-        extract('day', FlightTechniques.created_at).label('day'),
-        extract('month', FlightTechniques.created_at).label('month'),
-        extract('year', FlightTechniques.created_at).label('year')
-    ).join(Flights, Flights.id == FlightTechniques.flight_id) \
-     .filter(
-         FlightTechniques.is_approved == False
-     ) \
-     .group_by('day', 'month', 'year').all()
+    days_with_unapproved = (
+        db.query(
+            extract("day", FlightTechniques.created_at).label("day"),
+            extract("month", FlightTechniques.created_at).label("month"),
+            extract("year", FlightTechniques.created_at).label("year"),
+        )
+        .join(Flights, Flights.id == FlightTechniques.flight_id)
+        .filter(FlightTechniques.is_approved == False)
+        .group_by("day", "month", "year")
+        .all()
+    )
 
     # Возвращаем шаблон с кнопками для каждого дня
-    return templates.TemplateResponse("unapproved_days.html", {
-        "request": request,
-        "days_with_unapproved": days_with_unapproved
-    })
+    return templates.TemplateResponse(
+        "unapproved_days.html",
+        {"request": request, "days_with_unapproved": days_with_unapproved},
+    )
+
 
 @router.get("/unapproved-records", response_class=HTMLResponse)
 async def unapproved_records(
@@ -143,7 +154,7 @@ async def unapproved_records(
     year: int = Query(...),
     page: int = Query(1, ge=1),
     per_page: int = Query(30, ge=1, le=100),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -154,7 +165,9 @@ async def unapproved_records(
     if isinstance(payload, RedirectResponse):
         return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Передаем объект сессии в функцию get_filtered_flight_techniques
-    result = get_filtered_flight_techniques(day=day, month=month, year=year, page=page, per_page=per_page, db=db)
+    result = get_filtered_flight_techniques(
+        day=day, month=month, year=year, page=page, per_page=per_page, db=db
+    )
 
     flights_techniques = result["flights_techniques"]
     techniques = result["techniques"]
@@ -163,24 +176,26 @@ async def unapproved_records(
     payment_types = result["payment_types"]
     sources = result["sources"]
 
-
     # Передаём отфильтрованные записи в шаблон
-    return templates.TemplateResponse("unapproved_records.html", {
+    return templates.TemplateResponse(
+        "unapproved_records.html",
+        {
+            "request": request,
+            "flights_techniques": flights_techniques,
+            "day": day,
+            "month": month,
+            "year": year,
+            "page": page,
+            "per_page": per_page,
+            "total_pages": result["total_pages"],
+            "users": users,
+            "techniques": techniques,
+            "payment_types": payment_types,
+            "sources": sources,
+            "routes": routes,
+        },
+    )
 
-        "request": request,
-        "flights_techniques": flights_techniques,
-        "day": day,
-        "month": month,
-        "year": year,
-        "page": page,
-        "per_page": per_page,
-        "total_pages": result["total_pages"],
-        "users": users,
-        "techniques": techniques,
-        "payment_types": payment_types,
-        "sources": sources,
-        "routes": routes,
-    })
 
 @router.post("/approve-all", response_class=RedirectResponse)
 async def approve_all_records(
@@ -188,7 +203,7 @@ async def approve_all_records(
     day: int = Form(...),
     month: int = Form(...),
     year: int = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -200,15 +215,15 @@ async def approve_all_records(
         return payload  # Если токен недействителен, перенаправляем на страницу логина
     # Обновляем записи в Flights и устанавливаем confirmed в True
     db.query(Flights).filter(
-        extract('day', Flights.flight_date) == day,
-        extract('month', Flights.flight_date) == month,
-        extract('year', Flights.flight_date) == year
+        extract("day", Flights.flight_date) == day,
+        extract("month", Flights.flight_date) == month,
+        extract("year", Flights.flight_date) == year,
     ).update({"confirmed": True}, synchronize_session="fetch")
 
     db.query(FlightTechniques).filter(
-        extract('day', FlightTechniques.created_at) == day,
-        extract('month', FlightTechniques.created_at) == month,
-        extract('year', FlightTechniques.created_at) == year
+        extract("day", FlightTechniques.created_at) == day,
+        extract("month", FlightTechniques.created_at) == month,
+        extract("year", FlightTechniques.created_at) == year,
     ).update({"is_approved": True}, synchronize_session="fetch")
 
     # Сохраняем изменения
@@ -217,14 +232,15 @@ async def approve_all_records(
     # Перенаправляем обратно на страницу с неподтверждёнными записями
     return RedirectResponse(url=f"/unapproved-days", status_code=303)
 
+
 @router.post("/delete_unapproved/")
 async def delete_flight(
-request: Request,
+    request: Request,
     id: int = Form(...),
     day: int = Form(...),
     month: int = Form(...),
     year: int = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -239,13 +255,17 @@ request: Request,
     if flight:
         db.delete(flight)
         db.commit()
-        return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
+        return RedirectResponse(
+            url=f"/unapproved-records?day={day}&month={month}&year={year}",
+            status_code=303,
+        )
 
     return JSONResponse({"status": "error", "message": "Flight not found"})
 
+
 @router.post("/submit_unapproved")
 async def submit_form(
-request: Request,
+    request: Request,
     flight_number: int = Form(...),
     instructor_id: int = Form(...),
     date: str = Form(str(datetime.now())),
@@ -257,10 +277,10 @@ request: Request,
     payment_type_id: int = Form(...),
     source_id: int = Form(...),
     note: str = Form(""),
-    day: int = Form(...), #для того что бы остаться на той же странице
+    day: int = Form(...),  # для того что бы остаться на той же странице
     month: int = Form(...),
     year: int = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -302,12 +322,16 @@ request: Request,
         )
         db.add(new_flight_technique)
         db.commit()
-        return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
+        return RedirectResponse(
+            url=f"/unapproved-records?day={day}&month={month}&year={year}",
+            status_code=303,
+        )
     except Exception as e:
         db.rollback()
         return {"error": str(e)}
     finally:
         db.close()
+
 
 @router.post("/update_unapproved_flight/")
 async def update_flight(request: Request):
@@ -329,7 +353,7 @@ async def update_flight(request: Request):
     route_type = form_data.get("type-of-route")
     price = form_data.get("price")
     discount = form_data.get("discount")
-    prepayment = form_data.get("prepayment")=="no"
+    prepayment = form_data.get("prepayment") == "no"
     payment_type = form_data.get("payment_type")
     source_id = form_data.get("source_id")
     note = form_data.get("note")
@@ -376,4 +400,6 @@ async def update_flight(request: Request):
     session.close()
 
     # Редирект с параметрами даты
-    return RedirectResponse(url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303)
+    return RedirectResponse(
+        url=f"/unapproved-records?day={day}&month={month}&year={year}", status_code=303
+    )

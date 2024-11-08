@@ -2,12 +2,13 @@ from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
-from dependencies import get_token_from_cookie, get_current_user
+from dependencies import get_authenticated_user
 from models import TypeExpenses, CategoryExpenses
 
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
+
 
 def get_db():
     db = Session()
@@ -16,25 +17,28 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/types_of_expenses", response_class=HTMLResponse)
-async def directory(request: Request, db: Session = Depends(get_db)):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
 
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+@router.get("/types_of_expenses", response_class=HTMLResponse)
+async def directory(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
+):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
     type_expenses = db.query(TypeExpenses).all()
     category_expenses = db.query(CategoryExpenses).all()
 
-    return templates.TemplateResponse("directory/types_of_expenses.html", {
-        "request": request,
-        "type_expenses": type_expenses,
-        "category_expenses" : category_expenses,
-    })
+    return templates.TemplateResponse(
+        "directory/types_of_expenses.html",
+        {
+            "request": request,
+            "type_expenses": type_expenses,
+            "category_expenses": category_expenses,
+        },
+    )
+
 
 @router.post("/types_of_expenses/add", response_class=HTMLResponse)
 async def add_expenses(
@@ -44,23 +48,22 @@ async def add_expenses(
     visible_investor: bool = Form(False),
     visible_employee: bool = Form(False),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
-
-    new_exp = TypeExpenses(title=title,
-                           category_exp_id=category_exp_id,
-                           visible_investor=visible_investor,
-                           visible_employee = visible_employee)
+    new_exp = TypeExpenses(
+        title=title,
+        category_exp_id=category_exp_id,
+        visible_investor=visible_investor,
+        visible_employee=visible_employee,
+    )
     db.add(new_exp)
     db.commit()
 
     return RedirectResponse(url="/types_of_expenses", status_code=303)
+
 
 @router.post("/types_of_expenses/edit/{id}", response_class=HTMLResponse)
 async def edit_types_of_expenses(
@@ -71,14 +74,10 @@ async def edit_types_of_expenses(
     visible_investor: bool = Form(False),
     visible_employee: bool = Form(False),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
-
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
     # Поиск записи по id
     type_to_edit = db.query(TypeExpenses).filter(TypeExpenses.id == id).first()
@@ -91,15 +90,16 @@ async def edit_types_of_expenses(
 
     return RedirectResponse(url="/types_of_expenses", status_code=303)
 
-@router.post("/types_of_expenses/delete/{id}", response_class=HTMLResponse)
-async def delete_expenses(request: Request, id: int, db: Session = Depends(get_db)):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
 
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
+@router.post("/types_of_expenses/delete/{id}", response_class=HTMLResponse)
+async def delete_expenses(
+    request: Request,
+    id: int,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
+):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
     exp_to_delete = db.query(TypeExpenses).filter(TypeExpenses.id == id).first()
     if exp_to_delete:

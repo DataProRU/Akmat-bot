@@ -8,6 +8,7 @@ from routes.tinkoff.auth_tinkoff import get_browser
 
 router = APIRouter()
 
+
 # Пользователь перешел на другую страницу
 @router.post("/tinkoff/disconnect/")
 async def disconnect():

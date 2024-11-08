@@ -14,16 +14,12 @@ from playwright.async_api import Page
 from routes.tinkoff.auth_tinkoff import get_browser, save_browser_cache
 from utils.tinkoff.browser_utils import click_button
 from utils.tinkoff.general_utils import (
-    wait_for_new_download, 
-    expenses_redirect, 
+    wait_for_new_download,
+    expenses_redirect,
     get_expense_categories_with_description,
-    get_json_expense_from_csv
+    get_json_expense_from_csv,
 )
-from models import (
-    CategoryRequest,
-    KeywordsUpdateRequest,
-    DeleteCategoryRequest
-)
+from models import CategoryRequest, KeywordsUpdateRequest, DeleteCategoryRequest
 
 # Имитируем "БД" с помощью словарей
 categories_db = {1: "Продукты", 2: "Транспорт", 3: "Развлечения"}  # id: название статьи
@@ -32,24 +28,30 @@ keywords_db = {}  # id: ключевые слова
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+
 # Эндпоинт для получения расходов за выбранный период
 @router.get("/tinkoff/expenses/")
-async def get_expenses( 
+async def get_expenses(
     period: Optional[str] = Query("month"),  # Необязательный период
     rangeStart: Optional[str] = None,  # Необязательное начало периода
-    rangeEnd: Optional[str] = None , # Необязательный конец периода
+    rangeEnd: Optional[str] = None,  # Необязательный конец периода
 ):
 
     browser = get_browser()
-    if not await  browser.is_browser_active() or not await  browser.is_page_active():
-        raise HTTPException(status_code=307, detail="Сессия истекла. Перенаправление на основную страницу.")
+    if not await browser.is_browser_active() or not await browser.is_page_active():
+        raise HTTPException(
+            status_code=307,
+            detail="Сессия истекла. Перенаправление на основную страницу.",
+        )
     else:
         browser.reset_interaction_time()
         await save_browser_cache()
-    
+
     page = browser.page
 
-    if await expenses_redirect(page, period, rangeStart, rangeEnd):  # Перенаправление на страницу по соответствующему периоду
+    if await expenses_redirect(
+        page, period, rangeStart, rangeEnd
+    ):  # Перенаправление на страницу по соответствующему периоду
         await save_browser_cache()
         time.sleep(1)  # Если было перенаправление, то небольшое ожидание
 
@@ -63,12 +65,14 @@ async def get_expenses(
     categories_dict = await get_expense_categories_with_description()
 
     return await get_json_expense_from_csv(file_path, categories_dict)
-    
+
 
 # Эндпоинт для получения всех категорий
 @router.get("/tinkoff/expenses/categories/")
 async def get_categories():
-    return [{"id": cat_id, "category_name": name} for cat_id, name in categories_db.items()]
+    return [
+        {"id": cat_id, "category_name": name} for cat_id, name in categories_db.items()
+    ]
 
 
 # Эндпоинт для добавления категорий
@@ -86,7 +90,9 @@ async def add_categories(request: CategoryRequest):
 async def delete_category(request: DeleteCategoryRequest):
     for cat_id in request.ids:
         categories_db.pop(cat_id, None)
-        keywords_db = {k: v for k, v in keywords_db.items() if v != cat_id}  # Удаляем связанные ключевые слова
+        keywords_db = {
+            k: v for k, v in keywords_db.items() if v != cat_id
+        }  # Удаляем связанные ключевые слова
     return {"message": "Категории удалены"}
 
 

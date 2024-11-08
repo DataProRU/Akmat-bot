@@ -25,6 +25,8 @@ from sqlalchemy import or_
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
+
 def get_db():
     db = Session()
     try:
@@ -40,9 +42,16 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
             per_page += 3
 
         # Получаем количество записей, исключая те, у которых is_approved == False
-        total_count = session.query(FlightTechniques).filter(
-            or_(FlightTechniques.is_approved == True, FlightTechniques.is_approved.is_(None))
-        ).count()
+        total_count = (
+            session.query(FlightTechniques)
+            .filter(
+                or_(
+                    FlightTechniques.is_approved == True,
+                    FlightTechniques.is_approved.is_(None),
+                )
+            )
+            .count()
+        )
 
         total_pages = (total_count + per_page - 1) // per_page
 
@@ -52,7 +61,12 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
         # Добавляем фильтр для исключения записей, где is_approved == False
         flights_techniques = (
             session.query(FlightTechniques)
-            .filter(or_(FlightTechniques.is_approved == True, FlightTechniques.is_approved.is_(None)))
+            .filter(
+                or_(
+                    FlightTechniques.is_approved == True,
+                    FlightTechniques.is_approved.is_(None),
+                )
+            )
             .offset(offset)
             .limit(per_page)
             .all()
@@ -62,7 +76,10 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
         techniques = {tech.id: tech.title for tech in session.query(Techniques)}
         flights = {flight.id: flight for flight in session.query(Flights)}
         routes = {route.id: route.title for route in session.query(Routes)}
-        users = {user.id: user.full_name for user in session.query(Users).filter_by(is_instructor=True)}
+        users = {
+            user.id: user.full_name
+            for user in session.query(Users).filter_by(is_instructor=True)
+        }
         payment_types = {ptype.id: ptype.title for ptype in session.query(PaymentTypes)}
         sources = {source.id: source.title for source in session.query(Sources)}
 
@@ -83,9 +100,9 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
 
 @router.get("/income", response_class=HTMLResponse)
 async def index(
-        request: Request,
-        page: int = Query(1, ge=1),
-        per_page: int = Query(20, ge=20, le=30),
+    request: Request,
+    page: int = Query(1, ge=1),
+    per_page: int = Query(20, ge=20, le=30),
 ):
     # Получаем токен
     token = get_token_from_cookie(request)
@@ -116,28 +133,37 @@ async def index(
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
         if flight and flight.confirmed:
-            technique_name = techniques.get(flight_technique.technique_id, "Неизвестная техника")
+            technique_name = techniques.get(
+                flight_technique.technique_id, "Неизвестная техника"
+            )
             user_name = users.get(flight.instructor_id, "Неизвестный пользователь")
             flight_name = routes.get(flight.flight_number, "Неизвестный путь")
             formatted_created_at = (
                 flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
-                if flight_technique.created_at else "Дата не указана"
+                if flight_technique.created_at
+                else "Дата не указана"
             )
 
-            data.append({
-                "id": flight_technique.id,
-                "created_at": formatted_created_at,
-                "flight_number": flight.id,
-                "flight_name": flight_name,
-                "technique_name": technique_name,
-                "user_name": user_name,
-                "discount": flight_technique.discount,
-                "prepayment": "Да" if flight_technique.prepayment else "Нет",
-                "price": flight_technique.price,
-                "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
-                "source": sources.get(flight_technique.source_id, "Неизвестный источник клиента"),
-                "note": flight_technique.note,
-            })
+            data.append(
+                {
+                    "id": flight_technique.id,
+                    "created_at": formatted_created_at,
+                    "flight_number": flight.id,
+                    "flight_name": flight_name,
+                    "technique_name": technique_name,
+                    "user_name": user_name,
+                    "discount": flight_technique.discount,
+                    "prepayment": "Да" if flight_technique.prepayment else "Нет",
+                    "price": flight_technique.price,
+                    "payment_type": payment_types.get(
+                        flight_technique.payment_type_id, "Неизвестный тип оплаты"
+                    ),
+                    "source": sources.get(
+                        flight_technique.source_id, "Неизвестный источник клиента"
+                    ),
+                    "note": flight_technique.note,
+                }
+            )
 
     data.sort(key=lambda x: x["created_at"], reverse=True)
 
@@ -165,20 +191,20 @@ def get_filtered_flight_techniques(
     month: Optional[int] = None,
     year: Optional[int] = None,
     page: int = 1,
-    per_page: int = 2000
+    per_page: int = 2000,
 ):
     # Старт запроса с использованием сессии
     query = db_session.query(FlightTechniques)
 
     # Применяем фильтры в зависимости от переданных параметров
     if year is not None:
-        query = query.filter(extract('year', FlightTechniques.created_at) == year)
+        query = query.filter(extract("year", FlightTechniques.created_at) == year)
 
     if month is not None:
-        query = query.filter(extract('month', FlightTechniques.created_at) == month)
+        query = query.filter(extract("month", FlightTechniques.created_at) == month)
 
     if day is not None:
-        query = query.filter(extract('day', FlightTechniques.created_at) == day)
+        query = query.filter(extract("day", FlightTechniques.created_at) == day)
 
     # Пагинация
     flights_techniques = query.offset((page - 1) * per_page).limit(per_page).all()
@@ -190,7 +216,9 @@ def get_filtered_flight_techniques(
     flights = {flight.id: flight for flight in db_session.query(Flights).all()}
     routes = {route.id: route.title for route in db_session.query(Routes).all()}
     users = {user.id: user.full_name for user in db_session.query(Users).all()}
-    payment_types = {ptype.id: ptype.title for ptype in db_session.query(PaymentTypes).all()}
+    payment_types = {
+        ptype.id: ptype.title for ptype in db_session.query(PaymentTypes).all()
+    }
     sources = {source.id: source.title for source in db_session.query(Sources).all()}
 
     return {
@@ -205,16 +233,17 @@ def get_filtered_flight_techniques(
         "page": page,
     }
 
+
 @router.get("/filtered-income", response_class=HTMLResponse)
 async def filtered_income(
-            request: Request,
-            day: Optional[str] = Query(None),
-            month: Optional[str] = Query(None),
-            year: Optional[str] = Query(None),
-            page: int = Query(1, ge=1),
-            per_page: int = Query(30, ge=1, le=100),
-db_session: Session = Depends(get_db),
-    ):
+    request: Request,
+    day: Optional[str] = Query(None),
+    month: Optional[str] = Query(None),
+    year: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(30, ge=1, le=100),
+    db_session: Session = Depends(get_db),
+):
     # Проверка токена и пользователя
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -230,7 +259,14 @@ db_session: Session = Depends(get_db),
     year = int(year) if year else None
 
     # Вызов функции фильтрации с обработанными значениями
-    result = get_filtered_flight_techniques(db_session=db_session,year=year, month=month, day=day, page=page, per_page=10000)
+    result = get_filtered_flight_techniques(
+        db_session=db_session,
+        year=year,
+        month=month,
+        day=day,
+        page=page,
+        per_page=10000,
+    )
 
     flights_techniques = result["flights_techniques"]
     techniques = result["techniques"]
@@ -245,12 +281,15 @@ db_session: Session = Depends(get_db),
     for flight_technique in flights_techniques:
         flight = flights.get(flight_technique.flight_id)
         if flight:
-            technique_name = techniques.get(flight_technique.technique_id, "Unknown Technique")
+            technique_name = techniques.get(
+                flight_technique.technique_id, "Unknown Technique"
+            )
             user_name = users.get(flight.instructor_id, "Unknown User")
             flight_name = routes.get(flight.flight_number, "Unknown Route")
             formatted_created_at = (
                 flight_technique.created_at.strftime("%d-%m-%Y, %H:%M")
-                if flight_technique.created_at else "Дата не указана"
+                if flight_technique.created_at
+                else "Дата не указана"
             )
             data.append(
                 {
@@ -263,8 +302,12 @@ db_session: Session = Depends(get_db),
                     "discount": flight_technique.discount,
                     "prepayment": "Да" if flight_technique.prepayment else "Нет",
                     "price": flight_technique.price,
-                    "payment_type": payment_types.get(flight_technique.payment_type_id, "Неизвестный тип оплаты"),
-                    "source": sources.get(flight_technique.source_id, "Неизвесттный источник"),
+                    "payment_type": payment_types.get(
+                        flight_technique.payment_type_id, "Неизвестный тип оплаты"
+                    ),
+                    "source": sources.get(
+                        flight_technique.source_id, "Неизвесттный источник"
+                    ),
                     "note": flight_technique.note,
                 }
             )
@@ -288,6 +331,7 @@ db_session: Session = Depends(get_db),
         },
     )
 
+
 @router.get("/api/flight_techniques")
 async def flight_techniques_api(
     request: Request,
@@ -303,9 +347,15 @@ async def flight_techniques_api(
     role = payload.get("role")
     data = []
     if role == "admin" or role == "user":
-        flights_techniques, techniques, flights, routes, users, payment_types, sources = (
-            get_flight_techniques(page, per_page)
-        )
+        (
+            flights_techniques,
+            techniques,
+            flights,
+            routes,
+            users,
+            payment_types,
+            sources,
+        ) = get_flight_techniques(page, per_page)
         data = []
         for flight_technique in flights_techniques:
             flight = flights.get(flight_technique.flight_id)
@@ -329,7 +379,9 @@ async def flight_techniques_api(
                         "payment_type": payment_types.get(
                             flight_technique.payment_type_id, "Unknown Payment Type"
                         ),
-                        "source": sources.get(flight_technique.source_id, "Unknown Source"),
+                        "source": sources.get(
+                            flight_technique.source_id, "Unknown Source"
+                        ),
                         "note": flight_technique.note,
                     }
                 )
@@ -338,8 +390,7 @@ async def flight_techniques_api(
 
 @router.put("/flight_techniques/{flight_technique_id}")
 async def update_flight_technique(
-        request: Request,
-    flight_technique_id: int, data: FlightTechniqueUpdate
+    request: Request, flight_technique_id: int, data: FlightTechniqueUpdate
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -410,9 +461,10 @@ async def delete_flight_technique(request: Request, flight_technique_id: int):
     finally:
         session.close()
 
+
 @router.post("/submit")
 async def submit_form(
-        request: Request,
+    request: Request,
     flight_number: int = Form(...),
     instructor_id: int = Form(...),
     date: str = Form(str(datetime.now())),
@@ -424,7 +476,7 @@ async def submit_form(
     payment_type_id: int = Form(...),
     source_id: int = Form(...),
     note: str = Form(""),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):
@@ -489,7 +541,9 @@ async def delete_flight(request: Request):
         return JSONResponse({"status": "error", "message": "ID not provided"})
 
     session = Session()
-    flight = session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+    flight = (
+        session.query(FlightTechniques).filter(FlightTechniques.id == flight_id).first()
+    )
 
     if flight:
         session.delete(flight)
@@ -515,7 +569,9 @@ async def update_flight(request: Request):
     # Извлечение данных из формы
     flight_date = form_data.get("date")
     flight_number = form_data.get("flight_number")
-    technique_id = form_data.get("technique_id") #может падать если не ввести данные формы вручную
+    technique_id = form_data.get(
+        "technique_id"
+    )  # может падать если не ввести данные формы вручную
     instructor = form_data.get("edit-instructor")
     route_type = form_data.get("type-of-route")
     price = form_data.get("price")
@@ -525,16 +581,15 @@ async def update_flight(request: Request):
     source_id = form_data.get("source_id")
     note = form_data.get("note")
 
-
     # Обновление записи в базе данных
     session = Session()
     flight_techniques = session.query(FlightTechniques).filter_by(id=flight_id).first()
     if flight_date == "":
-        flight_date=flight_techniques.created_at
+        flight_date = flight_techniques.created_at
 
     if flight_techniques:
         flight_techniques.created_at = flight_date
-        #flight_techniques.flight_number = flight_number
+        # flight_techniques.flight_number = flight_number
         flight_techniques.technique_id = technique_id
         flight_techniques.price = price
         flight_techniques.discount = discount
@@ -543,13 +598,13 @@ async def update_flight(request: Request):
         flight_techniques.note = note
         flight_techniques.payment_type_id = payment_type
 
-
-    flight_technique = session.query(Flights).filter_by(id=flight_techniques.flight_id).first()
+    flight_technique = (
+        session.query(Flights).filter_by(id=flight_techniques.flight_id).first()
+    )
     if flight_technique:
         flight_technique.technique_id = technique_id
         flight_technique.instructor_id = instructor
         flight_technique.flight_number = route_type
-
 
     session.commit()
     session.close()
