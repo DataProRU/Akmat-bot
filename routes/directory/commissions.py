@@ -2,13 +2,11 @@ from fastapi import APIRouter, Request, Depends, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import Session
-from dependencies import get_token_from_cookie, get_current_user
+from dependencies import get_authenticated_user
 from models import Commisions
 
 router = APIRouter()
-
 templates = Jinja2Templates(directory="templates")
-
 
 def get_db():
     db = Session()
@@ -19,78 +17,69 @@ def get_db():
 
 
 @router.get("/commissions", response_class=HTMLResponse)
-async def directory(request: Request, db: Session = Depends(get_db)):
-    # Получаем токен
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
+async def directory(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user)
+):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
-
-    type_commisions = db.query(Commisions).all()
-
+    type_commissions = db.query(Commisions).all()
     return templates.TemplateResponse(
         "directory/commissions.html",
-        {"request": request, "type_commisions": type_commisions},
+        {"request": request, "type_commisions": type_commissions},
     )
-
 
 @router.post("/commissions/add", response_class=HTMLResponse)
 async def add_commissions(
-    request: Request, title: str = Form(...), db: Session = Depends(get_db)
+    request: Request,
+    title: str = Form(...),
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user)
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
+    if isinstance(user, RedirectResponse):
+        return user
 
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
-
-    new_type = Commisions(title=title)
-    db.add(new_type)
+    new_commission = Commisions(title=title)
+    db.add(new_commission)
     db.commit()
 
     return RedirectResponse(url="/commissions", status_code=303)
 
-
 @router.post("/commissions/edit/{id}", response_class=HTMLResponse)
 async def edit_commissions(
-    request: Request, id: int, title: str = Form(...), db: Session = Depends(get_db)
+    request: Request,
+    id: int,
+    title: str = Form(...),
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user)
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
+    if isinstance(user, RedirectResponse):
+        return user
 
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
-
-    # Поиск записи по id
-    type_to_edit = db.query(Commisions).filter(Commisions.id == id).first()
-    if type_to_edit:
-        type_to_edit.title = title  # Обновляем название
+    # Поиск и обновление записи
+    commission = db.query(Commisions).filter(Commisions.id == id).first()
+    if commission:
+        commission.title = title
         db.commit()
 
     return RedirectResponse(url="/commissions", status_code=303)
 
-
 @router.post("/commissions/delete/{id}", response_class=HTMLResponse)
-async def delete_commissions(request: Request, id: int, db: Session = Depends(get_db)):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
+async def delete_commissions(
+    request: Request,
+    id: int,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user)
+):
+    if isinstance(user, RedirectResponse):
+        return user
 
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
-
-    type_to_delete = db.query(Commisions).filter(Commisions.id == id).first()
-    if type_to_delete:
-        db.delete(type_to_delete)
+    # Поиск и удаление записи
+    commission = db.query(Commisions).filter(Commisions.id == id).first()
+    if commission:
+        db.delete(commission)
         db.commit()
 
     return RedirectResponse(url="/commissions", status_code=303)
