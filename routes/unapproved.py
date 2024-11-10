@@ -16,7 +16,7 @@ from sqlalchemy import extract
 from fastapi.responses import JSONResponse
 from fastapi import Form
 from datetime import datetime
-from dependencies import get_token_from_cookie, get_current_user
+from dependencies import get_authenticated_user
 
 
 router = APIRouter()
@@ -117,15 +117,9 @@ def get_filtered_flight_techniques(
 
 
 @router.get("/unapproved-days", response_class=HTMLResponse)
-async def unapproved_days(request: Request, db: Session = Depends(get_db)):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
-
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+async def unapproved_days(request: Request, db: Session = Depends(get_db), user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     # Получаем все уникальные даты с неподтверждёнными записями
     days_with_unapproved = (
         db.query(
@@ -155,15 +149,10 @@ async def unapproved_records(
     page: int = Query(1, ge=1),
     per_page: int = Query(30, ge=1, le=100),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
-
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     # Передаем объект сессии в функцию get_filtered_flight_techniques
     result = get_filtered_flight_techniques(
         day=day, month=month, year=year, page=page, per_page=per_page, db=db
@@ -204,15 +193,10 @@ async def approve_all_records(
     month: int = Form(...),
     year: int = Form(...),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
-
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     # Обновляем записи в Flights и устанавливаем confirmed в True
     db.query(Flights).filter(
         extract("day", Flights.flight_date) == day,
@@ -241,15 +225,10 @@ async def delete_flight(
     month: int = Form(...),
     year: int = Form(...),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
-
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     flight = db.query(FlightTechniques).filter(FlightTechniques.id == id).first()
 
     if flight:
@@ -281,15 +260,10 @@ async def submit_form(
     month: int = Form(...),
     year: int = Form(...),
     db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token  # Если токен отсутствует, перенаправляем на страницу логина
-
-    # Получаем информацию о текущем пользователе
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload  # Если токен недействителен, перенаправляем на страницу логина
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     try:
         # Создание новой записи в таблице Flights
         new_flight = Flights(
@@ -334,14 +308,9 @@ async def submit_form(
 
 
 @router.post("/update_unapproved_flight/")
-async def update_flight(request: Request):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
-
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
+async def update_flight(request: Request,  user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     form_data = await request.form()
     flight_id = form_data.get("id")
 

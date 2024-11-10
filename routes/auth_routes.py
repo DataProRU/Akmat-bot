@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 import databases
 from services.auth_service import login_user, register_user
-from dependencies import get_token_from_cookie, get_current_user
+from dependencies import get_authenticated_user, get_current_user, get_token_from_cookie
 from database import get_db
 
 router = APIRouter()
@@ -63,20 +63,12 @@ async def welcome(request: Request):
 
 
 @router.get("/confirm", response_class=HTMLResponse)
-async def confirm(request: Request):
-    token = get_token_from_cookie(request)
-    if isinstance(token, RedirectResponse):
-        return token
-
-    payload = get_current_user(token)
-    if isinstance(payload, RedirectResponse):
-        return payload
-
-    username = payload.get("sub")
-    role = payload.get("role")
+async def confirm(request: Request, user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
     return templates.TemplateResponse(
-        "confirm.html", {"request": request, "username": username, "role": role}
+        "confirm.html", {"request": request}
     )
 
 
