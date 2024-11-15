@@ -15,5 +15,5 @@ async def disconnect():
     print("Пользователь покинул страницу. Закрываем context.")
     browser = get_browser()
     if browser:
-        await browser.close_context_and_page()
+        await browser.close_browser()
     return {"message": "Браузер закрыт"}

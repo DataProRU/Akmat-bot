@@ -50,15 +50,6 @@ app.include_router(expenses_categories.router)
 app.include_router(positions.router)
 app.include_router(commissions.router)
 
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)
 app.include_router(general.router)
