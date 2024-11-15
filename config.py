@@ -3,8 +3,8 @@ from utils.tinkoff.browser_manager import BrowserManager
 # Тайм-аут для неактивности, после которого браузер будет закрыт (в секундах)
 BROWSER_TIMEOUT: int = 900  # 15 минут
 EXPENSES_URL: str = f"https://www.tbank.ru/auth/login/?redirectTo=%2Fevents%2Ffeed%2F&redirectType="
-DOWNLOAD_DIRECTORY: str = "/download"
-PATH_TO_CHROME_PROFILE: str ="/chrome_data"
+DOWNLOAD_DIRECTORY: str = "app/download"
+PATH_TO_CHROME_PROFILE: str ="./chrome_data"
 
 # Работа с драйвером
 browser_instance: BrowserManager = None
