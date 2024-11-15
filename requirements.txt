@@ -36,3 +36,6 @@ cachetools == 5.5.0
 python-dotenv == 1.0.1
 pytest-playwright == 0.5.2
 aiofiles == 24.1.0
+pytz == 2024.2
+fuzzywuzzy == 0.18.0
+python-dateutil == 2.9.0

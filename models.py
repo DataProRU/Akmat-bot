@@ -172,8 +172,8 @@ class TypeOperations(Base):
 
 class LoginResponse(BaseModel):
     status: str
-    next_page_type: PageType = None 
-    current_page_type: PageType = None
+    next_page_type: Optional[PageType] = None
+    current_page_type: Optional[PageType] = None
 
     class Config:
         use_enum_values = True
@@ -185,14 +185,14 @@ class Keyword(BaseModel):
 class SaveKeywordsRequest(BaseModel):
     keywords: List[Keyword]
 
-class CategoryExpenses(Base):
-    __tablename__ = "category_expenses"
+#class CategoryExpenses(Base):
+#    __tablename__ = "category_expenses"
 
-    id = Column(Integer, primary_key=True)
-    title = Column(Text)
+#    id = Column(Integer, primary_key=True)
+#    title = Column(Text)
 
 class CategoryKeyword(Base):
-    __tablename__ = "category_expenses_keywords"
+    __tablename__ = "tinkoff_category_expenses_keywords"
 
     id = Column(Integer, primary_key=True)
     keyword = Column(Text)
@@ -200,7 +200,7 @@ class CategoryKeyword(Base):
 
 # Модель для таблицы расходов
 class Expense(Base):
-    __tablename__ = "expenses"
+    __tablename__ = "tinkoff_expenses"
 
     id = Column(Integer, primary_key=True)
     timestamp = Column(Integer)
@@ -209,13 +209,13 @@ class Expense(Base):
     description = Column(Text)
 
 class TemporaryCode(Base):
-    __tablename__ = 'temporary_code'
+    __tablename__ = 'tinkoff_temporary_code'
 
     id = Column(Integer, primary_key=True, index=True)
     code = Column(String(4), nullable=False)
 
 class LastError(Base):
-    __tablename__ = "last_error"
+    __tablename__ = "tinkoff_last_error"
 
     id = Column(Integer, primary_key=True, index=True)
     error_text = Column(String, nullable=False)

@@ -19,7 +19,6 @@ from routes.tinkoff import (
     auth_tinkoff,
     expenses,
     general,
-    start
 )
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,6 +52,5 @@ app.include_router(commissions.router)
 app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)
 app.include_router(general.router)
-app.include_router(start.router)
 
 #update
