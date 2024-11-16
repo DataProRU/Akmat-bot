@@ -24,6 +24,7 @@ from routes.directory.tinkoff_expenses import (
 import config as config
 from database import Session
 from models import SaveKeywordsRequest, CategoryExpenses
+from dependencies import get_authenticated_user
 
 def get_db():
     db = Session()
@@ -37,7 +38,9 @@ templates = Jinja2Templates(directory="templates")
 
 # Эндпоинт для отображения страницы расходов
 @router.get("/tinkoff/expenses/page", response_class=HTMLResponse)
-async def show_expenses_page(request: Request):
+async def show_expenses_page(request: Request, user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     # Передаем начальные параметры для рендеринга шаблона
     return templates.TemplateResponse("tinkoff/expenses.html", {"request": request})#RedirectResponse(url="/tinkoff/expenses/")
 
@@ -49,8 +52,11 @@ async def get_expenses(
     rangeStart: Optional[str] = None,  # Необязательное начало периода
     rangeEnd: Optional[str] = None,  # Необязательный конец периода
     time_zone: str = Query(...), 
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
 ):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     # Преобразуем указанный диапазон в Unix-формат
     unix_range_start, unix_range_end = get_period_range(
         timezone=time_zone,
@@ -83,7 +89,9 @@ def get_categories(db: Session = Depends(get_db)):
     return get_categories_from_db(db)
 
 @router.post("/tinkoff/expenses/keywords/")
-async def save_keywords(request: SaveKeywordsRequest, db: Session = Depends(get_db)):
+async def save_keywords(request: SaveKeywordsRequest, db: Session = Depends(get_db),user: dict = Depends(get_authenticated_user), ):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     for keyword in request.keywords:
         if keyword.category_name == "":
             # Удаляем ключевое слово, если оно привязано к какой-либо категории
@@ -101,7 +109,11 @@ async def save_keywords(request: SaveKeywordsRequest, db: Session = Depends(get_
 @router.post("/tinkoff/save_otp/")
 async def save_otp(
     otp: str = Query(...), 
-    db: Session = Depends(get_db)):
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_authenticated_user),
+   ):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     if otp and len(otp) == 4:
         set_temporary_code(db, otp)
 

@@ -20,14 +20,17 @@ from config import (
 from utils.tinkoff.browser_manager import BrowserManager
 from utils.tinkoff.tinkoff_auth import paged_login, close_login_via_sms_page, get_user_name_from_otp_login
 from utils.tinkoff.browser_utils import get_text, detect_page_type, PageType, click_button
+from dependencies import get_authenticated_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 # Вход в тинькофф
 @router.get("/tinkoff/")
-async def get_login_type(request: Request):
+async def get_login_type(request: Request,  user: dict = Depends(get_authenticated_user),):
     global browser
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
 
     # Открытие браузера если закрыт, если открыт обновление времени выключения
     if await check_for_page(browser):
@@ -71,7 +74,10 @@ async def get_login_type(request: Request):
     
 # Обработка всех страниц входа
 @router.post("/tinkoff/login/", response_model=LoginResponse)
-async def login(request: Request, data: str = Body(...)):
+async def login(request: Request, data: str = Body(...),  user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
+
     if not await browser.is_page_active():
         raise HTTPException(status_code=307, detail="Сессия истекла. Пожалуйста, войдите заново.")
     
@@ -86,7 +92,9 @@ async def login(request: Request, data: str = Body(...)):
 
 # Универсальный эндпоинт для загрузки следующей страницы
 @router.get("/tinkoff/next/")
-async def next_page(request: Request, step: str | None = Query(default=None)):
+async def next_page(request: Request, step: str | None = Query(default=None), user: dict = Depends(get_authenticated_user),):
+    if isinstance(user, RedirectResponse):
+        return user  # Если пользователь не аутентифицирован
     if not await browser.is_page_active():
         raise HTTPException(status_code=307, detail="Сессия истекла. Пожалуйста, войдите заново.")
     
