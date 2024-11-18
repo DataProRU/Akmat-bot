@@ -23,7 +23,7 @@
             </th>
             <th class="trow-head-data th-income">Вид техники<div class="resizer"></div>
             </th>
-            <th class="trow-head-data th-income">Пользователь<div class="resizer"></div>
+            <th class="trow-head-data th-income">Инструктор<div class="resizer"></div>
             </th>
             <th class="trow-head-data th-income">Скидка<div class="resizer"></div>
             </th>
@@ -50,7 +50,13 @@
             <td class="tcol">{{ record.technique_name }}</td>
             <td class="tcol">{{ record.user_name }}</td>
             <td class="tcol tcol-num">{{ record.discount }}</td>
-            <td class="tcol tcol-num">{{ record.prepayment }}</td>
+            <td class="tcol tcol-num">
+                 {% if record.prepayment == 'Yes' %}
+                    &#10004; <!-- Unicode галочки -->
+                {% else %}
+                    ◻ <!-- Unicode пустого квадрата -->
+                {% endif %}
+            </td>
             <td class="tcol tcol-num">{{ record.price }}</td>
             <td class="tcol">{{ record.payment_type }}</td>
             <td class="tcol">{{ record.source }}</td>
