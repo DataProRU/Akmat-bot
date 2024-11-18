@@ -88,7 +88,7 @@ def get_filtered_flight_techniques(
                 {
                     "id": flight_technique.id,
                     "created_at": flight_technique.created_at,
-                    "flight_number": flight.id,
+                    "flight_number": flight.flight_number,
                     "flight_name": route_name,
                     "technique_name": technique_name,
                     "user_name": user_name,

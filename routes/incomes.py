@@ -39,7 +39,7 @@ def get_flight_techniques(page: int = 1, per_page: int = 20):
     session = scoped_session(Session)
     try:
         if page == 1 or page == 2:
-            per_page += 3
+            per_page += 2
 
         # Получаем количество записей, исключая те, у которых is_approved == False
         total_count = (
@@ -148,7 +148,7 @@ async def index(
                 {
                     "id": flight_technique.id,
                     "created_at": formatted_created_at,
-                    "flight_number": flight.id,
+                    "flight_number": flight.flight_number,
                     "flight_name": flight_name,
                     "technique_name": technique_name,
                     "user_name": user_name,
@@ -295,7 +295,7 @@ async def filtered_income(
                 {
                     "id": flight_technique.id,
                     "created_at": formatted_created_at,
-                    "flight_number": flight.id,
+                    "flight_number": flight.flight_number,
                     "flight_name": flight_name,
                     "technique_name": technique_name,
                     "user_name": user_name,

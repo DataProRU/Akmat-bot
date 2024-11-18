@@ -70,7 +70,8 @@
                     <input type="hidden" name="day" value="{{ day }}">
                     <input type="hidden" name="month" value="{{ month }}">
                     <input type="hidden" name="year" value="{{ year }}">
-                    <button type="submit" class="tcol-filter-delete"></button>
+                    <button type="submit" class="tcol-filter-delete"
+                    onclick="return confirm('Вы уверены, что хотите удалить эту запись?')" ></button>
                 </form>
             </td>
         </tr>
