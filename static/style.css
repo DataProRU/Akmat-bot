@@ -760,3 +760,26 @@ p {
     font-weight: bold;
 background-color: lightskyblue !important;
 }
+
+@media (max-width: 768px) {
+    .header-title {
+        padding: 10px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-title h1 {
+        width: 100%;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-title {
+        padding: 10px 15px;
+    }
+
+    .header-title h1 {
+        font-size: 16px;
+    }
+}
