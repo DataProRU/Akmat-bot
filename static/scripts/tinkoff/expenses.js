@@ -115,8 +115,7 @@ async function saveKeywords() {
         const categoryName = select.options[select.selectedIndex].textContent;
         const description = select.closest('tr').querySelector('td:nth-child(4)').textContent;
 
-        // Исключаем записи с категорией "без категории"
-        if (description) {
+        if (description && !keywords.some(keyword => keyword.description === description && keyword.category_name === categoryName)) {
             keywords.push({ description, category_name: categoryName });
             console.log(description, categoryName);
         }
