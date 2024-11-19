@@ -2,7 +2,7 @@
 
 # Сторонние библиотеки
 from fastapi import APIRouter, Depends, Query, Request, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from typing import Optional
 from fastapi.templating import Jinja2Templates
 
