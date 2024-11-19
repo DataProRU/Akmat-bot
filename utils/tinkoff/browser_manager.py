@@ -46,14 +46,12 @@ class BrowserManager:
                 permissions=["notifications"]
             )
 
-            # Указываем путь для загрузки файлов
-            #await self.context.set_download_path(self.download_dir)
-
             self.page = await self.context.new_page()
             print("Контекст и страница созданы")
 
         # Обновляем время последнего взаимодействия
         self.reset_interaction_time()
+        self.close_task = asyncio.create_task(self.close_after_timeout())
 
     async def close_context_and_page(self):
         """Закрывает контекст и страницу, сохраняет состояние."""
@@ -84,9 +82,19 @@ class BrowserManager:
                 break
 
     async def clearing_downloads_directory(self):
-        """Очищает директорию загрузок."""
+        """
+        Очищает директорию загрузок, исключая файлы с определёнными именами.
+        """
+        excluded_files = { "shrek_is_the_best_movie_ever_dont_delete_this_file_or_you_will_regret_it.txt" }  # Имена файлов, которые не нужно удалять
+
         for filename in os.listdir(self.download_dir):
             file_path = os.path.join(self.download_dir, filename)
+            
+            # Проверяем, не входит ли файл в список исключений
+            if filename in excluded_files:
+                print(f"Пропущен файл: {filename}")
+                continue
+
             try:
                 if os.path.isfile(file_path) or os.path.islink(file_path):
                     os.unlink(file_path)
@@ -112,6 +120,7 @@ class BrowserManager:
     async def close_browser(self):
         """Закрывает браузер и освобождает ресурсы."""
         if self.browser:
+            await self.clearing_downloads_directory()
             await self.browser.close()
             self.browser = None
             print("Браузер закрыт")
