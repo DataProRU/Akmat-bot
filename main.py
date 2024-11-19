@@ -60,3 +60,4 @@ app.include_router(general.router)
 # Запуск планировщика для автозагрузки в отдельном потоке
 scheduler_thread = Thread(target=start_scheduler, daemon=True)
 scheduler_thread.start()
+print("Запущена автозагрузка расходов")
