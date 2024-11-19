@@ -1,16 +1,19 @@
+# time_utils.py
+
 from datetime import timezone, datetime, timedelta
 import pytz
 from pytz import UTC
 from dateutil.relativedelta import relativedelta
 
+
 def get_period_range(timezone: str, range_start: str = None, range_end: str = None, period: str = 'month'):
+    """
+    Преобразовывает строковые значения периодов (как дефолтных, так и заданных) в юникс время.
+    """
     if range_start and range_end:
         start,end = get_period_from_range(range_start, range_end, timezone)
     elif period:
         start,end = get_period_from_default_range(period, timezone)
-
-    print(f"Start {start}")
-    print(f"End {end}")
 
     return get_unix_time_ms_from_date(start), get_unix_time_ms_from_date(end)
 

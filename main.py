@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from threading import Thread
 from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory
 from routes.directory import (
     categories,
@@ -21,7 +22,7 @@ from routes.tinkoff import (
     general,
 )
 
-from fastapi.middleware.cors import CORSMiddleware
+from utils.tinkoff.fixed_time_import_expenses import start_scheduler
 
 
 from fastapi.staticfiles import StaticFiles
@@ -54,3 +55,8 @@ app.include_router(expenses.router)
 app.include_router(general.router)
 
 #update
+
+
+# Запуск планировщика для автозагрузки в отдельном потоке
+scheduler_thread = Thread(target=start_scheduler, daemon=True)
+scheduler_thread.start()
