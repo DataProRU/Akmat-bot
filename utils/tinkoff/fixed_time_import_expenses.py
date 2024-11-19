@@ -123,7 +123,7 @@ def start_scheduler():
     print("Запуск автозарузки расходов")
     scheduler = BackgroundScheduler(timezone=moscow_tz)
     # Используем обёртку для вызова асинхронной функции
-    scheduler.add_job(lambda: async_to_sync(load_expenses), CronTrigger(hour=23, minute=40, timezone=moscow_tz))
+    scheduler.add_job(lambda: async_to_sync(load_expenses), CronTrigger(hour=0, minute=5, timezone=moscow_tz))
     scheduler.start()
     try:
         while True:

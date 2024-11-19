@@ -4,7 +4,7 @@
 import asyncio
 
 # Сторонние библиотеки
-from fastapi import APIRouter, HTTPException, Body, Request, Query
+from fastapi import APIRouter, HTTPException, Body, Request, Query, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
