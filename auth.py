@@ -46,3 +46,14 @@ def decode_access_token(token: str):
     except JWTError:
         return None
 #test
+
+
+def create_temp_token(data: dict, expires_delta: timedelta = timedelta(minutes=15)):
+    """
+    Создаёт временный токен.
+    """
+    to_encode = data.copy()
+    expire = datetime.utcnow() + expires_delta
+    to_encode.update({"exp": expire})
+    token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return token

@@ -1,37 +1,47 @@
 # fixed_time_import_expenses.py
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
+# Стандартные модули Python
 import time
 import asyncio
-import pytz
 from datetime import datetime, timezone
 
+# Сторонние модули
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 
-from utils.tinkoff.expenses_utils import (
-    expenses_redirect, 
-    download_csv_from_expenses_page,
-    get_json_expenses_from_csv, 
-    wait_for_new_download
-)
-from routes.tinkoff.auth_tinkoff import check_for_browser, check_for_page
-from utils.tinkoff.time_utils import (
-    get_period_range
-)
-from database import Session
+# Собственные модули
 import config
-from utils.tinkoff.browser_manager import BrowserManager
+
+from database import Session
+
+from routes.tinkoff.auth_tinkoff import check_for_browser, check_for_page
 from routes.directory.tinkoff_expenses import (
-    set_last_error, 
-    get_temporary_code, 
+    set_last_error,
+    get_temporary_code,
     save_expenses_to_db,
     get_categories_with_keywords
 )
-from utils.tinkoff.browser_utils import detect_page_type, PageType, detect_page_type_after_url_change
+
 from utils.tinkoff.tinkoff_auth import otp_page
+from utils.tinkoff.time_utils import get_period_range
+from utils.tinkoff.browser_manager import BrowserManager
+from utils.tinkoff.browser_utils import (
+    detect_page_type, 
+    PageType, 
+    detect_page_type_after_url_change
+)
+from utils.tinkoff.expenses_utils import (
+    expenses_redirect,
+    download_csv_from_expenses_page,
+    get_json_expenses_from_csv,
+    wait_for_new_download
+)
+
 
 # Часовой пояс Москвы
 moscow_tz = pytz.timezone("Europe/Moscow")
+
 
 async def load_expenses():
     print(f"Начата автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
