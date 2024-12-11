@@ -2,6 +2,12 @@ from fastapi import Request, HTTPException, status
 from fastapi.responses import RedirectResponse
 from auth import decode_access_token
 
+def is_telegram_web_app(request: Request) -> bool:
+    # Проверяем наличие специфичных заголовков Telegram Web Apps
+    return (
+        request.headers.get("x-telegram-web-app") is not None
+        or request.headers.get("user-agent", "").startswith("TelegramWeb")
+    )
 
 # Функция для получения токена из cookie
 def get_token_from_cookie(request: Request):

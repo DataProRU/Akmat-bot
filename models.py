@@ -99,6 +99,7 @@ class Users(Base):
     penalty = Column(Boolean, default=False)
     is_investor = Column(Boolean, default=False)
     change_salary = Column(Boolean, default=False)
+    card_number = Column(Text)
 
 
 class Routes(Base):

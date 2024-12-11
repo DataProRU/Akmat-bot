@@ -96,6 +96,7 @@ async def update_users(
     penalty: bool = Form(False),
     is_investor: bool = Form(False),
     change_salary: bool = Form(False),
+    card_number: str = Form(""),
     db: Session = Depends(get_db),
 ):
     token = get_token_from_cookie(request)
@@ -108,6 +109,8 @@ async def update_users(
     user = db.query(Users).filter(Users.id == id).first()
     if not user:
         return {"error": "User not found"}
+
+    print(f"card_number is {card_number}")
 
     user.tg = tg
     user.full_name = full_name
@@ -125,6 +128,7 @@ async def update_users(
     user.penalty = penalty
     user.is_investor = is_investor
     user.change_salary = change_salary
+    user.card_number = card_number
 
     db.commit()
 
@@ -168,6 +172,7 @@ async def add_user(
     penalty: bool = Form(False),
     is_investor: bool = Form(False),
     change_salary: bool = Form(False),
+    card_number: str = Form(""),
     db: Session = Depends(get_db),
 ):
     user = Users(
@@ -187,6 +192,7 @@ async def add_user(
         penalty=penalty,
         is_investor=is_investor,
         change_salary=change_salary,
+        card_number = card_number,
     )
     token = get_token_from_cookie(request)
     if isinstance(token, RedirectResponse):

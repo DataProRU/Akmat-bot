@@ -1,15 +1,15 @@
 1) bild docker image
 
-docker build -t my-python-app .  
+docker build -t web-auth .  
 
 2) run docker image
 
-docker run -d -p 8000:8000 my-python-app  
+docker run -d -p 8000:8000 web-auth 
 
 3) run docker image with reload
 
 
-docker run -v $(pwd):/app -p 8000:8000 my-python-app uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+docker run -v $(pwd):/app -p 8000:8000 web-auth uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 
 Note:
