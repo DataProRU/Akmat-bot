@@ -9,9 +9,13 @@ from sqlalchemy import (
     Text,
     DateTime,
     SmallInteger,
+    String,
+    ForeignKey,
+    TIMESTAMP
 )
 from sqlalchemy import BigInteger
 from typing import List, Optional, Dict, Union
+from datetime import datetime
 from utils.tinkoff.browser_utils import PageType
 
 Base = declarative_base()
@@ -169,30 +173,55 @@ class TypeOperations(Base):
 
 class LoginResponse(BaseModel):
     status: str
-    next_page_type: Union[PageType, None]
+    next_page_type: Optional[PageType] = None
+    current_page_type: Optional[PageType] = None
 
     class Config:
         use_enum_values = True
 
-class Expense(BaseModel):
-    date_time: str
-    card_number: str
-    transaction_type: str
-    amount: float
+class Keyword(BaseModel):
     description: str
-    category: Optional[str] = None
+    category_name: str
 
-# Модель для добавления новых категорий
-class CategoryRequest(BaseModel):
-    categories: List[str]
+class SaveKeywordsRequest(BaseModel):
+    keywords: List[Keyword]
 
-# Модель для обновления ключевых слов
-class KeywordsUpdateRequest(BaseModel):
-    keywords: List[Dict[str, Optional[int]]]
+#class CategoryExpenses(Base):
+#    __tablename__ = "category_expenses"
 
-# Модель для удаления категорий
-class DeleteCategoryRequest(BaseModel):
-    ids: List[int]
+#    id = Column(Integer, primary_key=True)
+#    title = Column(Text)
+
+class CategoryKeyword(Base):
+    __tablename__ = "tinkoff_category_expenses_keywords"
+
+    id = Column(Integer, primary_key=True)
+    keyword = Column(Text)
+    category_id = Column(Integer, ForeignKey("category_expenses.id"))
+
+# Модель для таблицы расходов
+class Expense(Base):
+    __tablename__ = "tinkoff_expenses"
+
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(Integer)
+    card_number = Column(Text)
+    amount = Column(Integer)
+    description = Column(Text)
+
+class TemporaryCode(Base):
+    __tablename__ = 'tinkoff_temporary_code'
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(4), nullable=False)
+
+class LastError(Base):
+    __tablename__ = "tinkoff_last_error"
+
+    id = Column(Integer, primary_key=True, index=True)
+    error_text = Column(String, nullable=False)
+    error_time = Column(TIMESTAMP, default=datetime.utcnow)
+    is_received = Column(Boolean, default=False)
 
 
 class FlightTechniqueUpdate(BaseModel):
