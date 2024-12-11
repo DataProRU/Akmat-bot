@@ -69,6 +69,7 @@
                 <th class="trow-head-data th-access">Внести комиссию</th>
                 <th class="trow-head-data th-access">Внести штраф</th>
                 <th class="trow-head-data th-access">Изменить зарплату</th>
+                <th class="trow-head-data th-access">Номер карты</th>
                 <th class="trow-head-data th-access">Действия</th>
                 <th class="trow-head-data th-access"></th>
             </tr>
@@ -122,6 +123,9 @@
                     </td>
                     <td>
                         <input type="checkbox" name="change_salary" {% if user.change_salary %}checked{% endif %}>
+                    </td>
+                    <td>
+                         <input type="text" name="card_number" value="{{ user.card_number }}" required>
                     </td>
                     <td>
                         <button type="submit" class="tcol-filter-edit"></button>
@@ -227,6 +231,10 @@
                     <div class="form-element-row">
                         <input type="checkbox" id="change_salary" name="change_salary=" class="form-checkbox">
                         <label for="change_salary">Изменить зарплату</label>
+                    </div>
+                    <div class="form-element-row">
+                        <input type="text" id="card_number" name="card_number=" class="middle-element">
+                        <label for="card_number">Номер карты</label>
                     </div>
                 </div>
             </div>
@@ -364,6 +372,7 @@
             penalty: row.find('input[data-field="penalty"]').is(':checked'),
             is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
             change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
+            card_number: row.find('td[data-field="card_number"]').text().trim(),
         };
 
         // Отправляем AJAX запрос для сохранения данных
@@ -403,6 +412,7 @@
             penalty: row.find('input[data-field="penalty"]').is(':checked'),
             is_investor: row.find('input[data-field="is_investor"]').is(':checked'),
             change_salary: row.find('input[data-field="change_salary"]').is(':checked'),
+            card_number: row.find('td[data-field="card_number"]').text().trim(),
         };
 
         $.ajax({

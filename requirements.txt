@@ -37,3 +37,4 @@ python-dotenv == 1.0.1
 pytest-playwright == 0.5.2
 aiofiles == 24.1.0
 apscheduler == 3.10.4
+python-Levenshtein == 0.26.1
