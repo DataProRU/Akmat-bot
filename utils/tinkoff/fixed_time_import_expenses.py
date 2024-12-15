@@ -1,37 +1,51 @@
 # fixed_time_import_expenses.py
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
+# Стандартные модули Python
 import time
 import asyncio
-import pytz
 from datetime import datetime, timezone
+import requests
+from contextlib import contextmanager
 
+# Сторонние модули
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 
-from utils.tinkoff.expenses_utils import (
-    expenses_redirect, 
-    download_csv_from_expenses_page,
-    get_json_expenses_from_csv, 
-    wait_for_new_download
-)
-from routes.tinkoff.auth_tinkoff import check_for_browser, check_for_page
-from utils.tinkoff.time_utils import (
-    get_period_range
-)
-from database import Session
+# Собственные модули
 import config
-from utils.tinkoff.browser_manager import BrowserManager
+
+from database import Session
+
+from models import Users, TgTmpUsers
+
+from routes.tinkoff.auth_tinkoff import check_for_browser, check_for_page
 from routes.directory.tinkoff_expenses import (
-    set_last_error, 
-    get_temporary_code, 
+    set_last_error,
+    get_temporary_code,
     save_expenses_to_db,
     get_categories_with_keywords
 )
-from utils.tinkoff.browser_utils import detect_page_type, PageType, detect_page_type_after_url_change
+
 from utils.tinkoff.tinkoff_auth import otp_page
+from utils.tinkoff.time_utils import get_period_range
+from utils.tinkoff.browser_manager import BrowserManager
+from utils.tinkoff.browser_utils import (
+    detect_page_type, 
+    PageType, 
+    detect_page_type_after_url_change
+)
+from utils.tinkoff.expenses_utils import (
+    expenses_redirect,
+    download_csv_from_expenses_page,
+    get_json_expenses_from_csv,
+    wait_for_new_download
+)
+
 
 # Часовой пояс Москвы
 moscow_tz = pytz.timezone("Europe/Moscow")
+
 
 async def load_expenses():
     print(f"Начата автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
@@ -94,6 +108,7 @@ async def load_expenses():
             print(f"Успешно завершена автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
             if browser:
                 await browser.close_browser()
+            send_expense_notification(db)
             return
         except Exception as e:
             last_error = e
@@ -106,6 +121,7 @@ async def load_expenses():
         set_last_error(db, str(last_error))
     else:
         print(f"Невозможно записать сообщение об ошибке в БД. Ошибка: {last_error}")
+    send_expense_notification(db)
 
 
 # Обёртка для вызова асинхронной функции в синхронном контексте
@@ -152,3 +168,28 @@ async def load_expenses_from_site(browser, unix_range_start, unix_range_end, db,
         return expenses
     except:
         raise Exception("Ошибка при загрузке расходов с Тинькофф")
+
+
+def send_expense_notification(db):
+    """
+    Вызывает эндпоинт на сервере бота для рассылки уведомлений пользователям.
+    """
+    try:
+        # Получение chat_id из TgTmpUsers с проверкой наличия card_number в Users
+        chat_ids = db.query(TgTmpUsers.chat_id).join(Users).filter(
+            Users.card_number.isnot(None)
+        ).all()
+
+        # Преобразование результата в список
+        chat_ids = [str(chat_id[0]) for chat_id in chat_ids]
+
+        response = requests.post(
+            config.AUTO_SAVE_MAILING_BOT_API_URL,
+            json={"chat_ids": chat_ids},
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Ошибка при отправке данных на сервер бота: {e}")
+        return {"error": str(e)}

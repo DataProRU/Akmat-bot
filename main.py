@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from threading import Thread
-from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory
+from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory, bot
 from routes.directory import (
     categories,
     technique,
@@ -19,7 +19,7 @@ from routes.directory import (
 from routes.tinkoff import (
     auth_tinkoff,
     expenses,
-    general,
+    general
 )
 
 from utils.tinkoff.fixed_time_import_expenses import start_scheduler
@@ -53,6 +53,8 @@ app.include_router(commissions.router)
 app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)
 app.include_router(general.router)
+
+app.include_router(bot.router)
 
 #update
 

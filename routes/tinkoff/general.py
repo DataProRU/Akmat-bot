@@ -1,17 +1,20 @@
 # general.py
 
-# Сторонние библиотеки
+# Сторонние модули
 from fastapi import APIRouter
 
 # Собственные модули
 from routes.tinkoff.auth_tinkoff import get_browser
 
+
 router = APIRouter()
 
 
-# Пользователь перешел на другую страницу
 @router.post("/tinkoff/disconnect/")
 async def disconnect():
+    """
+    Пользователь перешел на другую страницу.
+    """
     print("Пользователь покинул страницу. Закрываем context.")
     browser = get_browser()
     if browser:

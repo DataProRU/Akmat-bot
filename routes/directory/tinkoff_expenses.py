@@ -1,8 +1,13 @@
-from sqlalchemy.orm import Session
+# tinkoff_expenses.py
+
+# Стандартные модули Python
+from typing import Optional
 from datetime import datetime
+
+# Сторонние модули
+from sqlalchemy.orm import Session
 from sqlalchemy import and_, desc
 from sqlalchemy.future import select
-from typing import Optional
 from sqlalchemy.exc import IntegrityError
 
 # Собственные модули
@@ -10,6 +15,7 @@ from utils.tinkoff.time_utils import (
     get_unix_time_ms_from_string,
     convert_unix_to_local_datetime
 )
+
 from models import (
     Expense, 
     CategoryExpenses,
@@ -18,33 +24,37 @@ from models import (
     LastError
 ) 
 
+
 def get_expenses_from_db(
     db: Session,
     unix_range_start: Optional[int] = None,
     unix_range_end: Optional[int] = None,
-    timezone_str: str = "Europe/Moscow"  # Указание часового пояса
+    timezone_str: str = "Europe/Moscow",
+    card_number: Optional[str] = None
 ):
     """
     Получение расходов за выбранный период из базы данных.
     """
     query = db.query(Expense)
-    
+
+    # Фильтрация по дате
     if unix_range_start:
         query = query.filter(Expense.timestamp >= unix_range_start)
     if unix_range_end:
         query = query.filter(Expense.timestamp <= unix_range_end)
 
-    query = query.order_by(desc(Expense.timestamp))
+    # Фильтрация по номеру карты
+    if card_number:
+        query = query.filter(Expense.card_number == "*" + card_number)
+
+    query = query.order_by(desc(Expense.timestamp))  # Сортировка по убыванию даты
     expenses = query.all()
-    
-    # Получаем уникальные карты
-    unique_cards = list({expense.card_number for expense in expenses})
 
     # Определяем минимальный и максимальный timestamp
     if expenses:
         min_timestamp = min(expense.timestamp for expense in expenses)
         max_timestamp = max(expense.timestamp for expense in expenses)
-        period_message = generate_period_message(min_timestamp, max_timestamp, unix_range_start, unix_range_end)
+        period_message = generate_period_message(min_timestamp, max_timestamp, unix_range_start, unix_range_end, card_number)
     else:
         period_message = "Данные не найдены за выбранный период."
 
@@ -54,27 +64,46 @@ def get_expenses_from_db(
     expenses_list = [
         {
             "id": expense.id,
-            "date_time": convert_unix_to_local_datetime(expense.timestamp, timezone_str),
-            "card_number": expense.card_number,
             "amount": float(abs(expense.amount)),
             "description": expense.description,
             "category": get_category_from_description(categories_dict, expense) or "Не указана"
         }
         for expense in expenses
     ]
-    return {
+
+    # Добавление дополнительных полей, если номер карты не указан
+    if not card_number:
+        for expense_item, expense in zip(expenses_list, expenses):
+            expense_item.update({
+                "date_time": convert_unix_to_local_datetime(expense.timestamp, timezone_str),
+                "card_number": expense.card_number
+            })
+
+    result = {
         "expenses": expenses_list,
-        "cards": unique_cards,
-        "source": "database",
         "message": period_message
     }
 
+    if not card_number:
+        unique_cards = list({expense.card_number for expense in expenses})
+        result.update({"cards": unique_cards, "source": "database"})
+
+    return result
+
+
 def get_category_from_description(categories_dict, current_expense):
+    """
+    Получение категории по описанию.
+    """
     for category_title, data in categories_dict.items():
         if any(keyword.lower() in current_expense.description.lower() for keyword in data["keywords"]):
             return category_title
 
+
 def save_expenses_to_db(db, expenses, time_zone):
+    """
+    Сохранение расходов в бд.
+    """
     for expense in expenses:
         # Перевод времени в Unix-формат
         timestamp = get_unix_time_ms_from_string(expense["date_time"], time_zone)
@@ -121,7 +150,7 @@ def get_categories_from_db(db):
     categories_list = [
         {
             "id": category.id,
-            "category_name": category.title  # Здесь название поля совпадает с ожидаемым в JavaScript
+            "category_name": category.title
         }
         for category in categories
     ]
@@ -148,7 +177,11 @@ def get_categories_with_keywords(db: Session):
     
     return categories_dict
 
+
 def save_keyword_to_db(db: Session, description: str, category_id: int):
+    """
+    Сохранение ключевых слов в бд.
+    """
     # Проверяем, если ключевое слово уже существует в таблице, независимо от категории
     existing_keyword = db.query(CategoryKeyword).filter(
         CategoryKeyword.keyword == description
@@ -173,29 +206,50 @@ def save_keyword_to_db(db: Session, description: str, category_id: int):
         existing_keyword.category_id = category_id
         db.commit()
         print(f"Ключевое слово '{description}' обновлено для новой категории с ID {category_id}")
-    
+
     return
 
+
 def remove_keyword_from_category(db: Session, description: str):
-    """Удаление ключевого слова из всех категорий."""
+    """
+    Удаление ключевого слова из всех категорий.
+    """
     db.query(CategoryKeyword).filter(CategoryKeyword.keyword == description).delete(synchronize_session=False)
     db.commit()
     print(f"Ключевое слово '{description}' удалено из всех категорий.")
 
-def generate_period_message(min_timestamp, max_timestamp, unix_range_start, unix_range_end):
+
+def generate_period_message(
+    min_timestamp: Optional[int],
+    max_timestamp: Optional[int],
+    unix_range_start: Optional[int],
+    unix_range_end: Optional[int],
+    card_number: Optional[str] = None
+):
+    """
+    Генерация сообщения о загрузке данных в бд.
+    """
     unix_ms_day = 24 * 60 * 60 * 1000
 
-    if min_timestamp - unix_range_start < unix_ms_day and unix_range_end - max_timestamp < unix_ms_day:
-        return "Данные были загружены из БД. Данные за весь выбранный период загружены"
-    elif abs(min_timestamp) > abs(unix_range_start) or abs(max_timestamp) < abs(unix_range_end):
-        start_date = datetime.fromtimestamp(min_timestamp / 1000).strftime("%d.%m.%Y")
-        end_date = datetime.fromtimestamp(max_timestamp / 1000).strftime("%d.%m.%Y")
-        return f"Данные были загружены из БД за период {start_date} - {end_date}" if start_date != end_date else f"Данные были загружены из БД за день {start_date}"
-    else:
-        return "Данные были загружены из БД. Часть данных за выбранный период отсутствует"
+    card_message = f"по карте {card_number}" if card_number else "по всем картам"
+
+    if min_timestamp and max_timestamp:
+        if min_timestamp - unix_range_start < unix_ms_day and unix_range_end - max_timestamp < unix_ms_day:
+            return f"Данные были загружены из БД. Данные за весь выбранный период загружены {card_message}."
+        elif abs(min_timestamp) > abs(unix_range_start) or abs(max_timestamp) < abs(unix_range_end):
+            start_date = datetime.fromtimestamp(min_timestamp / 1000).strftime("%d.%m.%Y")
+            end_date = datetime.fromtimestamp(max_timestamp / 1000).strftime("%d.%m.%Y")
+            if start_date != end_date:
+                return f"Данные были загружены из БД за период {start_date} - {end_date} {card_message}."
+            else:
+                return f"Данные были загружены из БД за день {start_date} {card_message}."
+    return f"Данные были загружены из БД. Часть данных за выбранный период отсутствует {card_message}."
+
 
 def set_temporary_code(db: Session, code: str):
-    """Задать новый временный код, перезаписывая старый, если он есть."""
+    """
+    Задать новый временный код, перезаписывая старый, если он есть.
+    """
     existing_code = db.query(TemporaryCode).first()
     if existing_code:
         existing_code.code = code
@@ -227,7 +281,9 @@ def get_temporary_code(db: Session) -> str:
 
 
 def set_last_error(db: Session, error_text: str):
-    """Записать последнюю ошибку, перезаписывая старую запись, если она есть."""
+    """
+    Записать последнюю ошибку, перезаписывая старую запись, если она есть.
+    """
     existing_error = db.query(LastError).first()
     if existing_error:
         existing_error.error_text = error_text
@@ -237,13 +293,19 @@ def set_last_error(db: Session, error_text: str):
         db.add(new_error)
     db.commit()
 
+
 def delete_last_error(db: Session):
-    """Удалить последнюю ошибку из базы данных."""
+    """
+    Удалить последнюю ошибку из базы данных.
+    """
     db.query(LastError).delete()
     db.commit()
 
+
 def get_last_unreceived_error(db: Session):
-    """Получить последнюю неполученную ошибку и отметить её как полученную."""
+    """
+    Получить последнюю неполученную ошибку и отметить её как полученную.
+    """
     last_error = db.query(LastError).filter_by(is_received=False).order_by(LastError.error_time.desc()).first()
     if last_error:
         last_error.is_received = True  # Отмечаем ошибку как полученную

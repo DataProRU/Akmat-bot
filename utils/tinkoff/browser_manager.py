@@ -6,6 +6,7 @@ import asyncio, shutil, os, json
 # Сторонние модули
 from playwright.async_api import async_playwright
 
+
 class BrowserManager:
     def __init__(self, path_to_profile, download_dir, timeout):
         """Инициализация BrowserManager с путем к профилю, папкой загрузок и таймаутом."""
@@ -17,6 +18,7 @@ class BrowserManager:
         self.page = None
         self.last_interaction_time = None
 
+
     async def initialize_browser(self):
         """Инициализирует браузер, если он еще не запущен."""
         if self.browser is None:
@@ -27,6 +29,7 @@ class BrowserManager:
                 downloads_path = self.download_dir
             )
             print("Браузер запущен")
+
 
     async def create_context_and_page(self):
         """Создает контекст и страницу, если они не активны."""
@@ -53,6 +56,7 @@ class BrowserManager:
         self.reset_interaction_time()
         self.close_task = asyncio.create_task(self.close_after_timeout())
 
+
     async def close_context_and_page(self):
         """Закрывает контекст и страницу, сохраняет состояние."""
         if self.context:
@@ -64,14 +68,17 @@ class BrowserManager:
 
             await self.clearing_downloads_directory()
     
+
     async def save_browser_cache(self):
         if self.context:
             storage_state_file = os.path.join(self.path_to_profile, "storage_state.json")
             await self.context.storage_state(path=storage_state_file)
 
+
     def reset_interaction_time(self):
         """Сбрасывает таймер последнего взаимодействия."""
         self.last_interaction_time = asyncio.get_event_loop().time()
+
 
     async def close_after_timeout(self):
         """Закрывает контекст и страницу, если время ожидания превышено."""
@@ -80,6 +87,7 @@ class BrowserManager:
             if self.last_interaction_time and asyncio.get_event_loop().time() - self.last_interaction_time > self.timeout:
                 await self.close_context_and_page()
                 break
+
 
     async def clearing_downloads_directory(self):
         """
@@ -92,7 +100,6 @@ class BrowserManager:
             
             # Проверяем, не входит ли файл в список исключений
             if filename in excluded_files:
-                print(f"Пропущен файл: {filename}")
                 continue
 
             try:
@@ -103,10 +110,12 @@ class BrowserManager:
             except Exception as e:
                 print(f"Ошибка при очистке файла {file_path}: {str(e)}")
 
+
     async def is_browser_active(self):
         """Проверяет, подключен ли браузер и активен ли он."""
         return self.browser and self.browser.is_connected()
     
+
     async def is_page_active(self):
         """Проверяет, работает ли страница."""
         try:
@@ -116,6 +125,7 @@ class BrowserManager:
             return True
         except Exception as e:
             return False
+
 
     async def close_browser(self):
         """Закрывает браузер и освобождает ресурсы."""

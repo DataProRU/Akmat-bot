@@ -1,63 +1,76 @@
 # expenses_utils.py
 
-# Стандартные библиотеки Python
-import os, csv, time, asyncio
+# Стандартные модули Python
+import os
+import csv
+import time
+import asyncio
+from datetime import datetime
 
-# Сторонние библиотеки
+# Сторонние модули
 from fastapi import HTTPException
 import aiofiles
 from playwright.async_api import Page
-from datetime import datetime
 import pytz
 from fuzzywuzzy import fuzz
 
 # Собственные модули
 import config as config
+
 from utils.tinkoff.browser_manager import BrowserManager
+from utils.tinkoff.browser_utils import (
+    PageType,
+    detect_page_type,
+    click_button
+)
+
 from routes.directory.tinkoff_expenses import (
     get_categories_with_keywords,
     save_expenses_to_db
 )
 from routes.tinkoff.auth_tinkoff import (
-    save_browser_cache, 
+    save_browser_cache,
     check_for_page
 )
-from utils.tinkoff.browser_utils import (
-    PageType, 
-    detect_page_type,
-    click_button
-)
+
 
 async def load_expenses_from_site(browser, unix_range_start, unix_range_end, db, time_zone):
-    # Переход на сайт и проверка, что открыта нужная страница
-    if not await check_for_page(browser):
-        await browser.create_context_and_page()
-        await browser.page.goto(config.EXPENSES_URL)
-
+    """
+    Возвращает расходы с расходов Тинькофф.
+    """
     try:
-        await check_expenses_page(browser=browser)
+        # Переход на сайт и проверка, что открыта нужная страница
+        if not await check_for_page(browser):
+            await browser.create_context_and_page()
+            await browser.page.goto(config.EXPENSES_URL)
+
+        try:
+            await check_expenses_page(browser=browser)
+        except Exception:
+            raise HTTPException(status_code=500, detail="Ошибка при переходе на страницу расходов.")
+
+        # Перенаправление на страницу по периоду и скачивание CSV
+        if await expenses_redirect(browser.page, unix_range_start, unix_range_end):
+            await save_browser_cache()
+            time.sleep(1)  # Ожидание после перенаправления
+
+        start_time = time.time()
+        await download_csv_from_expenses_page(browser.page, 20)
+        file_path = await wait_for_new_download(start_time=start_time, timeout=20)
+
+        # Обработка CSV и сохранение в БД
+        categories_dict = get_categories_with_keywords(db)
+        expenses = await get_json_expenses_from_csv(file_path, categories_dict, time_zone)
+        save_expenses_to_db(db, expenses["expenses"], time_zone)
+
+        return {
+            "message": "Данные были успешно загружены с сайта.",
+            "source": "site",
+            **expenses
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Ошибка при переходе на страницу расходов.")
-
-    # Перенаправление на страницу по периоду и скачивание CSV
-    if await expenses_redirect(browser.page, unix_range_start, unix_range_end):
-        await save_browser_cache()
-        time.sleep(1)  # Ожидание после перенаправления
-
-    start_time = time.time()
-    await download_csv_from_expenses_page(browser.page, 20)
-    file_path = await wait_for_new_download(start_time=start_time, timeout=20)
-
-    # Обработка CSV и сохранение в БД
-    categories_dict = get_categories_with_keywords(db)
-    expenses = await get_json_expenses_from_csv(file_path, categories_dict, time_zone)
-    save_expenses_to_db(db, expenses["expenses"], time_zone)
-
-    return {
-        "message": "Данные были успешно загружены с сайта.",
-        "source": "site",
-        **expenses
-    }
+        print(e)
+        raise HTTPException(status_code=500, detail="Ошибка при загрузке расходов с Тинькофф")
 
 
 async def download_csv_from_expenses_page(page: Page, timeout=5):
@@ -102,8 +115,12 @@ async def expenses_redirect(page: Page, unix_range_start: str, unix_range_end: s
         return True
     return False
 
+
 async def check_expenses_page(browser: BrowserManager):
-    # 3. Проверка на тип текущей страницы
+    """
+    Проверка и попытка перехода на страницу расходов.
+    """
+    # Проверка на тип текущей страницы
     page = browser.page
     page_type = await detect_page_type(browser)
     
@@ -115,6 +132,7 @@ async def check_expenses_page(browser: BrowserManager):
         # Если после перехода не получилось попасть на страницу расходов
         if page_type != PageType.EXPENSES:
             raise HTTPException(status_code=307, detail="Не удалось открыть страницу расходов. Перенаправление.")
+
 
 async def get_json_expenses_from_csv(file_path, categories_dict, target_timezone):
     """

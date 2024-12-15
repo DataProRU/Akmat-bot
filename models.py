@@ -14,6 +14,7 @@ from sqlalchemy import (
     TIMESTAMP
 )
 from sqlalchemy import BigInteger
+from sqlalchemy.orm import relationship
 from typing import List, Optional, Dict, Union
 from datetime import datetime
 from utils.tinkoff.browser_utils import PageType
@@ -41,6 +42,10 @@ class UserCreate(User):
 
 class UpdateUserRole(BaseModel):
     role: str
+
+
+class TokenizedUrlRequest(BaseModel):
+    token: str  # Токен из ссылки
 
 
 class Sources(Base):
@@ -234,3 +239,11 @@ class FlightTechniqueUpdate(BaseModel):
     source_id: int
     transfer: float
     note: str
+
+class TgTmpUsers(Base):
+    __tablename__ = "tg_tmp_users"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    chat_id = Column(BigInteger, nullable=False)
+    # Связь с таблицей Users
+    user = relationship("Users", backref="tmp_users")
