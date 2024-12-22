@@ -2,6 +2,7 @@
 
 # Стандартные модули Python
 import time 
+from datetime import datetime
 
 # Собственные модули
 from app.utils.token_utils import get_tokenized_url
@@ -18,7 +19,10 @@ async def send_daily_expenses_miniapp(chat_id: str):
     """
     try:
         # Генерация токенизированного URL
-        tokenized_url = get_tokenized_url(TINKOFF_EXPENSES_URL, {"chat_id": chat_id, "auth_date": str(int(time.time()))}) + "&period=day"
+        today = datetime.now()
+        formatted_date = today.strftime("%Y-%m-%d")
+
+        tokenized_url = get_tokenized_url(TINKOFF_EXPENSES_URL, {"chat_id": chat_id, "auth_date": str(int(time.time()))}) + f"&rangeStart={formatted_date}&rangeEnd={formatted_date}"
         keyboard = generate_inline_buttons([{"text": "Открыть расходы по вашей карте", "url": tokenized_url}])
         
         # Отправка сообщения
