@@ -33,7 +33,7 @@ from utils.tinkoff.browser_manager import BrowserManager
 from utils.tinkoff.browser_utils import (
     detect_page_type, 
     PageType, 
-    detect_page_type_after_url_change
+    detect_page_type
 )
 from utils.tinkoff.expenses_utils import (
     expenses_redirect,
@@ -87,9 +87,8 @@ async def load_expenses():
                     except:
                         raise
 
-                    initial_url = browser.page.url
                     await otp_page(browser, otp)
-                    if await detect_page_type_after_url_change(browser, initial_url, 15) != PageType.EXPENSES:
+                    if await detect_page_type(browser, 15) != PageType.EXPENSES:
                         raise Exception("Временная проблема автозагрузки")
 
                 else:
