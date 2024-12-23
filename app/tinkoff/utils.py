@@ -17,6 +17,13 @@ async def send_daily_expenses_miniapp(chat_id: str):
     """
     Рассылает сообщения о проставлении статей после автосохранения расходов.
     """
+    await send_expenses_miniapp(chat_id, "Автовыгрузка расходов завершена.")
+
+
+async def send_expenses_miniapp(chat_id: str, message: str):
+    """
+    Рассылает сообщение с миниапом на расходы.
+    """
     try:
         # Генерация токенизированного URL
         today = datetime.now()
@@ -26,7 +33,7 @@ async def send_daily_expenses_miniapp(chat_id: str):
         keyboard = generate_inline_buttons([{"text": "Открыть расходы по вашей карте", "url": tokenized_url}])
         
         # Отправка сообщения
-        await bot.send_message(chat_id, "Автовыгрузка расходов завершена.", reply_markup=keyboard)
+        await bot.send_message(chat_id, message, reply_markup=keyboard)
         return {"chat_id": chat_id, "status": "success"}
     except Exception as e:
         return {"chat_id": chat_id, "status": "error", "detail": str(e)}
