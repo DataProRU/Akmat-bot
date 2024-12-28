@@ -247,3 +247,18 @@ class TgTmpUsers(Base):
     chat_id = Column(BigInteger, nullable=False)
     # Связь с таблицей Users
     user = relationship("Users", backref="tmp_users")
+
+class SwingShift(Base):
+    __tablename__ = "swing_shift"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(Text)
+
+class SwingReason(Base):
+    __tablename__ = "swing_reason"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(Text)
+
+class AirBalonWeather(Base):
+    __tablename__ = "air_balon_weather"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(Text)

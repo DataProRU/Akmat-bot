@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from threading import Thread
-from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory, bot
+from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory, bot, bot_swing, bot_air_balon
 from routes.directory import (
     categories,
     technique,
@@ -14,6 +14,9 @@ from routes.directory import (
     expenses_categories,
     positions,
     commissions,
+    swing_shift,
+    swing_reason,
+    air_balon_weather,
 )
 
 from routes.tinkoff import (
@@ -35,6 +38,8 @@ app.include_router(user_routes.router)
 app.include_router(users.router)
 app.include_router(incomes.router)
 app.include_router(unapproved.router)
+app.include_router(bot_swing.router)
+app.include_router(bot_air_balon.router)
 
 app.include_router(main_directory.router)
 app.include_router(categories.router)
@@ -49,6 +54,9 @@ app.include_router(types_of_expenses.router)
 app.include_router(expenses_categories.router)
 app.include_router(positions.router)
 app.include_router(commissions.router)
+app.include_router(swing_shift.router)
+app.include_router(swing_reason.router)
+app.include_router(air_balon_weather.router)
 
 app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)

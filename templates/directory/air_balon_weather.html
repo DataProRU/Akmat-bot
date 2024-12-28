@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Комисии{% endblock %}
+
+{% block nav %}
+<h2 class="welcome-title">Погода воздушный шар</h2>
+<button class="unapproved-btn-back"><a href="/directory/">Назад</a></button>
+{% endblock %}
+
+{% block content %}
+<!--<img src="/static/img/directory-categories-bg.png" class="img-bg" alt="фоновое изображение">-->
+<div class="opasity-btn-container">
+    <form action="/air_balon_weather/add" method="post">
+        <input type="text" name="title" placeholder="Погода" required>
+        <button type="submit" class="add-entry-btn tooltip">✚</button>
+    </form>
+    <table class="table-data" id="table-data">
+        <thead>
+            <tr class="trow-head">
+                <th class="trow-head-data">Погода
+                    <div class="resizer"></div>
+                </th>
+                <th class="trow-head-data">Действия
+                    <div class="resizer"></div>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody class="table-body" id="table-body">
+
+            {% for type in weather %}
+            <tr class="trow">
+                <td class="tcol">
+                    <form action="/air_balon_weather/edit/{{ type.id }}" method="post" style="display:inline;">
+                        <input type="text" name="title" value="{{ type.title }}" required>
+                        <button type="submit" class="tcol-filter-edit"></button>
+                    </form>
+                </td>
+                <td class="tcol">
+                    <form action="/air_balon_weather/delete/{{ type.id }}" method="post" style="display:inline;">
+                        <button type="submit" class="tcol-filter-delete"
+                            onclick="return confirm('Вы уверены, что хотите удалить эту запись?')"></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+</div>
+{% endblock %}

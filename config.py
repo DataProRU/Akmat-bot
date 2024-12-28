@@ -8,10 +8,10 @@ EXPENSES_URL: str = f"https://www.tbank.ru/auth/login/?redirectTo=%2Fevents%2Ffe
 DOWNLOAD_DIRECTORY: str = "./downloads"
 PATH_TO_CHROME_PROFILE: str ="./chrome_data"
 
-BOT_API_URL = 
+BOT_API_URL = ""
 AUTO_SAVE_MAILING_BOT_API_URL = f"{BOT_API_URL}tinkoff/auto-save_mailing/"
 
-BOT_TOKEN = 
+BOT_TOKEN = ""
 BOT_SECRET_KEY = hashlib.sha256(BOT_TOKEN.encode()).digest()
 
 # Работа с драйвером
