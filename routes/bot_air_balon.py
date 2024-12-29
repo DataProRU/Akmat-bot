@@ -33,17 +33,19 @@ except Exception as e:
 @router.get("/bot_air_balon", response_class=HTMLResponse)
 async def directory(
     request: Request,
+username: str,
     db: Session = Depends(get_db),
 ):
 
     weathers = db.query(AirBalonWeather).all()
     return templates.TemplateResponse(
         "air_balon.html",
-        {"request": request, "weathers": weathers},
+        {"request": request, "weathers": weathers, "username": username},
     )
 
 @router.post("/submit_balloon")
 async def submit_balloon(
+    username: str = Form(...),
     nalchik: int = Form(...),
     terminal: str = Form(...),
     free_flight: bool = Form(False),  # Checkbox передает True/False
@@ -52,6 +54,12 @@ async def submit_balloon(
     weather: str = Form(...),
     comment: Optional[str] = Form(None)
 ):
+    worksheet.format('A:A', {
+        "numberFormat": {
+            "type": "DATE_TIME",
+            "pattern": "dd.mm.yyyy hh:mm"
+        }
+    })
     # Обработка свободных полетов, приведение типов
     nalchik_free_flight = int(nalchik_free_flight) if nalchik_free_flight else None
 
@@ -62,7 +70,7 @@ async def submit_balloon(
 
     current_time = datetime.now(moscow_tz)
     new_row = [
-        current_time.strftime("%d-%m-%Y %H:%M"), 'tg_username', nalchik, terminal, free_flight, nalchik_free_flight, terminal_free_flight,  weather, comment]
-    worksheet.append_row(new_row)
+        current_time.strftime("%d-%m-%Y %H:%M"), username, nalchik, terminal, free_flight, nalchik_free_flight, terminal_free_flight,  weather, comment]
+    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
     return JSONResponse(content={"message": "Данные успешно отправлены"})
