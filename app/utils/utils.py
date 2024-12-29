@@ -36,5 +36,38 @@ async def check_user_access(message: Message):
             error_message = str(error_detail)
         await message.answer(f"Ошибка: {error_message}")
         return
-    
+
+async def air_balon_and_swings(message: Message):
+    # Извлекаем username из объекта message
+    tg_username = message.from_user.username
+
+    # Создаем ссылку с параметром username
+    swing_url = f"{BASE_URL}bot_swing?username={tg_username}"
+    air_ballon_url = f"{BASE_URL}bot_air_balon?username={tg_username}"
+    print(swing_url)
+    print(air_ballon_url)
+
+    # Создаем клавиатуру с кнопками в одну линию
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(
+                    text="Качели",
+                    web_app=WebAppInfo(url=swing_url)
+                ),
+                KeyboardButton(
+                    text="Воздушный шар",
+                    web_app=WebAppInfo(url=air_ballon_url)
+                )
+            ]
+        ],
+        resize_keyboard=True
+    )
+
+    # Отправляем сообщение с кнопками в клавиатуре
+    await message.answer(
+        text="Внесите доход",
+        reply_markup=keyboard
+    )
+
     
