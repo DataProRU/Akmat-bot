@@ -6,6 +6,7 @@ from aiogram import Router, F
 
 # Собственные модули
 from app.tinkoff.utils import send_expenses_miniapp, send_auto_save_expenses_error
+from app.utils.utils import air_balon_and_swings
 
 
 router = Router()
@@ -18,6 +19,8 @@ async def send_welcome(message: Message):
     """
     print(f"Пришел новый пользователь: user_id: {message.from_user.id}  chat_id: {message.chat.id}")
     await message.answer("Добро пожаловать! Доступ к боту открыт.")
+    await air_balon_and_swings(message)
+
 
 
 @router.message(F.text == "/report")
