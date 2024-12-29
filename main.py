@@ -12,6 +12,8 @@ from app.bot import dp, bot
 
 from app.handlers import router as general_router
 
+from app.middlewares.check_user_access import CheckUserAccessMiddleware
+
 from server.routes.tinkoff import router as tinkoff_router
 
 
@@ -20,6 +22,7 @@ async def start_bot():
     Запуск Telegram-бота.
     """
     dp.include_router(general_router)
+    dp.message.middleware(CheckUserAccessMiddleware())
     print("Bot has started")
 
     await bot.delete_webhook(drop_pending_updates=True)

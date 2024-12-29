@@ -7,8 +7,8 @@ pip install uvicorn
 
 ### Как пользоваться:
 #### Контейнер:
-1. ```docker build -t tg_Axmat_bot .```
-2. ```docker run -d -p 8001:8001 --name tg_Axmat_bot tg_Axmat_bot```
+1. ```docker build -t tg_axmat_bot .```
+2. ```docker run -d -p 8001:8001 --name tg_axmat_bot tg_axmat_bot```
 
 #### Локалка:
 1. Установить библиотеки из списка (с версиями можно ознакомиться в [requirements.txt](./requirements.txt))

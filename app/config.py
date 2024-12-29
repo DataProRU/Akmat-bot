@@ -18,3 +18,4 @@ ADD_CHAT_ID_URL = f"{BASE_URL}bot/check_access/"
 
 # Эндпоинты для тинькофф
 TINKOFF_EXPENSES_URL = f"{BASE_URL}bot/expenses/"
+TINKOFF_LOGIN_URL = f"{BASE_URL}tinkoff/"
