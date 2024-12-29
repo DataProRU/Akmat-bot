@@ -1,4 +1,4 @@
-# tinkoff_auth.py
+# utils/browser_input_utils.py
 
 # Стандартные модули Python
 import time

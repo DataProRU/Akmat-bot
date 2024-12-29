@@ -11,7 +11,7 @@ from fastapi.templating import Jinja2Templates
 
 # Собственные модули
 from models import LoginResponse
-from auth import decode_access_token
+from auth import decode_access_token, verify_bot_token
 
 import config as config
 from config import (
@@ -21,7 +21,7 @@ from config import (
 )
 
 from utils.tinkoff.browser_manager import BrowserManager
-from utils.tinkoff.tinkoff_auth import paged_login, close_login_via_sms_page, get_user_name_from_otp_login, skip_control_questions
+from utils.tinkoff.browser_input_utils import paged_login, close_login_via_sms_page, get_user_name_from_otp_login, skip_control_questions
 from utils.tinkoff.browser_utils import get_text, detect_page_type, PageType, click_button
 
 from dependencies import get_authenticated_user
@@ -32,7 +32,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/tinkoff/")
-async def get_login_type(request: Request,  user: dict = Depends(get_authenticated_user),):
+async def get_login_type(request: Request, token: str = Query(default=None),  user: dict = Depends(get_authenticated_user),):
     """
     Вход в тинькофф.
     Инициализирует браузер, если нужно.
@@ -40,8 +40,12 @@ async def get_login_type(request: Request,  user: dict = Depends(get_authenticat
     """
     global browser
 
-    if isinstance(user, RedirectResponse):
-        return user  # Если пользователь не аутентифицирован
+    if token:
+        if not check_miniapp_token(token):
+            return
+    else:
+        if isinstance(user, RedirectResponse):
+            return user  # Если пользователь не аутентифицирован
 
     # Открытие браузера если закрыт, если открыт обновление времени выключения
     if await check_for_page(browser):
@@ -59,7 +63,7 @@ async def get_login_type(request: Request,  user: dict = Depends(get_authenticat
         detected_type = await detect_page_type(browser, 8)  # Асинхронное определение типа страницы
 
         if detected_type:
-            return await next_page(request, detected_type.value)
+            return await next_page(request, detected_type.value, token)
         else:
             raise HTTPException(status_code=500, detail="Ошибка входа в тинькофф. Попробуйте войти снова")
     except Exception as e:
@@ -68,13 +72,16 @@ async def get_login_type(request: Request,  user: dict = Depends(get_authenticat
     
 
 @router.post("/tinkoff/login/", response_model=LoginResponse)
-async def login(request: Request, data: str = Body(...),  user: dict = Depends(get_authenticated_user),):
+async def login(request: Request, data: str = Body(...), token: str = Query(default=None),  user: dict = Depends(get_authenticated_user),):
     """
     Ввод инфы в инпуты
     """
-
-    if isinstance(user, RedirectResponse):
-        return user  # Если пользователь не аутентифицирован
+    if token:
+        if not check_miniapp_token(token):
+            return
+    else:
+        if isinstance(user, RedirectResponse):
+            return user  # Если пользователь не аутентифицирован
 
     # Если страница неактивна кидаем ошибку
     if not await browser.is_page_active():
@@ -91,13 +98,16 @@ async def login(request: Request, data: str = Body(...),  user: dict = Depends(g
 
 # Универсальный эндпоинт для загрузки следующей страницы
 @router.get("/tinkoff/next/")
-async def next_page(request: Request, step: str | None = Query(default=None), user: dict = Depends(get_authenticated_user),):
+async def next_page(request: Request, step: str | None = Query(default=None), token: str = Query(default=None), user: dict = Depends(get_authenticated_user),):
     """
     Универсальный эндпоинт для загрузки следующей страницы.
     """
-
-    if isinstance(user, RedirectResponse):
-        return user  # Если пользователь не аутентифицирован
+    if token:
+        if not check_miniapp_token(token):
+            return
+    else:
+        if isinstance(user, RedirectResponse):
+            return user  # Если пользователь не аутентифицирован
     
     # Если страница неактивна кидаем ошибку
     if not await browser.is_page_active():
@@ -131,11 +141,14 @@ async def next_page(request: Request, step: str | None = Query(default=None), us
         return templates.TemplateResponse(template_path, {"request": request, "name": await get_user_name_from_otp_login(browser)})
     
     if page_type == PageType.EXPENSES:
-        redirect = redirect_by_token(request,)
-        if not redirect:
-            raise HTTPException(status_code=307, detail="Ошибка входа в тинькофф. Попробуйте войти снова.")
-        
-        return redirect
+        if token:
+            from utils.tinkoff.fixed_time_import_expenses import load_expenses
+
+            asyncio.create_task(load_expenses())
+            return templates.TemplateResponse("tinkoff/success_login.html", {"request": request})
+        redirect = redirect_by_token(request)
+        if redirect:
+            return redirect
     
     return templates.TemplateResponse(template_path, {"request": request})
 
@@ -266,3 +279,24 @@ def redirect_by_token(request: Request):
             response.delete_cookie("temp_token")
             return response
     return None
+
+
+def check_miniapp_token(token: str):
+    """
+    Проверяет токенизированный доступ и записывает данные в tg_tmp_users.
+    """
+    try:
+        # Проверяем токен и извлекаем данные
+        user_data = verify_bot_token(token)
+        chat_id = int(user_data.get("chat_id"))
+        auth_date = int(user_data.get("auth_date", 0))
+
+        if (int(time.time()) - auth_date) > 25 * 3600:
+            raise HTTPException(status_code=401, detail="Токен истёк. Запросите ссылку заново.")
+
+        if not chat_id:
+            raise HTTPException(status_code=400, detail="Некорректный токен: отсутствует chat_id.")
+
+        return True
+    except ValueError as e:
+        raise HTTPException(status_code=403, detail=str(e))
