@@ -221,7 +221,7 @@ async def cancel_otp():
 async def reset_session():
     if await check_for_browser(browser):
         await browser.close_browser()
-    file_path = "chrome_data/storage_state.json"
+    file_path = config.PATH_TO_CHROME_PROFILE + "/storage_state.json"
     try:
         if os.path.exists(file_path):
             os.remove(file_path)
