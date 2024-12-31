@@ -3,6 +3,7 @@
 # Стандартные модули Python
 import asyncio
 import os
+import time
 
 # Сторонние модули
 from fastapi import APIRouter, HTTPException, Body, Request, Query, Depends
@@ -96,7 +97,7 @@ async def login(request: Request, data: str = Body(...), token: str = Query(defa
     except:
         raise
 
-# Универсальный эндпоинт для загрузки следующей страницы
+
 @router.get("/tinkoff/next/")
 async def next_page(request: Request, step: str | None = Query(default=None), token: str = Query(default=None), user: dict = Depends(get_authenticated_user),):
     """
