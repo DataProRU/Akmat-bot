@@ -8,6 +8,7 @@ from pytz import timezone
 import gspread
 from datetime import datetime
 import logging
+from typing import List, Union
 
 # Настройка логгера
 logging.basicConfig(level=logging.INFO)
@@ -62,15 +63,20 @@ async def send_report(
         tg_username: str = Form(...),
         klichka: int = Form(...),
         terminal: str = Form(...),
-        shift: str = Form(...),
+        shift: Union[str, List[str]] = Form(...),
         additional: str = Form(None),
         reason: str = Form(None),
         comment: str = Form(None),
+        checksCount: int = Form(...),
 ):
     if not worksheet:
         return JSONResponse(content={"message": "Ошибка работы с таблицей"}, status_code=500)
 
     try:
+        # Объединение массива в строку, если shift является списком
+        if isinstance(shift, list):
+            shift = ', '.join(shift)
+
         worksheet.format('A:A', {
             "numberFormat": {
                 "type": "DATE_TIME",
@@ -83,7 +89,7 @@ async def send_report(
                 "type": "NUMBER"
             }
         })
-        # Форматирование столбца A как "DATE_TIME"
+
         current_time = datetime.now(moscow_tz)
         new_row = [
             current_time.strftime("%d.%m.%Y %H:%M"),
@@ -93,6 +99,7 @@ async def send_report(
             shift,
             additional,
             reason,
+            checksCount,
             comment,
         ]
 

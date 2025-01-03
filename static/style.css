@@ -488,12 +488,34 @@ p {
     background: url(img/welcome-bg.jpg) center/cover no-repeat;
 }
 
+.opasity-btn-container-directory {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    margin: 20%; /* Это общее значение для всех сторон */
+    margin-top: 30%; /* Увеличенный отступ сверху */
+    background-color: #f6f9fbdd;
+    border-radius: 3px;
+}
+
 .opasity-btn-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 30px;
     margin: 50px;
+    background-color: #f6f9fbdd;
+    border-radius: 3px;
+}
+
+.opasity-btn-container-unaproved{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    margin: 20%; /* Это общее значение для всех сторон */
+    margin-top: 120%; /* Увеличенный отступ сверху */
     background-color: #f6f9fbdd;
     border-radius: 3px;
 }
