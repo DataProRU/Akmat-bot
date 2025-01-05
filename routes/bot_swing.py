@@ -9,6 +9,7 @@ import gspread
 from datetime import datetime
 import logging
 from typing import List, Union
+from babel.dates import format_date
 
 # Настройка логгера
 logging.basicConfig(level=logging.INFO)
@@ -60,7 +61,6 @@ async def directory(request: Request, username: str, db: Session = Depends(get_d
 @router.post("/send_report")
 async def send_report(
         username: str = Form(...),
-        tg_username: str = Form(...),
         klichka: int = Form(...),
         terminal: str = Form(...),
         shift: Union[str, List[str]] = Form(...),
@@ -91,6 +91,7 @@ async def send_report(
         })
 
         current_time = datetime.now(moscow_tz)
+        new_date = current_time.strftime("%d.%m.%Y")
         new_row = [
             current_time.strftime("%d.%m.%Y %H:%M"),
             username,
@@ -103,6 +104,32 @@ async def send_report(
             comment,
         ]
 
+        # Получение всех данных из таблицы
+        all_values = worksheet.get_all_values()
+        if all_values:  # Если таблица не пустая
+            last_row = all_values[-1]  # Последняя строка таблицы
+
+            # Проверяем, чтобы значение даты не содержало текст
+            try:
+                last_date = last_row[0].split(" ")[0]  # Извлекаем дату последней записи
+                last_date_obj = datetime.strptime(last_date, "%d.%m.%Y")  # Пробуем преобразовать в объект даты
+            except ValueError:
+                last_date_obj = None  # Если преобразование не удалось, пропускаем обработку даты
+
+            if last_date_obj:  # Если дата успешно преобразована
+                # Преобразуем даты в объекты datetime и получаем месяцы
+                last_month = format_date(last_date_obj, "MMMM", locale="ru")  # Название месяца на русском
+                new_month = format_date(current_time, "MMMM", locale="ru")
+
+                if last_month != new_month:  # Если месяцы отличаются
+                    # Добавляем строку с названием нового месяца
+                    worksheet.append_row([new_month.capitalize()] + [""] * (len(last_row) - 1),
+                                         value_input_option="USER_ENTERED")
+                elif last_date < new_date:  # Если даты отличаются (новая больше)
+                    # Добавляем строку с новой датой
+                    worksheet.append_row([new_date] + [""] * (len(last_row) - 1), value_input_option="USER_ENTERED")
+
+        # Добавление новой строки
         worksheet.append_row(new_row, value_input_option="USER_ENTERED")
         logger.info(f"Отчет успешно отправлен: {new_row}")
 

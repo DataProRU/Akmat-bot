@@ -314,11 +314,33 @@
             cursor: pointer;
             font-size: 16px;
         }
-        select[multiple] {
-    height: auto;
-    min-height: 80px;
-    overflow-y: auto;
-}
+
+
+        .checkbox-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        -webkit-appearance: none; /* Убираем стиль по умолчанию */
+        -moz-appearance: none;
+        appearance: none;
+        width: 16px; /* Размер */
+        height: 16px;
+        border: 1px solid #333;
+        border-radius: 4px;
+        background-color: #fff;
+        margin-right: 5px;
+    }
+
+    .checkbox-container input[type="checkbox"]:checked {
+        background-color: #007BFF; /* Цвет чекбокса при выборе */
+        border-color: #007BFF;
+    }
+
+    .checkbox-container label {
+        margin: 0;
+    }
     </style>
 </head>
 <body>
@@ -333,19 +355,22 @@
             <label for="klichka">Наличка: <span class="required">*</span></label>
             <input type="number" id="klichka" name="klichka" required>
 
-            <label for="terminal">Терминал: <span class="required">*</span></label>
+            <label for="terminal">Безнал: <span class="required">*</span></label>
             <input type="text" id="terminal" name="terminal" required>
 
             <label for="checksCount">Количество чеков: <span class="required">*</span></label>
             <input type="number" id="checksCount" name="checksCount" required>
 
             <label for="shift">На смену вышли: <span class="required">*</span></label>
-<select id="shift" name="shift[]" multiple required>
-    <option value="" disabled>Выберите смену</option>
-    {% for shift in shifts %}
-        <option value="{{ shift.title }}">{{ shift.title }}</option>
-    {% endfor %}
-</select>
+            <div id="shiftContainer">
+                {% for shift in shifts %}
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="shift_{{ loop.index }}" name="shift" value="{{ shift.title }}">
+                        <label for="shift_{{ loop.index }}">{{ shift.title }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+
             <label for="additional">Дополнительно: <span class="required">*</span></label>
             <select id="additional" name="additional" required>
                 <option value="" disabled selected>Выберите</option>
@@ -377,85 +402,84 @@
 
     <script>
         document.getElementById('additional').addEventListener('change', function() {
-    const reasonContainer = document.getElementById('reasonContainer');
-    if (this.value === 'не работали') {
-        reasonContainer.style.display = 'block';
-    } else {
-        reasonContainer.style.display = 'none';
-    }
-});
-
-async function submitForm() {
-    const form = document.getElementById('paymentForm');
-    const loader = document.getElementById('loader');
-    const successMessage = document.getElementById('successMessage');
-    const submitButton = document.getElementById('submitButton');
-    const additionalInput = document.getElementById('additional');
-
-    // Преобразование выбранных значений shift[] в строку
-    const shiftSelect = document.getElementById('shift');
-    const selectedShifts = Array.from(shiftSelect.selectedOptions).map(option => option.value);
-    const serializedShifts = selectedShifts.join(', ');
-
-    // Добавляем сериализованные данные в FormData
-    const formData = new FormData(form);
-    formData.set('shift', serializedShifts); // Перезаписываем shift строкой
-
-    // Проверка обязательных полей
-    const requiredFields = form.querySelectorAll('[required]');
-    let allFieldsFilled = true;
-
-    requiredFields.forEach(field => {
-        if (!field.value && field.id !== 'reason') {
-            alert(`Поле "${field.previousElementSibling.innerText.replace(':', '').trim()}" обязательно для заполнения.`);
-            allFieldsFilled = false;
-            return;
-        }
-    });
-
-    if (!allFieldsFilled) {
-        return;
-    }
-
-    if (additionalInput.value === 'не работали' && !document.getElementById('reason').value) {
-        alert('Пожалуйста, выберите причину.');
-        return;
-    }
-
-    submitButton.disabled = true;
-    loader.style.display = 'block';
-
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData,
+            const reasonContainer = document.getElementById('reasonContainer');
+            if (this.value === 'не работали') {
+                reasonContainer.style.display = 'block';
+            } else {
+                reasonContainer.style.display = 'none';
+            }
         });
 
-        loader.style.display = 'none';
+        async function submitForm() {
+            const form = document.getElementById('paymentForm');
+            const loader = document.getElementById('loader');
+            const successMessage = document.getElementById('successMessage');
+            const submitButton = document.getElementById('submitButton');
+            const additionalInput = document.getElementById('additional');
 
-        if (response.ok) {
-            successMessage.style.display = 'block';
-            resetForm();
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
-        } else {
-            alert('Ошибка при отправке данных');
+            // Получение выбранных значений shift
+            const shiftCheckboxes = document.querySelectorAll('input[name="shift"]:checked');
+            const selectedShifts = Array.from(shiftCheckboxes).map(checkbox => checkbox.value);
+            const serializedShifts = selectedShifts.join(', ');
+
+            // Добавляем сериализованные данные в FormData
+            const formData = new FormData(form);
+            formData.set('shift', serializedShifts); // Перезаписываем shift строкой
+
+            // Проверка обязательных полей
+            const requiredFields = form.querySelectorAll('[required]');
+            let allFieldsFilled = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value && field.id !== 'reason') {
+                    alert(`Поле "${field.previousElementSibling.innerText.replace(':', '').trim()}" обязательно для заполнения.`);
+                    allFieldsFilled = false;
+                    return;
+                }
+            });
+
+            if (!allFieldsFilled) {
+                return;
+            }
+
+            if (additionalInput.value === 'не работали' && !document.getElementById('reason').value) {
+                alert('Пожалуйста, выберите причину.');
+                return;
+            }
+
+            submitButton.disabled = true;
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                });
+
+                loader.style.display = 'none';
+
+                if (response.ok) {
+                    successMessage.style.display = 'block';
+                    resetForm();
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    alert('Ошибка при отправке данных');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке данных');
+            } finally {
+                submitButton.disabled = false;
+            }
         }
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Ошибка при отправке данных');
-    } finally {
-        submitButton.disabled = false;
-    }
-}
 
-function resetForm() {
-    const form = document.getElementById('paymentForm');
-    form.reset();
-    document.getElementById('reasonContainer').style.display = 'none';
-}
-
+        function resetForm() {
+            const form = document.getElementById('paymentForm');
+            form.reset();
+            document.getElementById('reasonContainer').style.display = 'none';
+        }
     </script>
 </body>
 </html>
