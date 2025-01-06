@@ -117,10 +117,15 @@ def get_filtered_flight_techniques(
 
 
 @router.get("/unapproved-days", response_class=HTMLResponse)
-async def unapproved_days(request: Request, db: Session = Depends(get_db), user: dict = Depends(get_authenticated_user),):
+async def unapproved_days(
+        request: Request,
+        db: Session = Depends(get_db),
+        user: dict = Depends(get_authenticated_user),
+):
     if isinstance(user, RedirectResponse):
         return user  # Если пользователь не аутентифицирован
-    # Получаем все уникальные даты с неподтверждёнными записями
+
+    # Получаем все уникальные даты с неподтверждёнными записями и сортируем по дате
     days_with_unapproved = (
         db.query(
             extract("day", FlightTechniques.created_at).label("day"),
@@ -130,6 +135,11 @@ async def unapproved_days(request: Request, db: Session = Depends(get_db), user:
         .join(Flights, Flights.id == FlightTechniques.flight_id)
         .filter(FlightTechniques.is_approved == False)
         .group_by("day", "month", "year")
+        .order_by(
+            extract("year", FlightTechniques.created_at).desc(),
+            extract("month", FlightTechniques.created_at).desc(),
+            extract("day", FlightTechniques.created_at).desc(),
+        )
         .all()
     )
 

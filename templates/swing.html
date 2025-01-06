@@ -317,30 +317,32 @@
 
 
         .checkbox-container {
-        display: flex;
-        align-items: center;
-    }
+    display: flex;
+    align-items: flex-start; /* Выравнивание по верхнему краю */
+    gap: 8px; /* Расстояние между чекбоксом и надписью */
+}
 
-    .checkbox-container input[type="checkbox"] {
-        -webkit-appearance: none; /* Убираем стиль по умолчанию */
-        -moz-appearance: none;
-        appearance: none;
-        width: 16px; /* Размер */
-        height: 16px;
-        border: 1px solid #333;
-        border-radius: 4px;
-        background-color: #fff;
-        margin-right: 5px;
-    }
+.checkbox-container input[type="checkbox"] {
+    margin-top: 0px; /* Сдвиг чекбокса вниз */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+}
 
-    .checkbox-container input[type="checkbox"]:checked {
-        background-color: #007BFF; /* Цвет чекбокса при выборе */
-        border-color: #007BFF;
-    }
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: #007BFF;
+    border-color: #007BFF;
+}
 
-    .checkbox-container label {
-        margin: 0;
-    }
+.checkbox-container label {
+    margin: 0;
+    line-height: 1.2; /* Настройка высоты строки для выравнивания текста */
+}
     </style>
 </head>
 <body>

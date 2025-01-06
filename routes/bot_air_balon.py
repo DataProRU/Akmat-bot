@@ -56,51 +56,79 @@ async def submit_balloon(
         weather: str = Form(""),
         comment: Optional[str] = Form(None)
 ):
-    worksheet.format('A:A', {
-        "numberFormat": {
-            "type": "DATE_TIME",
-            "pattern": "dd.mm.yyyy hh:mm"
+    if not worksheet:
+        return JSONResponse(content={"message": "Ошибка работы с таблицей"}, status_code=500)
+
+    try:
+
+        # Установим формат столбцов
+        worksheet.format('A:A', {"numberFormat": {"type": "TEXT"}})
+        worksheet.format('C:C', {"numberFormat": {"type": "NUMBER"}})
+
+        current_time = datetime.now(moscow_tz)
+        new_date = format_date(current_time, "d MMMM", locale="ru")  # Формат: "5 января"
+
+        # Массив месяцев в именительном падеже
+        months_nom = [
+            "ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ",
+            "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"
+        ]
+
+        # Формируем строку для месяца и года в именительном падеже
+        new_month_year = f"{months_nom[current_time.month - 1]} {current_time.year}"
+
+        # Словарь месяцев на русском языке (для старого кода с родительным падежом)
+        months_dict = {
+            "января": 1, "февраля": 2, "марта": 3, "апреля": 4, "мая": 5, "июня": 6,
+            "июля": 7, "августа": 8, "сентября": 9, "октября": 10, "ноября": 11, "декабря": 12
         }
-    })
 
-    # Обработка свободных полетов, приведение типов
-    nalchik_free_flight = int(nalchik_free_flight) if nalchik_free_flight else None
+        # Получить все данные из столбца с датами
+        dates_column = worksheet.col_values(1)  # Считать столбец A (с датами)
+        if dates_column:
+            last_date_str = dates_column[-1]  # Последняя дата
 
-    # Используем завтрашнюю дату вместо текущей
-    current_time = datetime.now(moscow_tz)
-    new_date = current_time.strftime("%d.%m.%Y")
-    new_row = [
-        current_time.strftime("%d.%m.%Y %H:%M"), username, nalchik_tethered_flight, terminal_tethered_flight,
-        nalchik_free_flight, terminal_free_flight, weather, comment
-    ]
+            # Разделяем строку на день и месяц
+            day, month = last_date_str.split()  # "5 января" -> day = "5", month = "января"
+            month_number = months_dict[month]  # Получаем номер месяца из словаря
+            last_date_str_with_year = f"{day} {month_number} {current_time.year}"
 
-    # Получение всех данных из таблицы
-    all_values = worksheet.get_all_values()
-    if all_values:  # Если таблица не пустая
-        last_row = all_values[-1]  # Последняя строка таблицы
-        last_date = last_row[0].split(" ")[0]  # Извлекаем дату последней записи
+            # Преобразуем строку в дату
+            last_date = datetime.strptime(last_date_str_with_year, "%d %m %Y")
 
-        # Проверяем, чтобы значение даты не содержало текст
-        try:
-            last_date_obj = datetime.strptime(last_date, "%d.%m.%Y")  # Пробуем преобразовать в объект даты
-        except ValueError:
-            last_date_obj = None  # Если преобразование не удалось, пропускаем обработку даты
+            # Добавим временную зону к last_date
+            last_date = moscow_tz.localize(last_date)  # Преобразуем в aware datetime
 
-        if last_date_obj:  # Если дата успешно преобразована
-            # Преобразуем даты в объекты datetime и получаем месяцы
-            last_month = format_date(last_date_obj, "MMMM", locale="ru")  # Название месяца на русском
-            new_month = format_date(current_time, "MMMM", locale="ru")
+            # Если месяц и год последней записи отличаются от текущего
+            if last_date.month != current_time.month or last_date.year != current_time.year:
+                # Добавить месяц и год в новую строку
+                worksheet.append_row([new_month_year], value_input_option="USER_ENTERED")
+            elif last_date < current_time:
+                # Добавить пустую строку с текущей датой, если дата последней записи меньше текущей
+                worksheet.append_row([new_date], value_input_option="USER_ENTERED")
 
-            if last_month != new_month:  # Если месяцы отличаются
-                # Добавляем строку с названием нового месяца
-                worksheet.append_row([new_month.capitalize()] + [""] * (len(last_row) - 1),
-                                     value_input_option="USER_ENTERED")
-            elif last_date < new_date:  # Если даты отличаются (новая больше)
-                # Добавляем строку с новой датой
-                worksheet.append_row([new_date] + [""] * (len(last_row) - 1), value_input_option="USER_ENTERED")
 
-    # Добавление новой строки
-    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
+        # Подготовить данные для новой строки
+        new_row = [
+            new_date,
+            username,
+            nalchik_tethered_flight,
+            terminal_tethered_flight,
+            nalchik_free_flight,
+            terminal_free_flight,
+            weather,
+            comment,
+        ]
+
+        # Добавить новую строку с данными отчета
+        worksheet.append_row(new_row, value_input_option="USER_ENTERED")
+
+
+        return JSONResponse(content={"message": "Отчет успешно отправлен!"})
+
+    except Exception as e:
+
+        return JSONResponse(content={"message": "Ошибка сервера"}, status_code=500)
 
     return JSONResponse(content={"message": "Данные успешно отправлены"})
 
@@ -158,7 +186,8 @@ def sync_expenses_to_sheet(db, period="week", timezone_str="Europe/Moscow"):
             worksheet.append_row([expense_id, date_time, card_number, amount, description, category])
 
 
-def sync_expenses_to_sheet_no_id(db, period="week", timezone_str="Europe/Moscow"):
+@router.get("/submit_tinkoff")
+async def sync_expenses_to_sheet_no_id( period="month", timezone_str="Europe/Moscow",  db: Session = Depends(get_db)):
     """
     Синхронизация расходов из базы данных в Google Sheets. ВЕРСИЯ БЕЗ АЙДИШНИКОВ
     """
@@ -182,6 +211,7 @@ def sync_expenses_to_sheet_no_id(db, period="week", timezone_str="Europe/Moscow"
         for row in existing_rows[1:]  # Пропускаем заголовок
     }
     existing_expenses_tuples = [tuple(expense) for expense in existing_expenses]
+    print(expenses_data)
 
     # Добавляем новые расходы
     for expense in expenses_data["expenses"]:
@@ -190,7 +220,9 @@ def sync_expenses_to_sheet_no_id(db, period="week", timezone_str="Europe/Moscow"
         amount = "{:.2f}".format(expense["amount"]).rstrip('0').rstrip('.').replace('.',',')
         description = expense["description"]
         category = expense["category"]
+        print(date_time, card_number, amount, description, category)
 
         # Проверяем, есть ли запись в таблице
         if (date_time, card_number, str(amount), description) not in existing_expenses_tuples:
+            print(date_time, card_number, amount, description, category)
             worksheet.append_row([date_time, card_number, amount, description, category])
