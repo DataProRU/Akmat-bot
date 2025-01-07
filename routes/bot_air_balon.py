@@ -150,7 +150,8 @@ def sync_expenses_to_sheet(db, period="week", timezone_str="Europe/Moscow"):
         db=db,
         unix_range_start=unix_range_start,
         unix_range_end=unix_range_end,
-        timezone_str=timezone_str
+        timezone_str=timezone_str,
+        sort_order='asc'
     )
 
     # Получаем текущие данные из таблицы
@@ -201,7 +202,8 @@ async def sync_expenses_to_sheet_no_id( period="month", timezone_str="Europe/Mos
         db=db,
         unix_range_start=unix_range_start,
         unix_range_end=unix_range_end,
-        timezone_str=timezone_str
+        timezone_str=timezone_str,
+        sort_order='asc'
     )
 
     # Получаем текущие данные из таблицы
