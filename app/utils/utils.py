@@ -9,7 +9,7 @@ from aiogram.types import Message
 # Собственные модули
 from app.utils.token_utils import prepare_user_info, generate_token
 from app.config import ADD_CHAT_ID_URL, BASE_URL
-from app.tinkoff.utils import send_buttons
+
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, WebAppInfo
 
 
