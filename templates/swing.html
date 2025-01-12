@@ -376,8 +376,8 @@
             <label for="additional">Дополнительно: <span class="required">*</span></label>
             <select id="additional" name="additional" required>
                 <option value="" disabled selected>Выберите</option>
-                <option value="работали">Работали</option>
-                <option value="не работали">Не работали</option>
+                <option value="Работали">Работали</option>
+                <option value="Не работали">Не работали</option>
             </select>
 
             <div id="reasonContainer" style="display: none;">
@@ -405,7 +405,7 @@
     <script>
         document.getElementById('additional').addEventListener('change', function() {
             const reasonContainer = document.getElementById('reasonContainer');
-            if (this.value === 'не работали') {
+            if (this.value === 'Не работали') {
                 reasonContainer.style.display = 'block';
             } else {
                 reasonContainer.style.display = 'none';
