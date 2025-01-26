@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Доходы</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #eaeef3;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .form-container:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #d5d8dc;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            color: #2c3e50;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+            color: #1e1010;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            background-color: #fff;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #39d487;
+            color: black;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            padding: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            color: #555;
+            cursor: pointer;
+        }
+
+        input[type="date"]:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            background-color: #fff;
+            outline: none;
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            color: #555;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='%23555'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px 12px;
+        }
+
+        select:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            background-color: #fff;
+            outline: none;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            position: relative;
+            top: 4px;
+            margin-right: 10px;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #007BFF;
+            border-color: #007BFF;
+        }
+
+        input[type="checkbox"]:checked::before {
+            content: "✓";
+            color: white;
+            font-size: 16px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .date-flight-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .date-flight-container .date-container,
+        .date-flight-container .flight-container {
+            flex: 1;
+        }
+
+        .cost-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .cost-display p {
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+
+        .equipment-form {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .equipment-form h3 {
+            margin-top: 0;
+        }
+
+        .equipment-form .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+         .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+
+        .duplicated-form {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .duplicated-form h3 {
+            margin-top: 0;
+        }
+
+        .duplicated-form .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+     .form-cost {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="header">
+            <h1>Доходы</h1>
+        </div>
+        <form id="incomeForm" action="/submit_income" method="post">
+            <input type="hidden" id="user_id" name="user_id" value="{{ user_id }}">
+            <!-- Контейнер для даты и номера рейса -->
+            <div class="date-flight-container">
+                <div class="date-container">
+                    <label for="date">Дата:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="flight-container">
+                    <label for="flight_number">Номер рейса:</label>
+                  <select id="flight_number" name="flight_number" required>
+    {% for number in all_flight_numbers %}
+        <option value="{{ number }}" {% if number == next_flight_number %}selected{% endif %}>
+            {{ number }}
+        </option>
+    {% endfor %}
+</select>
+                </div>
+            </div>
+
+            <label for="instructor">Инструктор:</label>
+            <select id="instructor" name="instructor" required>
+                <option value="" disabled selected>Выберите инструктора</option>
+                 {% for instructor in instructors %}
+                    {% if instructor.is_instructor == True %}
+                        <option value="{{ instructor.full_name }}">{{ instructor.full_name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <label for="route_type">Вид маршрута:</label>
+            <select id="route_type" name="route_type" required>
+                <option value="" disabled selected>Выберите вид маршрута</option>
+                <option value="Белые водопады">Белые водопады</option>
+                <option value="Малый маршрут">Малый маршрут</option>
+                <option value="Часовой маршрут">Часовой маршрут</option>
+            </select>
+
+            <!-- Блок для дублируемых форм -->
+            <div id="duplicated-forms">
+                <div class="duplicated-form">
+                    <!-- У первой формы нет кнопки удаления -->
+                    <label for="equipment_type">Вид техники:</label>
+                   <select class="equipment_type" name="equipment_type" required>
+                    <option value="" disabled selected>Выберите вид техники</option>
+                    {% for technique in techniques %}
+
+                        <option value="{{ technique.id }}" data-type="{{ technique.type_technique_title }}">
+            {{ technique.title }}
+        </option>
+    {% endfor %}
+                </select>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="prepayment" name="prepayment"> Предоплата
+                    </label>
+
+                    <!-- Контейнер для поля с суммой предоплаты и его названия -->
+                    <div class="prepayment-container" style="display: none;">
+                        <label for="prepayment_amount">Предоплата (руб.):</label>
+                        <input type="number" class="prepayment_amount" name="prepayment_amount" min="0" step="1">
+                    </div>
+
+                    <label for="payment_type">Вид оплаты:</label>
+                    <select class="payment_type" name="payment_type" required>
+                        <option value="" disabled selected>Выберите вид оплаты</option>
+                        <option value="Наличные">Наличка</option>
+                        <option value="Безналичные">QR</option>
+                        <option value="Карта">Постоплата</option>
+                    </select>
+
+                    <label for="client_source">Источник клиента:</label>
+                    <select class="client_source" name="client_source" required>
+                        <option value="" disabled selected>Выберите источник</option>
+                        <option value="Отели">Отели</option>
+                        <option value="Интернет">Интернет</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+
+                    <label for="comment">Комментарий:</label>
+                    <textarea class="comment" name="comment" placeholder="Введите комментарий"></textarea>
+
+                    <!-- Блок для отображения стоимости одной формы -->
+                    <div class="form-cost">
+                        Стоимость: <span class="single-cost">0</span> руб.
+                    </div>
+
+                    <!-- Скрытые поля для стоимости и названия техники -->
+                    <input type="hidden" class="hidden-cost" name="hidden-cost">
+                    <input type="hidden" class="hidden-equipment-name" name="hidden-equipment-name">
+                </div>
+            </div>
+
+            <!-- Кнопки "Добавить" и "Дублировать" -->
+            <div class="action-buttons">
+                <button type="button" onclick="addForm()">Добавить</button>
+                <button type="button" onclick="duplicateForm()">Дублировать</button>
+            </div>
+
+            <!-- Отображение общей стоимости -->
+            <div class="cost-display">
+                <p>Итоговая стоимость: <span id="final-cost">0</span> руб.</p>
+            </div>
+
+            <button type="button" onclick="submitForm()" id="submitButton">Отправить</button>
+        </form>
+    </div>
+
+    <script>
+       // Устанавливаем сегодняшнюю дату по умолчанию
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('date').value = today;
+
+// Объект с ценами для маршрутов и техники
+const prices = {
+    "Белые водопады": {
+        "Квадроциклы": 7000,
+        "Снегоходы": 6000,
+        "Вездеходы": 5000
+    },
+    "Малый маршрут": {
+        "Квадроциклы": 4000,
+        "Снегоходы": 5000,
+        "Вездеходы": 5000
+    },
+    "Часовой маршрут": {
+        "Квадроциклы": 5500,
+        "Снегоходы": 8000,
+        "Вездеходы": 8000
+    }
+};
+
+// Функция для обновления стоимости одной формы
+function updateSingleCost(form) {
+    const route = document.getElementById('route_type').value;
+    const equipmentSelect = form.querySelector('.equipment_type');
+    const selectedOption = equipmentSelect.options[equipmentSelect.selectedIndex];
+    const equipmentName = selectedOption.getAttribute('data-type');  // Используем data-type
+    const prepaymentAmount = parseFloat(form.querySelector('.prepayment_amount').value) || 0;
+    const isPrepaymentChecked = form.querySelector('.prepayment').checked;
+
+    if (route && equipmentName) {
+        const baseCost = prices[route][equipmentName];  // Используем название техники для расчета
+        let finalCost = baseCost;
+
+        if (isPrepaymentChecked && prepaymentAmount > 0) {
+            finalCost = Math.round(baseCost - prepaymentAmount); // Убираем умножение на 2
+        } else {
+            finalCost = Math.round(baseCost - prepaymentAmount);
+        }
+
+        form.querySelector('.single-cost').textContent = finalCost;
+        form.querySelector('.hidden-cost').value = finalCost;  // Обновляем скрытое поле с стоимостью
+        form.querySelector('.hidden-equipment-name').value = equipmentName;  // Обновляем скрытое поле с названием техники
+    } else {
+        form.querySelector('.single-cost').textContent = 0;
+        form.querySelector('.hidden-cost').value = 0;
+        form.querySelector('.hidden-equipment-name').value = '';
+    }
+}
+
+
+// Функция для обновления итоговой стоимости
+function updateTotalCost() {
+    const equipmentForms = document.querySelectorAll('.duplicated-form');
+    let totalCost = 0;
+
+    equipmentForms.forEach(form => {
+        const singleCost = parseFloat(form.querySelector('.single-cost').textContent) || 0;
+        totalCost += singleCost;
+    });
+
+    document.getElementById('final-cost').textContent = totalCost;
+}
+
+// Обновляем стоимость при изменении данных
+function updateCost() {
+    const forms = document.querySelectorAll('.duplicated-form');
+    forms.forEach(form => updateSingleCost(form));
+    updateTotalCost();
+}
+
+// Слушаем изменения в выборе маршрута, техники и предоплаты
+document.getElementById('route_type').addEventListener('change', updateCost);
+document.getElementById('duplicated-forms').addEventListener('change', (e) => {
+    if (e.target.classList.contains('equipment_type') ||
+        e.target.classList.contains('prepayment_amount') ||
+        e.target.classList.contains('prepayment') ||
+        e.target.classList.contains('payment_type') ||
+        e.target.classList.contains('client_source')) {
+        updateCost();
+    }
+});
+
+// Функция для управления видимостью контейнера с суммой предоплаты
+function togglePrepaymentAmount(checkbox) {
+    const prepaymentContainer = checkbox.closest('.duplicated-form').querySelector('.prepayment-container');
+    const prepaymentAmountInput = prepaymentContainer.querySelector('.prepayment_amount');
+
+    if (checkbox.checked) {
+        prepaymentContainer.style.display = 'block';
+        prepaymentAmountInput.value = 1000; // Устанавливаем значение по умолчанию
+    } else {
+        prepaymentContainer.style.display = 'none';
+        prepaymentAmountInput.value = ''; // Очищаем значение
+    }
+    updateCost();
+}
+
+// Добавляем обработчик события на чекбокс предоплаты
+document.querySelectorAll('.prepayment').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        togglePrepaymentAmount(this);
+    });
+});
+
+// Функция для добавления пустой формы
+function addForm() {
+    const duplicatedForms = document.getElementById('duplicated-forms');
+    const lastForm = duplicatedForms.lastElementChild.cloneNode(true);
+
+    // Очищаем значения в новой форме
+    lastForm.querySelector('.equipment_type').value = "";
+    lastForm.querySelector('.prepayment_amount').value = "";
+    lastForm.querySelector('.prepayment').checked = false;
+    lastForm.querySelector('.payment_type').value = "";
+    lastForm.querySelector('.client_source').value = "";
+    lastForm.querySelector('.comment').value = "";
+    lastForm.querySelector('.single-cost').textContent = 0;
+
+    // Скрываем контейнер с суммой предоплаты
+    lastForm.querySelector('.prepayment-container').style.display = 'none';
+
+    // Добавляем скрытые поля для стоимости и названия техники
+    const hiddenCost = document.createElement('input');
+    hiddenCost.type = 'hidden';
+    hiddenCost.className = 'hidden-cost';
+    hiddenCost.name = 'hidden-cost';
+    lastForm.appendChild(hiddenCost);
+
+    const hiddenEquipmentName = document.createElement('input');
+    hiddenEquipmentName.type = 'hidden';
+    hiddenEquipmentName.className = 'hidden-equipment-name';
+    hiddenEquipmentName.name = 'hidden-equipment-name';
+    lastForm.appendChild(hiddenEquipmentName);
+
+    // Добавляем кнопку удаления
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-button';
+    deleteButton.innerHTML = '×';
+    deleteButton.onclick = function () {
+        deleteForm(this);
+    };
+    lastForm.appendChild(deleteButton);
+
+    duplicatedForms.appendChild(lastForm);
+    updateCost();
+}
+
+
+// Функция для дублирования формы с данными
+function duplicateForm() {
+    const duplicatedForms = document.getElementById('duplicated-forms');
+    const lastForm = duplicatedForms.lastElementChild.cloneNode(true);
+
+    // Копируем данные из последней формы
+    const lastFormData = {
+        equipment_type: duplicatedForms.lastElementChild.querySelector('.equipment_type').value,
+        prepayment_amount: duplicatedForms.lastElementChild.querySelector('.prepayment_amount').value,
+        prepayment: duplicatedForms.lastElementChild.querySelector('.prepayment').checked,
+        payment_type: duplicatedForms.lastElementChild.querySelector('.payment_type').value,
+        client_source: duplicatedForms.lastElementChild.querySelector('.client_source').value,
+        comment: duplicatedForms.lastElementChild.querySelector('.comment').value
+    };
+
+    // Устанавливаем скопированные данные в новую форму
+    lastForm.querySelector('.equipment_type').value = lastFormData.equipment_type;
+    lastForm.querySelector('.prepayment_amount').value = lastFormData.prepayment_amount;
+    lastForm.querySelector('.prepayment').checked = lastFormData.prepayment;
+    lastForm.querySelector('.payment_type').value = lastFormData.payment_type;
+    lastForm.querySelector('.client_source').value = lastFormData.client_source;
+    lastForm.querySelector('.comment').value = lastFormData.comment;
+
+    // Управляем видимостью контейнера с суммой предоплаты
+    const prepaymentContainer = lastForm.querySelector('.prepayment-container');
+    if (lastFormData.prepayment) {
+        prepaymentContainer.style.display = 'block';
+    } else {
+        prepaymentContainer.style.display = 'none';
+    }
+
+    // Добавляем кнопку удаления
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-button';
+    deleteButton.innerHTML = '×';
+    deleteButton.onclick = function () {
+        deleteForm(this);
+    };
+    lastForm.appendChild(deleteButton);
+
+    duplicatedForms.appendChild(lastForm);
+    updateCost();
+}
+
+// Функция для удаления формы
+function deleteForm(button) {
+    const form = button.closest('.duplicated-form');
+    const duplicatedForms = document.getElementById('duplicated-forms');
+
+    // Проверяем, что это не первая форма
+    if (duplicatedForms.children.length > 1) {
+        form.remove();
+        updateCost();
+    } else {
+        alert("Нельзя удалить первую форму!");
+    }
+}
+
+async function submitForm() {
+    const formData = {
+        user_id: document.getElementById("user_id").value, // Добавляем user_id
+        date: document.getElementById("date").value,
+        flight_number: document.getElementById("flight_number").value,
+        instructor: document.getElementById("instructor").value,
+        route_type: document.getElementById("route_type").value,
+        equipment_forms: [...document.querySelectorAll(".duplicated-form")].map(form => ({
+            equipment_type: form.querySelector(".equipment_type").value,
+            prepayment_amount: parseFloat(form.querySelector(".prepayment_amount").value) || 0,
+            prepayment: form.querySelector(".prepayment").checked,
+            payment_type: form.querySelector(".payment_type").value,
+            client_source: form.querySelector(".client_source").value,
+            comment: form.querySelector(".comment").value,
+            cost: parseFloat(form.querySelector(".hidden-cost").value) || 0,  // Добавляем стоимость
+            equipment_name: form.querySelector(".hidden-equipment-name").value  // Добавляем название техники
+        })),
+    };
+
+    try {
+        const response = await fetch("/submit_income", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) throw new Error("Ошибка при отправке формы!");
+        const result = await response.json();
+        alert("Форма успешно отправлена!");
+        console.log(result);
+
+        // Закрываем мини-приложение после успешной отправки
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            Telegram.WebApp.close();
+        } else {
+            console.warn("Telegram WebApp API недоступен. Мини-приложение не будет закрыто.");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Произошла ошибка при отправке формы.");
+    }
+}
+
+function resetForm() {
+    const form = document.getElementById('incomeForm');
+    form.reset();
+    // Устанавливаем сегодняшнюю дату снова после сброса формы
+    document.getElementById('date').value = today;
+    // Сбрасываем стоимость
+    document.getElementById('final-cost').textContent = 0;
+    // Сбрасываем стоимость в каждой форме
+    document.querySelectorAll('.single-cost').forEach(cost => cost.textContent = 0);
+}
+
+// Добавляем скрытые поля в первую форму при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const firstForm = document.querySelector('.duplicated-form');
+    const hiddenCost = document.createElement('input');
+    hiddenCost.type = 'hidden';
+    hiddenCost.className = 'hidden-cost';
+    hiddenCost.name = 'hidden-cost';
+    firstForm.appendChild(hiddenCost);
+
+    const hiddenEquipmentName = document.createElement('input');
+    hiddenEquipmentName.type = 'hidden';
+    hiddenEquipmentName.className = 'hidden-equipment-name';
+    hiddenEquipmentName.name = 'hidden-equipment-name';
+    firstForm.appendChild(hiddenEquipmentName);
+});
+    </script>
+</body>
+</html>

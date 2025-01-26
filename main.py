@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from threading import Thread
-from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory, bot, bot_swing, bot_air_balon
+from routes import user_routes, users, incomes, auth_routes, unapproved, main_directory, bot, bot_swing, bot_air_balon, flight
 from routes.directory import (
     categories,
     technique,
@@ -40,6 +40,7 @@ app.include_router(incomes.router)
 app.include_router(unapproved.router)
 app.include_router(bot_swing.router)
 app.include_router(bot_air_balon.router)
+app.include_router(flight.router)
 
 app.include_router(main_directory.router)
 app.include_router(categories.router)

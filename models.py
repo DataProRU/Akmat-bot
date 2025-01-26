@@ -11,7 +11,8 @@ from sqlalchemy import (
     SmallInteger,
     String,
     ForeignKey,
-    TIMESTAMP
+    TIMESTAMP,
+Date
 )
 from sqlalchemy import BigInteger
 from sqlalchemy.orm import relationship
@@ -262,3 +263,9 @@ class AirBalonWeather(Base):
     __tablename__ = "air_balon_weather"
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(Text)
+
+class FlightNums(Base):
+    __tablename__ = "flights_nums"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(Date)
+    flight_number = Column(Integer)

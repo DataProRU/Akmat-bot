@@ -303,6 +303,14 @@
             top: 10px;
             right: 10px;
         }
+     .form-cost {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -383,6 +391,11 @@
 
                     <label for="comment">Комментарий:</label>
                     <textarea class="comment" name="comment" placeholder="Введите комментарий"></textarea>
+
+                    <!-- Блок для отображения стоимости одной формы -->
+                    <div class="form-cost">
+                        Стоимость: <span class="single-cost">0</span> руб.
+                    </div>
                 </div>
             </div>
 
@@ -392,7 +405,7 @@
                 <button type="button" onclick="duplicateForm()">Дублировать</button>
             </div>
 
-            <!-- Отображение стоимости -->
+            <!-- Отображение общей стоимости -->
             <div class="cost-display">
                 <p>Итоговая стоимость: <span id="final-cost">0</span> руб.</p>
             </div>
@@ -425,32 +438,53 @@
             }
         };
 
-        // Функция для обновления итоговой стоимости
-        function updateCost() {
+        // Функция для обновления стоимости одной формы
+        function updateSingleCost(form) {
             const route = document.getElementById('route_type').value;
+            const equipment = form.querySelector('.equipment_type').value;
+            const prepaymentAmount = parseFloat(form.querySelector('.prepayment_amount').value) || 0;
+            const isPrepaymentChecked = form.querySelector('.prepayment').checked;
+
+            if (route && equipment) {
+                const baseCost = prices[route][equipment];
+                let finalCost = baseCost;
+
+                if (isPrepaymentChecked && prepaymentAmount > 0) {
+                    finalCost = Math.round(baseCost - (prepaymentAmount * 2));
+                } else {
+                    finalCost = Math.round(baseCost - prepaymentAmount);
+                }
+
+                form.querySelector('.single-cost').textContent = finalCost;
+            } else {
+                form.querySelector('.single-cost').textContent = 0;
+            }
+        }
+
+        // Функция для обновления итоговой стоимости
+        function updateTotalCost() {
             const equipmentForms = document.querySelectorAll('.duplicated-form');
             let totalCost = 0;
 
-            if (route) {
-                equipmentForms.forEach(form => {
-                    const equipment = form.querySelector('.equipment_type').value;
-                    const prepaymentAmount = parseFloat(form.querySelector('.prepayment_amount').value) || 0;
-
-                    if (equipment) {
-                        const baseCost = prices[route][equipment];
-                        const finalCost = Math.round(baseCost - prepaymentAmount);
-                        totalCost += finalCost;
-                    }
-                });
-            }
+            equipmentForms.forEach(form => {
+                const singleCost = parseFloat(form.querySelector('.single-cost').textContent) || 0;
+                totalCost += singleCost;
+            });
 
             document.getElementById('final-cost').textContent = totalCost;
+        }
+
+        // Обновляем стоимость при изменении данных
+        function updateCost() {
+            const forms = document.querySelectorAll('.duplicated-form');
+            forms.forEach(form => updateSingleCost(form));
+            updateTotalCost();
         }
 
         // Слушаем изменения в выборе маршрута, техники и предоплаты
         document.getElementById('route_type').addEventListener('change', updateCost);
         document.getElementById('duplicated-forms').addEventListener('change', (e) => {
-            if (e.target.classList.contains('equipment_type') || e.target.classList.contains('prepayment_amount')) {
+            if (e.target.classList.contains('equipment_type') || e.target.classList.contains('prepayment_amount') || e.target.classList.contains('prepayment')) {
                 updateCost();
             }
         });
@@ -467,6 +501,7 @@
             lastForm.querySelector('.payment_type').value = "";
             lastForm.querySelector('.client_source').value = "";
             lastForm.querySelector('.comment').value = "";
+            lastForm.querySelector('.single-cost').textContent = 0;
 
             // Добавляем кнопку удаления
             const deleteButton = document.createElement('button');
@@ -478,6 +513,7 @@
             lastForm.appendChild(deleteButton);
 
             duplicatedForms.appendChild(lastForm);
+            updateCost();
         }
 
         // Функция для дублирования формы с данными
@@ -513,6 +549,7 @@
             lastForm.appendChild(deleteButton);
 
             duplicatedForms.appendChild(lastForm);
+            updateCost();
         }
 
         // Функция для удаления формы
@@ -581,6 +618,8 @@
             document.getElementById('date').value = today;
             // Сбрасываем стоимость
             document.getElementById('final-cost').textContent = 0;
+            // Сбрасываем стоимость в каждой форме
+            document.querySelectorAll('.single-cost').forEach(cost => cost.textContent = 0);
         }
     </script>
 </body>
