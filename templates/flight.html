@@ -361,15 +361,14 @@
                 <div class="duplicated-form">
                     <!-- У первой формы нет кнопки удаления -->
                     <label for="equipment_type">Вид техники:</label>
-                   <select class="equipment_type" name="equipment_type" required>
-                    <option value="" disabled selected>Выберите вид техники</option>
-                    {% for technique in techniques %}
-
-                        <option value="{{ technique.id }}" data-type="{{ technique.type_technique_title }}">
-            {{ technique.title }}
+                  <select class="equipment_type" name="equipment_type" required>
+    <option value="" disabled selected>Выберите вид техники</option>
+    {% for technique in techniques %}
+        <option value="{{ technique.id }}" data-type="{{ technique.type_technique_title }}">
+            {{ technique.title }}  <!-- Например, "Квадроцикл X1" -->
         </option>
     {% endfor %}
-                </select>
+</select>
 
                     <label class="checkbox-label">
                         <input type="checkbox" class="prepayment" name="prepayment"> Предоплата
@@ -455,12 +454,20 @@ function updateSingleCost(form) {
     const route = document.getElementById('route_type').value;
     const equipmentSelect = form.querySelector('.equipment_type');
     const selectedOption = equipmentSelect.options[equipmentSelect.selectedIndex];
-    const equipmentName = selectedOption.getAttribute('data-type');  // Используем data-type
+    const equipmentType = selectedOption.getAttribute('data-type');  // Используем data-type для типа техники
     const prepaymentAmount = parseFloat(form.querySelector('.prepayment_amount').value) || 0;
     const isPrepaymentChecked = form.querySelector('.prepayment').checked;
 
-    if (route && equipmentName) {
-        const baseCost = prices[route][equipmentName];  // Используем название техники для расчета
+    if (route && equipmentType) {
+        const baseCost = prices[route][equipmentType];  // Используем тип техники для расчета
+        if (baseCost === undefined) {
+            console.error(`Стоимость для типа техники "${equipmentType}" на маршруте "${route}" не найдена.`);
+            form.querySelector('.single-cost').textContent = 0;
+            form.querySelector('.hidden-cost').value = 0;
+            form.querySelector('.hidden-equipment-name').value = '';
+            return;
+        }
+
         let finalCost = baseCost;
 
         if (isPrepaymentChecked && prepaymentAmount > 0) {
@@ -471,14 +478,13 @@ function updateSingleCost(form) {
 
         form.querySelector('.single-cost').textContent = finalCost;
         form.querySelector('.hidden-cost').value = finalCost;  // Обновляем скрытое поле с стоимостью
-        form.querySelector('.hidden-equipment-name').value = equipmentName;  // Обновляем скрытое поле с названием техники
+        form.querySelector('.hidden-equipment-name').value = selectedOption.text;  // Используем название техники
     } else {
         form.querySelector('.single-cost').textContent = 0;
         form.querySelector('.hidden-cost').value = 0;
         form.querySelector('.hidden-equipment-name').value = '';
     }
 }
-
 
 // Функция для обновления итоговой стоимости
 function updateTotalCost() {
@@ -638,7 +644,7 @@ function deleteForm(button) {
 
 async function submitForm() {
     const formData = {
-        user_id: document.getElementById("user_id").value, // Добавляем user_id
+        user_id: document.getElementById("user_id").value,
         date: document.getElementById("date").value,
         flight_number: document.getElementById("flight_number").value,
         instructor: document.getElementById("instructor").value,
@@ -650,8 +656,8 @@ async function submitForm() {
             payment_type: form.querySelector(".payment_type").value,
             client_source: form.querySelector(".client_source").value,
             comment: form.querySelector(".comment").value,
-            cost: parseFloat(form.querySelector(".hidden-cost").value) || 0,  // Добавляем стоимость
-            equipment_name: form.querySelector(".hidden-equipment-name").value  // Добавляем название техники
+            cost: parseFloat(form.querySelector(".hidden-cost").value) || 0,
+            equipment_name: form.querySelector(".equipment_type").options[form.querySelector(".equipment_type").selectedIndex].text  // Используем название техники
         })),
     };
 
