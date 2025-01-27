@@ -369,6 +369,11 @@
         </option>
     {% endfor %}
 </select>
+                    <div class="discount-container">
+    <label for="discount">Скидка (руб.):</label>
+    <input type="number" id="discount" name="discount" value="0" step="1">
+</div>
+
 
                     <label class="checkbox-label">
                         <input type="checkbox" class="prepayment" name="prepayment"> Предоплата
@@ -383,8 +388,8 @@
                     <label for="payment_type">Вид оплаты:</label>
                     <select class="payment_type" name="payment_type" required>
                         <option value="" disabled selected>Выберите вид оплаты</option>
-                        <option value="Наличные">Наличка</option>
-                        <option value="Безналичные">QR</option>
+                        <option value="Наличка">Наличка</option>
+                        <option value="QR">QR</option>
                         <option value="Карта">Постоплата</option>
                     </select>
 
@@ -439,13 +444,13 @@ const prices = {
     },
     "Малый маршрут": {
         "Квадроциклы": 4000,
-        "Снегоходы": 5000,
-        "Вездеходы": 5000
+        "Снегоходы": 4000,
+        "Вездеходы": 4000
     },
     "Часовой маршрут": {
         "Квадроциклы": 5500,
-        "Снегоходы": 8000,
-        "Вездеходы": 8000
+        "Снегоходы": 7000,
+        "Вездеходы": 6000
     }
 };
 
@@ -457,6 +462,7 @@ function updateSingleCost(form) {
     const equipmentType = selectedOption.getAttribute('data-type');  // Используем data-type для типа техники
     const prepaymentAmount = parseFloat(form.querySelector('.prepayment_amount').value) || 0;
     const isPrepaymentChecked = form.querySelector('.prepayment').checked;
+    const discount = parseFloat(document.getElementById('discount').value) || 0;
 
     if (route && equipmentType) {
         const baseCost = prices[route][equipmentType];  // Используем тип техники для расчета
@@ -474,6 +480,11 @@ function updateSingleCost(form) {
             finalCost = Math.round(baseCost - prepaymentAmount); // Убираем умножение на 2
         } else {
             finalCost = Math.round(baseCost - prepaymentAmount);
+        }
+
+        // Учитываем скидку
+        if (discount !== 0) {
+            finalCost -= discount; // Если скидка отрицательная, она добавится к стоимости
         }
 
         form.querySelector('.single-cost').textContent = finalCost;
@@ -508,6 +519,7 @@ function updateCost() {
 
 // Слушаем изменения в выборе маршрута, техники и предоплаты
 document.getElementById('route_type').addEventListener('change', updateCost);
+document.getElementById('discount').addEventListener('input', updateCost); // Добавляем обработчик для скидки
 document.getElementById('duplicated-forms').addEventListener('change', (e) => {
     if (e.target.classList.contains('equipment_type') ||
         e.target.classList.contains('prepayment_amount') ||
@@ -583,7 +595,6 @@ function addForm() {
     updateCost();
 }
 
-
 // Функция для дублирования формы с данными
 function duplicateForm() {
     const duplicatedForms = document.getElementById('duplicated-forms');
@@ -656,6 +667,7 @@ async function submitForm() {
             payment_type: form.querySelector(".payment_type").value,
             client_source: form.querySelector(".client_source").value,
             comment: form.querySelector(".comment").value,
+            discount: parseFloat(document.getElementById('discount').value) || 0,
             cost: parseFloat(form.querySelector(".hidden-cost").value) || 0,
             equipment_name: form.querySelector(".equipment_type").options[form.querySelector(".equipment_type").selectedIndex].text  // Используем название техники
         })),

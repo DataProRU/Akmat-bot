@@ -51,6 +51,7 @@ class EquipmentForm(BaseModel):
     payment_type: str
     client_source: str
     comment: str
+    discount: float
     cost: float  # Добавляем поле для стоимости
     equipment_name: str
 
@@ -145,6 +146,7 @@ async def submit_income(data: IncomeData, db: Session = Depends(get_db)):
             f"<b>Техника:</b>\n"
             f"Машина: {equipment.equipment_name}\n"
             f"Сумма предоплаты: {equipment.prepayment_amount}\n"
+            f"Скидка:  {equipment.discount}\n"
             f"Предоплата: {'Да' if equipment.prepayment else 'Нет'}\n"
             f"Тип оплаты: {equipment.payment_type}\n"
             f"Источник клиента: {equipment.client_source}\n"
