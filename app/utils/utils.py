@@ -8,7 +8,7 @@ from aiogram.types import Message
 
 # Собственные модули
 from app.utils.token_utils import prepare_user_info, generate_token
-from app.config import ADD_CHAT_ID_URL, BASE_URL
+from app.config import ADD_CHAT_ID_URL, BASE_URL, WEB_APP_URL
 
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, WebAppInfo
 
@@ -40,12 +40,12 @@ async def check_user_access(message: Message):
 async def air_balon_and_swings(message: Message):
     # Извлекаем username из объекта message
     tg_username = message.from_user.username
+    chat_id = message.chat.id
 
     # Создаем ссылку с параметром username
-    swing_url = f"{BASE_URL}bot_swing?username={tg_username}"
-    air_ballon_url = f"{BASE_URL}bot_air_balon?username={tg_username}"
-    print(swing_url)
-    print(air_ballon_url)
+    swing_url = f"{WEB_APP_URL}bot_swing?username={tg_username}"
+    air_ballon_url = f"{WEB_APP_URL}bot_air_balon?username={tg_username}"
+    flight_url = f"{WEB_APP_URL}flight?user_id={chat_id}"
 
     # Создаем клавиатуру с кнопками в одну линию
     keyboard = ReplyKeyboardMarkup(
@@ -58,6 +58,10 @@ async def air_balon_and_swings(message: Message):
                 KeyboardButton(
                     text="Воздушный шар",
                     web_app=WebAppInfo(url=air_ballon_url)
+                ),
+                KeyboardButton(
+                    text="Доходы",
+                    web_app=WebAppInfo(url=flight_url)
                 )
             ]
         ],
