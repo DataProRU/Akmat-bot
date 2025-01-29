@@ -5,6 +5,9 @@ import hmac
 import hashlib
 import base64
 import time
+from urllib.parse import urlencode, urlparse, parse_qs, urlunparse
+
+# Сторонние модули
 from aiogram.types import Message
 
 # Собственные модули
@@ -31,10 +34,30 @@ def generate_token(data: dict) -> str:
 
 def get_tokenized_url(url: str, data: dict) -> str:
     """
-    Добавляет к ссылке токен.
+    Добавляет к ссылке токен. Учитывает наличие параметров в исходной ссылке.
     """
+    # Генерация токена
     token = generate_token(data)
-    return f"{url}?token={token}"
+    
+    # Разбор URL на компоненты
+    parsed_url = urlparse(url)
+    query_params = parse_qs(parsed_url.query)  # Существующие параметры
+
+    # Добавление токена к параметрам
+    query_params['token'] = token
+
+    # Формирование нового URL
+    new_query = urlencode(query_params, doseq=True)
+    new_url = urlunparse((
+        parsed_url.scheme,
+        parsed_url.netloc,
+        parsed_url.path,
+        parsed_url.params,
+        new_query,
+        parsed_url.fragment,
+    ))
+
+    return new_url
 
 
 def prepare_user_info(message: Message) -> dict:
