@@ -10,7 +10,7 @@ from uvicorn import Config, Server
 # Собственные модули
 from app.bot import dp, bot
 
-from app.handlers import router as general_router
+from app.handlers import router as general_router, main_scheduler
 
 #from app.middlewares.check_user_access import CheckUserAccessMiddleware
 
@@ -27,6 +27,7 @@ async def start_bot():
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
+    await main_scheduler(bot)
 
 
 def create_app():
