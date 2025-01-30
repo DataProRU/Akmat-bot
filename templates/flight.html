@@ -390,6 +390,8 @@
                         <option value="Отели">Отели</option>
                         <option value="Интернет">Интернет</option>
                         <option value="Другое">Другое</option>
+                        <option value="Агенты">Агенты</option>
+                        <option value="Поляна">Поляна</option>
                     </select>
                     <label for="comment">Комментарий:</label>
                     <textarea class="comment" name="comment" placeholder="Введите комментарий"></textarea>
@@ -422,7 +424,7 @@
             "Белые водопады": {
                 "Квадроциклы": 7000,
                 "Снегоходы": 6000,
-                "Вездеходы": 5000
+                "Вездеходы": 10000
             },
             "Малый маршрут": {
                 "Квадроциклы": 4000,
@@ -521,12 +523,6 @@
             updateCost();
         }
 
-        document.querySelectorAll('.prepayment').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                togglePrepaymentAmount(this);
-            });
-        });
-
         function addForm() {
             const duplicatedForms = document.getElementById('duplicated-forms');
             const lastForm = duplicatedForms.lastElementChild.cloneNode(true);
@@ -540,6 +536,8 @@
             lastForm.querySelector('.single-cost').textContent = 0;
             lastForm.querySelector('.prepayment-container').style.display = 'none';
 
+            lastForm.querySelector('.discount').value = 0;
+
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete-button';
             deleteButton.innerHTML = '×';
@@ -547,6 +545,11 @@
                 deleteForm(this);
             };
             lastForm.appendChild(deleteButton);
+
+            // Добавляем обработчик события для чекбокса предоплаты
+            lastForm.querySelector('.prepayment').addEventListener('change', function() {
+                togglePrepaymentAmount(this);
+            });
 
             duplicatedForms.appendChild(lastForm);
             updateCost();
@@ -586,6 +589,11 @@
                 deleteForm(this);
             };
             lastForm.appendChild(deleteButton);
+
+            // Добавляем обработчик события для чекбокса предоплаты
+            lastForm.querySelector('.prepayment').addEventListener('change', function() {
+                togglePrepaymentAmount(this);
+            });
 
             duplicatedForms.appendChild(lastForm);
             updateCost();
@@ -637,8 +645,8 @@
                 alert("Форма успешно отправлена!");
                 console.log(result);
 
-                if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-                    Telegram.WebApp.close();
+                if (window.Telegram && window.Telegram.WebApp) {
+                   window.Telegram.WebApp.close()
                 } else {
                     console.warn("Telegram WebApp API недоступен. Мини-приложение не будет закрыто.");
                 }
@@ -669,6 +677,11 @@
             hiddenEquipmentName.className = 'hidden-equipment-name';
             hiddenEquipmentName.name = 'hidden-equipment-name';
             firstForm.appendChild(hiddenEquipmentName);
+
+            // Добавляем обработчик события для чекбокса предоплаты в первой форме
+            firstForm.querySelector('.prepayment').addEventListener('change', function() {
+                togglePrepaymentAmount(this);
+            });
         });
     </script>
 </body>
