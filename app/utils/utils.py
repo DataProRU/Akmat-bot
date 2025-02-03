@@ -125,23 +125,17 @@ async def check_user_access(message: Message):
 
 
 async def create_reply_markupButton(message: Message):
-    # Получаем username пользователя
     tg_username = message.from_user.username
 
-    # Проверяем, есть ли пользователь в списке ALLOWED_USERS
     if tg_username not in ALLOWED_USERS:
-        return None  # Если пользователя нет в списке, возвращаем None
+        return None 
 
-    # Получаем текст кнопки для данного пользователя
     button_text = ALLOWED_USERS[tg_username]
 
-    # Генерируем URL для кнопки на основе текста и username
     if button_text in BUTTON_URLS:
         url = BUTTON_URLS[button_text](tg_username)
     else:
-        return None  # Если текст кнопки не найден в BUTTON_URLS, возвращаем None
-
-    # Создаем и возвращаем кнопку
+        return None  
     return InlineKeyboardButton(text=button_text, web_app=WebAppInfo(url=url))
 
 

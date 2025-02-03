@@ -33,7 +33,7 @@ async def send_welcome(message: Message):
     """
     print(f"Пришел новый пользователь: user_id: {message.from_user.id}  chat_id: {message.chat.id}")
     await message.answer("Добро пожаловать! Доступ к боту открыт.")
-    await  get_income_keyboard(message)
+    await get_income_keyboard(message)
 
 @router.message(Command("report"))
 async def send_expenses(message: Message):
