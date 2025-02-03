@@ -1,7 +1,7 @@
 # /app/handlers.py
 
 # Сторонние модули
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram import Router, F
 from aiogram.enums import ParseMode
 from aiogram.filters import Command
@@ -12,7 +12,7 @@ import asyncio
 
 # Собственные модули
 from app.tinkoff.utils import send_expenses_miniapp, send_auto_save_expenses_error
-from app.utils.utils import air_balon_and_swings
+from app.utils.utils import  get_income_keyboard, create_reply_markupButton
 
 router = Router()
 
@@ -33,7 +33,7 @@ async def send_welcome(message: Message):
     """
     print(f"Пришел новый пользователь: user_id: {message.from_user.id}  chat_id: {message.chat.id}")
     await message.answer("Добро пожаловать! Доступ к боту открыт.")
-    await air_balon_and_swings(message)
+    await  get_income_keyboard(message)
 
 @router.message(Command("report"))
 async def send_expenses(message: Message):
@@ -223,3 +223,12 @@ async def scheduler(bot):
 # Запуск бота и планировщика
 async def main_scheduler(bot):
     asyncio.create_task(scheduler(bot))
+
+@router.message(F.text == "Внести доход")
+async def reply_keyboard(message: Message):
+    button = await create_reply_markupButton(message)
+    if button:
+        markup = InlineKeyboardMarkup(inline_keyboard=[[button]])
+        await message.answer(text="Выберите действие:", reply_markup=markup)
+    else:
+        await message.answer(text="У вас нет доступа к специальным функциям.")
