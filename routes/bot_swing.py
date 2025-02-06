@@ -10,7 +10,7 @@ from datetime import datetime
 import logging
 from typing import List, Union
 from babel.dates import format_date
-from typing import Optional
+import requests
 
 
 # Настройка логгера
@@ -37,7 +37,7 @@ def init_gspread():
         sheet = gc.open_by_url(
             'https://docs.google.com/spreadsheets/d/1tKxNewX91eNOHpYVqDy_EslNV2cSTf8w9lttXRucp6s/edit?gid=0#gid=0'
         )
-        return sheet.get_worksheet(0)
+        return sheet.get_worksheet(1)
     except Exception as e:
         logger.error(f"Ошибка при инициализации gspread: {str(e)}")
         return None
@@ -59,17 +59,26 @@ async def directory(request: Request, username: str, db: Session = Depends(get_d
         logger.error(f"Ошибка при загрузке данных: {str(e)}")
         return JSONResponse(content={"message": "Ошибка сервера"}, status_code=500)
 
+
+
+# Настройки Telegram
+TELEGRAM_BOT_TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
+chat_ids = [1129601494, 702856294]  # Список chat_id получателей
+
+
 @router.post("/send_report")
 async def send_report(
-        username: str = Form(...),
-        klichka: int = Form(...),
-        terminal: str = Form(...),
-        shift: Union[str, List[str]] = Form(...),
+        username: str = Form(None),
+        klichka: int = Form(None),
+        qr: int = Form(None),
+        terminal: str = Form(None),
+        shift: Union[str, List[str]] = Form(None),
         additional: str = Form(None),
         reason: str = Form(None),
         comment: str = Form(None),
-        checksCount: int = Form(...),
+        checksCount: int = Form(None)
 ):
+    global worksheet
     if not worksheet:
         return JSONResponse(content={"message": "Ошибка работы с таблицей"}, status_code=500)
 
@@ -77,70 +86,124 @@ async def send_report(
         if isinstance(shift, list):
             shift = ', '.join(shift)
 
-            # Установим формат столбцов
-            worksheet.format('C:C', {"numberFormat": {"type": "NUMBER"}})
+        worksheet.format('C:C', {"numberFormat": {"type": "NUMBER"}})
+        current_time = datetime.now(moscow_tz)
+        new_date = format_date(current_time, "d MMMM", locale="ru")
 
-            current_time = datetime.now(moscow_tz)
-            new_date = format_date(current_time, "d MMMM", locale="ru")  # Формат: "5 января"
+        months_nom = [
+            "ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ",
+            "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"
+        ]
+        months_dict = {
+            "января": 1, "февраля": 2, "марта": 3, "апреля": 4, "мая": 5, "июня": 6,
+            "июля": 7, "августа": 8, "сентября": 9, "октября": 10, "ноября": 11, "декабря": 12
+        }
 
-            # Массив месяцев в именительном падеже
-            months_nom = [
-                "ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ",
-                "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"
-            ]
+        dates_column = worksheet.col_values(1)
+        if dates_column:
+            last_date_str = dates_column[-1]
+            day, month = last_date_str.split()
+            month_number = months_dict[month]
+            last_date_str_with_year = f"{day} {month_number} {current_time.year}"
+            last_date = datetime.strptime(last_date_str_with_year, "%d %m %Y")
+            last_date = moscow_tz.localize(last_date)
+            if last_date.month != current_time.month or last_date.year != current_time.year:
+                next_row = len(worksheet.get_all_values()) + 1
+                worksheet.insert_row([f"{months_nom[current_time.month - 1]} {current_time.year}"], index=next_row,
+                                     value_input_option="USER_ENTERED")
 
-            # Формируем строку для месяца и года в именительном падеже
-            new_month_year = f"{months_nom[current_time.month - 1]} {current_time.year}"
+        if additional == "Работали":
+            additional = "＋"
+        else:
+            additional = "－"
 
-            # Словарь месяцев на русском языке (для старого кода с родительным падежом)
-            months_dict = {
-                "января": 1, "февраля": 2, "марта": 3, "апреля": 4, "мая": 5, "июня": 6,
-                "июля": 7, "августа": 8, "сентября": 9, "октября": 10, "ноября": 11, "декабря": 12
+        next_row = len(worksheet.get_all_values()) + 1
+        new_row = [
+            new_date,
+            username,
+            klichka,
+            qr,
+            terminal,
+            checksCount,
+            shift,
+            additional,
+            reason,
+            comment,
+        ]
+        worksheet.insert_row(new_row, index=next_row, value_input_option="USER_ENTERED")
+
+        # Отправка сообщения в Telegram
+        if additional == "＋":
+            message = (
+                "ВЫКОГОРНЫЕ КАЧЕЛИ\n"
+                f"Отчет за {new_date}\n"
+                f"Выручка {int(klichka) + int(terminal) + int(qr)} ₽\n"
+                "Из них:\n"
+                f"Наличка {klichka} ₽\n"
+                f"Безнал {terminal} ₽\n"
+                f"QR {qr}\n"
+                f"Чеков {checksCount} шт\n"
+                f"Работали:\n{shift}"
+            )
+        elif additional == "－":
+            message = (
+                "ВЫКОГОРНЫЕ КАЧЕЛИ\n"
+                f"Отчет за {new_date}\n"
+                "Не работали ❌\n"
+                f"Причина:\n{reason}"
+            )
+
+        # Отправляем сообщение каждому chat_id из списка
+        for chat_id in chat_ids:
+            telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+            data = {
+                "chat_id": chat_id,
+                "text": message,
+                "parse_mode": "HTML"
             }
+            response = requests.post(telegram_url, data=data)
+            if response.status_code != 200:
+                logger.error(f"Ошибка при отправке сообщения в Telegram (chat_id={chat_id}): {response.text}")
 
-            # Получить все данные из столбца с датами
-            dates_column = worksheet.col_values(1)  # Считать столбец A (с датами)
-            if dates_column:
-                last_date_str = dates_column[-1]  # Последняя дата
+        # Расчет зарплаты сотрудников только если additional == "＋"
+        if additional == "＋":
+            salary_message = "Зарплата сотрудников:\n"
+            total_salary = 0
 
-                # Разделяем строку на день и месяц
-                day, month = last_date_str.split()  # "5 января" -> day = "5", month = "января"
-                month_number = months_dict[month]  # Получаем номер месяца из словаря
-                last_date_str_with_year = f"{day} {month_number} {current_time.year}"
+            # Проверяем, был ли Аслан в смене
+            if "Аслан" in shift:
+                aslan_salary = 2000
+                salary_message += f"Аслан: {aslan_salary} ₽\n"
+                total_salary += aslan_salary
 
-                # Преобразуем строку в дату
-                last_date = datetime.strptime(last_date_str_with_year, "%d %m %Y")
+            # Проверяем, был ли Ренат в смене
+            if "Ренат" in shift:
+                # Расчет зарплаты Рената
+                renat_salary = (
+                        (klichka * 0.9 * 0.9) +  # Наличка - 10% - ещё 10%
+                        (qr * 0.89 * 0.9) +  # QR - 11% - ещё 10%
+                        (int(terminal) * 0.87 * 0.9) +  # Безнал - 13% - ещё 10%
+                        ((checksCount * 450) * 0.9)  # Чеки × 450 - 10%
+                )
+                salary_message += f"Ренат: {renat_salary:.2f} ₽\n"
+                total_salary += renat_salary
 
-                # Добавим временную зону к last_date
-                last_date = moscow_tz.localize(last_date)  # Преобразуем в aware datetime
+            # Добавляем общую сумму зарплат
+            salary_message += f"\nОбщая сумма зарплат: {total_salary:.2f} ₽"
 
-                # Если месяц и год последней записи отличаются от текущего
-                if last_date.month != current_time.month or last_date.year != current_time.year:
-                    # Добавить месяц и год в новую строку
-                    worksheet.append_row([new_month_year], value_input_option="USER_ENTERED")
-                elif last_date.date() < current_time.date():
-                    # Добавить пустую строку с текущей датой, если дата последней записи меньше текущей
-                    worksheet.append_row([new_date], value_input_option="USER_ENTERED")
+            # Отправляем сообщение о зарплатах
+            for chat_id in chat_ids:
+                data = {
+                    "chat_id": chat_id,
+                    "text": salary_message,
+                    "parse_mode": "HTML"
+                }
+                response = requests.post(telegram_url, data=data)
+                if response.status_code != 200:
+                    logger.error(f"Ошибка при отправке сообщения о зарплатах (chat_id={chat_id}): {response.text}")
 
-            # Подготовить данные для новой строки
-            new_row = [
-                new_date,
-                username,
-                klichka,
-                terminal,
-                checksCount,
-                shift,
-                additional,
-                reason,
-                comment,
-            ]
-
-            # Добавить новую строку с данными отчета
-            worksheet.append_row(new_row, value_input_option="USER_ENTERED")
-
-            return JSONResponse(content={"message": "Отчет успешно отправлен!"})
+        return JSONResponse(content={"message": "Отчет успешно отправлен!"})
 
     except Exception as e:
         logger.error(f"Ошибка при отправке отчета: {str(e)}")
         return JSONResponse(content={"message": "Ошибка сервера"}, status_code=500)
-

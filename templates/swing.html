@@ -227,20 +227,27 @@
         .capture-photo-button:active {
             transform: scale(0.98);
         }
+        .loader-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    z-index: 1000;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center; /* Центрирование по вертикали */
+}
 
-        .loader {
-            display: none;
-            position: fixed;
-            top: 30%;
-            left: 30%;
-            transform: translate(-40%, -40%);
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #007BFF;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-        }
+       .loader {
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid #007BFF;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -260,6 +267,7 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             font-size: 18px;
             text-align: center;
+            z-index: 1002;
         }
 
         .required {
@@ -315,34 +323,44 @@
             font-size: 16px;
         }
 
-
         .checkbox-container {
-    display: flex;
-    align-items: flex-start; /* Выравнивание по верхнему краю */
-    gap: 8px; /* Расстояние между чекбоксом и надписью */
-}
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
 
-.checkbox-container input[type="checkbox"] {
-    margin-top: 0px; /* Сдвиг чекбокса вниз */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 1px solid #333;
-    border-radius: 4px;
-    background-color: #fff;
-}
+        .checkbox-container input[type="checkbox"] {
+            margin-top: 0px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #fff;
+        }
 
-.checkbox-container input[type="checkbox"]:checked {
-    background-color: #007BFF;
-    border-color: #007BFF;
-}
+        .checkbox-container input[type="checkbox"]:checked {
+            background-color: #007BFF;
+            border-color: #007BFF;
+        }
 
-.checkbox-container label {
-    margin: 0;
-    line-height: 1.2; /* Настройка высоты строки для выравнивания текста */
-}
+        .checkbox-container label {
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -353,16 +371,14 @@
         <form id="paymentForm" action="/send_report" method="post" enctype="multipart/form-data">
             <input type="hidden" name="username" value="{{ username }}">
             <input type="hidden" name="tg_username" value="{{ tg_username }}">
-
             <label for="klichka">Наличка: <span class="required">*</span></label>
-            <input type="number" id="klichka" name="klichka" required>
-
+            <input type="number" id="klichka" name="klichka" required class="clearable" value="0">
+            <label for="qr">QR: <span class="required">*</span></label>
+            <input type="number" id="qr" name="qr" required class="clearable" value="0">
             <label for="terminal">Безнал: <span class="required">*</span></label>
-            <input type="text" id="terminal" name="terminal" required>
-
+            <input type="text" id="terminal" name="terminal" required class="clearable" value="0">
             <label for="checksCount">Количество чеков: <span class="required">*</span></label>
-            <input type="number" id="checksCount" name="checksCount" required>
-
+            <input type="number" id="checksCount" name="checksCount" required class="clearable" value="0">
             <label for="shift">На смену вышли: <span class="required">*</span></label>
             <div id="shiftContainer">
                 {% for shift in shifts %}
@@ -372,14 +388,11 @@
                     </div>
                 {% endfor %}
             </div>
-
             <label for="additional">Дополнительно: <span class="required">*</span></label>
             <select id="additional" name="additional" required>
-                <option value="" disabled selected>Выберите</option>
                 <option value="Работали">Работали</option>
                 <option value="Не работали">Не работали</option>
             </select>
-
             <div id="reasonContainer" style="display: none;">
                 <label for="reason">Причина: <span class="required">*</span></label>
                 <select id="reason" name="reason" required>
@@ -389,19 +402,16 @@
                     {% endfor %}
                 </select>
             </div>
-
             <label for="comment">Комментарий:</label>
             <textarea id="comment" name="comment" placeholder="Введите комментарий"></textarea>
-
             <button type="button" onclick="submitForm()" id="submitButton">Отправить</button>
         </form>
     </div>
-
-    <div class="loader" id="loader"></div>
-
+    <div class="loader-container" id="loaderContainer">
+    <div class="loader" ></div>
+        </div>
     <div class="success-message" id="successMessage">Данные успешно отправлены!</div>
     <button class="floating-button"> <span class="material-icons">keyboard_hide</span></button>
-
     <script>
         document.getElementById('additional').addEventListener('change', function() {
             const reasonContainer = document.getElementById('reasonContainer');
@@ -412,76 +422,79 @@
             }
         });
 
-        async function submitForm() {
-            const form = document.getElementById('paymentForm');
-            const loader = document.getElementById('loader');
-            const successMessage = document.getElementById('successMessage');
-            const submitButton = document.getElementById('submitButton');
-            const additionalInput = document.getElementById('additional');
-
-            // Получение выбранных значений shift
-            const shiftCheckboxes = document.querySelectorAll('input[name="shift"]:checked');
-            const selectedShifts = Array.from(shiftCheckboxes).map(checkbox => checkbox.value);
-            const serializedShifts = selectedShifts.join(', ');
-
-            // Добавляем сериализованные данные в FormData
-            const formData = new FormData(form);
-            formData.set('shift', serializedShifts); // Перезаписываем shift строкой
-
-            // Проверка обязательных полей
-            const requiredFields = form.querySelectorAll('[required]');
-            let allFieldsFilled = true;
-
-            requiredFields.forEach(field => {
-                if (!field.value && field.id !== 'reason') {
-                    alert(`Поле "${field.previousElementSibling.innerText.replace(':', '').trim()}" обязательно для заполнения.`);
-                    allFieldsFilled = false;
-                    return;
+        // Обработчики для очистки значений "0"
+        document.querySelectorAll('.clearable').forEach(input => {
+            input.addEventListener('focus', function() {
+                if (this.value === '0') {
+                    this.value = '';
                 }
             });
 
-            if (!allFieldsFilled) {
-                return;
-            }
-
-            if (additionalInput.value === 'не работали' && !document.getElementById('reason').value) {
-                alert('Пожалуйста, выберите причину.');
-                return;
-            }
-
-            submitButton.disabled = true;
-            loader.style.display = 'block';
-
-            try {
-                const response = await fetch(form.action, {
-                    method: form.method,
-                    body: formData,
-                });
-
-                loader.style.display = 'none';
-
-                if (response.ok) {
-                    successMessage.style.display = 'block';
-                    resetForm();
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000);
-                } else {
-                    alert('Ошибка при отправке данных');
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.value = '0';
                 }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                alert('Ошибка при отправке данных');
-            } finally {
-                submitButton.disabled = false;
-            }
+            });
+        });
+
+        async function submitForm() {
+    const form = document.getElementById('paymentForm');
+    const loaderContainer = document.getElementById('loaderContainer');
+    const successMessage = document.getElementById('successMessage');
+    const submitButton = document.getElementById('submitButton');
+
+    submitButton.disabled = true;
+    loaderContainer.style.display = 'flex'; // Показываем контейнер с лоадером
+
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+        });
+
+        loaderContainer.style.display = 'none'; // Скрываем контейнер с лоадером
+
+        if (response.ok) {
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+            if (window.Telegram && window.Telegram.WebApp) {
+                   window.Telegram.WebApp.close()
+                } else {
+                    console.warn("Telegram WebApp API недоступен. Мини-приложение не будет закрыто.");
+                }
+        } else {
+            alert('Ошибка при отправке данных');
         }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Ошибка при отправке данных');
+    } finally {
+        submitButton.disabled = false;
+    }
+}
 
         function resetForm() {
             const form = document.getElementById('paymentForm');
             form.reset();
             document.getElementById('reasonContainer').style.display = 'none';
+
+            // Восстановление значения "0" после сброса формы
+            document.querySelectorAll('.clearable').forEach(input => {
+                if (input.value === '') {
+                    input.value = '0';
+                }
+            });
         }
+        window.addEventListener('resize', () => {
+    const loader = document.getElementById('loader');
+    if (loader.style.display === 'block') {
+        loader.style.top = '50%';
+        loader.style.left = '50%';
+        loader.style.transform = 'translate(-50%, -50%)';
+    }
+});
     </script>
 </body>
 </html>

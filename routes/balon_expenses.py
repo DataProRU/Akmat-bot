@@ -5,15 +5,13 @@ from database import Session
 from models import AirBalonWeather
 from typing import Optional
 from pytz import timezone
-from datetime import datetime, timedelta
+from datetime import datetime
 import gspread
 from babel.dates import format_date
-
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 moscow_tz = timezone('Europe/Moscow')
-
 
 def get_db():
     db = Session()
@@ -25,36 +23,28 @@ def get_db():
 try:
     gc = gspread.service_account(filename="credentials.json")
     sht2 = gc.open_by_url(
-        'https://docs.google.com/spreadsheets/d/1K5rBDV7QEHH1iROffqmuUxFvNn8kTbHe6DZ54MyPIqE/edit?gid=0#gid=0'
+        'https://docs.google.com/spreadsheets/d/1K5rBDV7QEHH1iROffqmuUxFvNn8kTbHe6DZ54MyPIqE/edit?gid=768581262#gid=768581262'
     )
-    worksheet = sht2.get_worksheet(0)
+    worksheet = sht2.get_worksheet(1)
 except Exception as e:
     print(f"Ошибка при инициализации gspread: {str(e)}")
+    worksheet = None
 
-
-@router.get("/bot_air_balon", response_class=HTMLResponse)
-async def directory(
-    request: Request,
-username: str,
-    db: Session = Depends(get_db),
-):
-
-    weathers = db.query(AirBalonWeather).all()
+@router.get("/expense_form", response_class=HTMLResponse)
+async def expense_form(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
-        "air_balon.html",
-        {"request": request, "weathers": weathers, "username": username},
+        "expense_form.html",  # Убедитесь, что у вас есть шаблон expense_form.html
+        {"request": request},
     )
 
+from datetime import datetime  # Убедитесь, что импортирован datetime
 
-@router.post("/submit_balloon")
-async def submit_balloon(
-        username: str = Form(""),
-        nalchik_tethered_flight: str = Form(""),
-        terminal_tethered_flight: str = Form(""),
-        nalchik_free_flight: str = Form(""),
-        terminal_free_flight: str = Form(""),
-        weather: str = Form(""),
-        comment: Optional[str] = Form(None)
+@router.post("/submit_expense")
+async def submit_expense(
+    date: str = Form(...),
+    amount: float = Form(...),
+    expense_type: str = Form(...),
+    description: Optional[str] = Form(None)
 ):
     if not worksheet:
         return JSONResponse(content={"message": "Ошибка работы с таблицей"}, status_code=500)
@@ -108,14 +98,9 @@ async def submit_balloon(
         # Подготовить данные для новой строки
         new_row = [
             new_date,
-            username,
-            nalchik_tethered_flight,
-            terminal_tethered_flight,
-            nalchik_free_flight,
-            terminal_free_flight,
-            weather,
-            "",
-            comment,
+            amount,
+            expense_type,
+            description
         ]
 
         # Добавить новую строку с данными отчета

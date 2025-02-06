@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расход воздушный шар</title>
+    <style>
+        /* Ваши текущие стили */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #eaeef3;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .form-container:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #d5d8dc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+            color: #1e1010;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            background-color: #fff;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #39d487;
+            color: black;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Лоадер и сообщение об успехе */
+        .loader-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #007BFF;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            font-size: 18px;
+            text-align: center;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Заголовок с серым фоном -->
+        <div class="header">
+            <h1>Расход воздушный шар</h1>
+        </div>
+
+        <form id="expenseForm" action="/submit_expense" method="post">
+            <label for="date">Дата:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="amount">Сумма:</label>
+            <input type="number" id="amount" name="amount" value="0" required>
+
+            <label for="expense_type">Вид расходов:</label>
+            <select id="expense_type" name="expense_type" required>
+                <option value="" disabled selected>Выберите вид расходов</option>
+                <option value="Зарплата">Зарплата</option>
+                <option value="Доработки">Доработки</option>
+                <option value="Аренда">Аренда</option>
+                <option value="Проценты">Проценты</option>
+                <option value="Пропуски">Пропуски</option>
+            </select>
+
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description" placeholder="Введите описание"></textarea>
+
+            <button type="submit" id="submitButton">Отправить</button>
+        </form>
+    </div>
+
+    <!-- Лоадер с полупрозрачным фоном -->
+    <div class="loader-container" id="loaderContainer">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Сообщение об успешной отправке -->
+    <div class="success-message" id="successMessage">Данные успешно отправлены!</div>
+
+    <script>
+        // Установка сегодняшней даты по умолчанию
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Обработка поля "Сумма"
+        const amountInput = document.getElementById('amount');
+
+        // При фокусе на поле, если значение "0", очищаем его
+        amountInput.addEventListener('focus', function() {
+            if (this.value === '0') {
+                this.value = '';
+            }
+        });
+
+        // При потере фокуса, если поле пустое, возвращаем "0"
+        amountInput.addEventListener('blur', function() {
+            if (this.value === '') {
+                this.value = '0';
+            }
+        });
+
+        // Обработка отправки формы
+        const form = document.getElementById('expenseForm');
+        const loaderContainer = document.getElementById('loaderContainer');
+        const successMessage = document.getElementById('successMessage');
+        const submitButton = document.getElementById('submitButton');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Отменяем стандартную отправку формы
+
+            // Показываем лоадер
+            loaderContainer.style.display = 'flex';
+
+            // Отправляем данные на сервер
+            const formData = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Показываем сообщение об успехе
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+
+                    // Очищаем форму
+                    form.reset();
+                } else {
+                    alert('Ошибка при отправке данных');
+                }
+            } catch (error) {
+                alert('Ошибка при отправке данных');
+            } finally {
+                // Скрываем лоадер
+                loaderContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
