@@ -79,7 +79,7 @@
 # Стандартные модули Python
 import aiohttp
 # Сторонние модули
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup, WebAppInfo, InlineKeyboardButton
+from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram import Bot, Dispatcher, types
 # Собственные модули
 from app.utils.token_utils import prepare_user_info, generate_token
@@ -91,15 +91,16 @@ dp = Dispatcher()
 ALLOWED_USERS = {
     "heytward": "Запись рейсов",
     "axm9t": "Запись рейсов",
-    "Vladislav_Arkhipov": "Шар",
+    "Vladislav_Arkhipov": "Внести доход",
     "qwert693126": "Качели",
-    "Q5fantan": "Качели"
+    "Q5fantan": "Внести доход",
+    "Pavel_Er": "Внести доход"
 }
 
 # Словарь для URL кнопок
 BUTTON_URLS = {
     "Запись рейсов": lambda user_id: f"{WEB_APP_URL}flight?user_id={user_id}",
-    "Шар": lambda username: f"{WEB_APP_URL}bot_air_balon?username={username}",
+    "Внести доход": lambda username: f"{WEB_APP_URL}bot_air_balon?username={username}",
     "Качели": lambda username: f"{WEB_APP_URL}bot_swing?username={username}"
 }
 
@@ -124,23 +125,32 @@ async def check_user_access(message: Message):
 
 
 
-async def create_reply_markupButton(message: Message):
+async def create_reply_markupButton(message: Message) -> InlineKeyboardMarkup | None:
     tg_username = message.from_user.username
 
     if tg_username not in ALLOWED_USERS:
-        return None 
+        return None
 
     button_text = ALLOWED_USERS[tg_username]
+    if button_text not in BUTTON_URLS:
+        return None
 
-    if button_text in BUTTON_URLS:
-        url = BUTTON_URLS[button_text](tg_username)
+    url = BUTTON_URLS[button_text](tg_username)
+    print(f"Generated URL: {url}")  # Для отладки
+
+    if button_text == "Внести доход":
+        first_button = InlineKeyboardButton(text="Внести доход", web_app=WebAppInfo(url=url))
+        second_button = InlineKeyboardButton(text="Внести расход", web_app=WebAppInfo(url=url))
+        markup = InlineKeyboardMarkup(inline_keyboard=[[first_button], [second_button]])
     else:
-        return None  
-    return InlineKeyboardButton(text=button_text, web_app=WebAppInfo(url=url))
+        button = InlineKeyboardButton(text=button_text, web_app=WebAppInfo(url=url))
+        markup = InlineKeyboardMarkup(inline_keyboard=[[button]])
+
+    return markup
 
 
+# Обработчик для ReplyKeyboardMarkup
 async def get_income_keyboard(message: Message):
-    
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="Внести доход")]],
         resize_keyboard=True

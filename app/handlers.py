@@ -226,9 +226,8 @@ async def main_scheduler(bot):
 
 @router.message(F.text == "Внести доход")
 async def reply_keyboard(message: Message):
-    button = await create_reply_markupButton(message)
-    if button:
-        markup = InlineKeyboardMarkup(inline_keyboard=[[button]])
+    markup = await create_reply_markupButton(message)
+    if markup:
         await message.answer(text="Выберите действие:", reply_markup=markup)
     else:
         await message.answer(text="У вас нет доступа к специальным функциям.")
