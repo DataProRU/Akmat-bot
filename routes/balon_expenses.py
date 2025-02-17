@@ -109,6 +109,7 @@ async def submit_expense(
         return JSONResponse(content={"message": "Отчет успешно отправлен!"})
 
     except Exception as e:
+        print(e)
         return JSONResponse(content={"message": "Ошибка сервера"}, status_code=500)
 
     return JSONResponse(content={"message": "Данные успешно отправлены"})
