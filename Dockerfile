@@ -37,6 +37,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN playwright install chromium
 
+# Устанавливаем русскую локаль
+RUN apt-get update && apt-get install -y locales && \
+    echo "ru_RU.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen ru_RU.UTF-8 && \
+    update-locale LANG=ru_RU.UTF-8
+
 
 # Копируем все файлы проекта
 COPY . .

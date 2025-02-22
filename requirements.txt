@@ -42,6 +42,7 @@ python-dateutil == 2.9.0
 apscheduler == 3.10.4
 python-Levenshtein == 0.26.1
 gspread==5.9.0
+gspread-formatting==1.2.0
 babel
 aiohttp
 aiogram

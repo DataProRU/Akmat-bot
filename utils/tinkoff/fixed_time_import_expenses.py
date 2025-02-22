@@ -42,6 +42,7 @@ from utils.tinkoff.expenses_utils import (
     get_json_expenses_from_csv,
     wait_for_new_download
 )
+from utils.tinkoff.expenses_google_sheets import sync_expenses_to_sheet_no_id
 
 
 # Часовой пояс Москвы
@@ -109,6 +110,7 @@ async def load_expenses():
             if browser:
                 await browser.close_browser()
             send_expense_notification(db)
+            sync_expenses_to_sheet_no_id(db, "day")
             return
         except Exception as e:
             last_error = e
