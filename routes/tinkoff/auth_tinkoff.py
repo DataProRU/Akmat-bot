@@ -139,7 +139,7 @@ async def next_page(request: Request, step: str | None = Query(default=None), to
         raise HTTPException(status_code=307, detail="Ошибка загрузки страницы")
 
     if page_type == PageType.LOGIN_OTP:
-        return templates.TemplateResponse(template_path, {"request": request, "name": await get_user_name_from_otp_login(browser)})
+        return templates.TemplateResponse(template_path, {"request": request, "name": await get_user_name_from_otp_login(browser), "is_miniapp": bool(token)})
     
     if page_type == PageType.EXPENSES:
         if token:
@@ -151,7 +151,7 @@ async def next_page(request: Request, step: str | None = Query(default=None), to
         if redirect:
             return redirect
     
-    return templates.TemplateResponse(template_path, {"request": request})
+    return templates.TemplateResponse(template_path, {"request": request, "is_miniapp": bool(token)})
 
 
 @router.get("/tinkoff/get_sms_timer/")

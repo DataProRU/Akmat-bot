@@ -7,6 +7,8 @@ BROWSER_TIMEOUT: int = 900  # 15 минут
 EXPENSES_URL: str = f"https://www.tbank.ru/auth/login/?redirectTo=%2Fevents%2Ffeed%2F&redirectType="
 DOWNLOAD_DIRECTORY: str = "./downloads"
 PATH_TO_CHROME_PROFILE: str ="./chrome_data"
+GOOGLE_SHEETS_URL='https://docs.google.com/spreadsheets/d/1y6uuCApCSpoYhbS2_a7Drljnt5isM4nuOvyytJcETpI/edit?gid=48506753#gid=48506753'
+
 
 BOT_API_URL = "https://axmat-bot-pavel-ershov-12.amvera.io/"
 AUTO_SAVE_MAILING_BOT_API_URL = f"{BOT_API_URL}tinkoff/auto-save_mailing/"
