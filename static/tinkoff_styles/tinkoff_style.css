@@ -34,3 +34,9 @@ p {
 input {
     padding: 5px;
 }
+
+#date {
+    padding:10px;
+    background-color: #39D488;
+    border-radius: 5px;
+}
