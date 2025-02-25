@@ -17,13 +17,6 @@ AUTO_SAVE_ERROR_MAILING_BOT_API_URL = f"{BOT_API_URL}tinkoff/auto-save_error_mai
 BOT_TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
 BOT_SECRET_KEY = hashlib.sha256(BOT_TOKEN.encode()).digest()
 
-ERROR_NOTIFICATION_USERS = [                                            # Список пользователей которым надо рассылать сообщение об ошибке автовыгрузки
-    '5711'
-]
-
-TRANSFER_NOTIFICATION_USERS = [                                         # Список пользователей которым надо рассылать дополнительно переводы
-    '5711'
-]
 
 # Работа с драйвером
 browser_instance: BrowserManager = None
