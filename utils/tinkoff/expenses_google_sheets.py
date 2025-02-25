@@ -1,11 +1,11 @@
 
 import locale
 import re
+import logging
 
 from pytz import timezone
 from datetime import datetime
 import gspread
-from gspread_formatting import format_cell_range, CellFormat, Color, TextFormat
 
 from routes.directory.tinkoff_expenses import get_expenses_from_db
 from utils.tinkoff.time_utils import get_period_range
@@ -16,12 +16,15 @@ from config import GOOGLE_SHEETS_URL
 moscow_tz = timezone('Europe/Moscow')
 locale.setlocale(locale.LC_TIME, "ru_RU.utf8")  # Устанавливаем русскую локаль
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 try:
     gc = gspread.service_account(filename="credentials.json")
     sht2 = gc.open_by_url(GOOGLE_SHEETS_URL)
     worksheet = sht2.get_worksheet(0)
 except Exception as e:
-    print(f"Ошибка при инициализации gspread: {str(e)}")
+    logger.error(f"Ошибка при инициализации gspread: {str(e)}")
 
 MONTHS_NOMINATIVE = {
     "января": "ЯНВАРЬ", "февраля": "ФЕВРАЛЬ", "марта": "МАРТ",
@@ -72,7 +75,7 @@ def sync_expenses_to_sheet_no_id(db, period="week", timezone_str="Europe/Moscow"
     expenses_to_add = get_expenses_to_add(preprocess_existing_expenses(existing_rows), expenses_data)
 
     if not expenses_to_add:
-        print("Нет новых расходов для добавления.")
+        logger.info("Нет новых расходов для добавления.")
         return
 
     # Группируем по дате
@@ -85,7 +88,7 @@ def sync_expenses_to_sheet_no_id(db, period="week", timezone_str="Europe/Moscow"
     worksheet.batch_update(updates, value_input_option="USER_ENTERED")
     
 
-    print("Синхронизация завершена.")
+    logger.info("Синхронизация гугл таблицы завершена.")
 
 
 def get_last_month_and_date(existing_rows):
@@ -215,5 +218,5 @@ def get_updates_to_table(existing_rows, expenses_to_add, last_month, last_date):
 
 
         row_index += 1
-    
+        
     return updates

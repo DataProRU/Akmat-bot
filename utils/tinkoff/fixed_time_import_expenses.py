@@ -6,6 +6,7 @@ import asyncio
 from datetime import datetime, timezone
 import requests
 from contextlib import contextmanager
+import logging
 
 # Сторонние модули
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -48,9 +49,12 @@ from utils.tinkoff.expenses_google_sheets import sync_expenses_to_sheet_no_id
 # Часовой пояс Москвы
 moscow_tz = pytz.timezone("Europe/Moscow")
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 async def load_expenses():
-    print(f"Начата автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
+    logger.info(f"Начата автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
     retries = 3
     attempts_completed = 0
     last_error = ""
@@ -106,7 +110,7 @@ async def load_expenses():
                 period="week"
             )
             await load_expenses_from_site(browser, unix_range_start, unix_range_end, db, "Europe/Moscow")
-            print(f"Успешно завершена автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
+            logger.info(f"Успешно завершена автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})")
             if browser:
                 await browser.close_browser()
             send_expense_notification(db)
@@ -116,13 +120,13 @@ async def load_expenses():
             last_error = e
             attempts_completed += 1
 
-    print(f"Автозагрузка расходов завершена с ошибкой (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')}) : ${last_error}")
+    logger.warning(f"Автозагрузка расходов завершена с ошибкой (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')}) : ${last_error}")
     if browser:
         await browser.close_browser()
     if db:
         set_last_error(db, str(last_error))
     else:
-        print(f"Невозможно записать сообщение об ошибке в БД. Ошибка: {last_error}")
+        logger.error(f"Невозможно записать сообщение об ошибке в БД. Ошибка: {last_error}")
     
     get_error_notification_chat_ids(db, config.ERROR_NOTIFICATION_USERS)
 
@@ -141,7 +145,7 @@ def async_to_sync(async_func):
 def start_scheduler():
     scheduler = BackgroundScheduler(timezone=moscow_tz)
     # Используем обёртку для вызова асинхронной функции
-    scheduler.add_job(lambda: async_to_sync(load_expenses), CronTrigger(hour=21, minute=0, timezone=moscow_tz))
+    scheduler.add_job(lambda: async_to_sync(load_expenses), CronTrigger(hour=22, minute=20, timezone=moscow_tz))
     scheduler.start()
     try:
         while True:
@@ -203,7 +207,7 @@ def send_expense_notification(db):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        print(f"Ошибка при отправке данных на сервер бота: {e}")
+        logger.error(f"Ошибка при отправке данных на сервер бота: {e}")
         return {"error": str(e)}
 
 
@@ -232,7 +236,7 @@ def get_error_notification_chat_ids(db, error_notification_users: list):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
-        print(f"Ошибка при отправке данных на сервер бота: {e}")
+        logger.error(f"Ошибка при отправке данных на сервер бота: {e}")
         return {"error": str(e)}
 
 
@@ -249,4 +253,4 @@ def get_today_uniq_cards(db):
         expenses_data = get_expenses_from_db(db, unix_range_start, unix_range_end, "Europe/Moscow")
         return expenses_data.get("cards", None)
     except Exception as e:
-        print(f"Ошибка загрузки расходов для бота: {e}")
+        logger.error(f"Ошибка загрузки расходов для бота: {e}")
