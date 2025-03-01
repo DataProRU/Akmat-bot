@@ -33,6 +33,8 @@ from utils.tinkoff.expenses_utils import (
     wait_for_new_download
 )
 
+from auth import verify_bot_token
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,9 +43,14 @@ logger = logging.getLogger(__name__)
 moscow_tz = pytz.timezone("Europe/Moscow")
 
 
-async def resume_load_expenses(db):
+async def resume_load_expenses(db, token):
     # Получаем текущее время в Москве
-    now = datetime.now(moscow_tz).time()
+    now = datetime.now(moscow_tz)
+
+    # Декодируем auth_date из Unix timestamp
+    user_data = verify_bot_token(token)
+    auth_date = int(user_data.get("auth_date", 0))
+    error_date = datetime.fromtimestamp(auth_date, moscow_tz).date()
 
     # Получаем времена из базы
     schedule_time = get_import_times(db)
@@ -51,23 +58,22 @@ async def resume_load_expenses(db):
     full_time = schedule_time["full"]
 
     # Конвертируем `time` в `datetime` для удобного сравнения
-    today = datetime.now(moscow_tz).date()
-    expense_datetime = moscow_tz.localize(datetime.combine(today, expense_time))
-    full_datetime = moscow_tz.localize(datetime.combine(today, full_time))
+    expense_datetime = moscow_tz.localize(datetime.combine(error_date, expense_time))
+    full_datetime = moscow_tz.localize(datetime.combine(error_date, full_time))
     
     # Добавляем 5-минутный интервал
     five_min = timedelta(minutes=5)
 
     # Проверяем условия
-    if now >= expense_time and now >= full_time:
+    if now >= expense_datetime and now >= full_datetime:
         await load_expenses("all")  # Оба времени прошли
-    elif now >= expense_time and (full_datetime - datetime.now(moscow_tz) <= five_min):
+    elif now >= expense_datetime and (full_datetime - datetime.now(moscow_tz) <= five_min):
         await load_expenses("all")  # Expense прошло, до Full < 5 мин
-    elif now >= full_time and (expense_datetime - datetime.now(moscow_tz) <= five_min):
+    elif now >= full_datetime and (expense_datetime - datetime.now(moscow_tz) <= five_min):
         await load_expenses("all")  # Full прошло, до Expense < 5 мин
-    elif now >= expense_time and (full_datetime - datetime.now(moscow_tz) > five_min):
+    elif now >= expense_datetime and (full_datetime - datetime.now(moscow_tz) > five_min):
         await load_expenses("expenses") # Expense прошло, до Full > 5 мин
-    elif now >= full_time and (expense_datetime - datetime.now(moscow_tz) > five_min):
+    elif now >= full_datetime and (expense_datetime - datetime.now(moscow_tz) > five_min):
         await load_expenses("full")  # Full прошло, до Expense > 5 мин
 
 
@@ -76,7 +82,6 @@ async def load_expenses(export_type: str):
     """
     Загружает расходы и отправляет пользователям уведомления.
     """
-    export_type = 'all'
     logger.info(f"Начата автозагрузка расходов (Время (UTC): {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M:%S')})  |  тип выгрузки: {export_type}")
     retries = 3
     attempts_completed = 0

@@ -155,7 +155,7 @@ async def next_page(request: Request, step: str | None = Query(default=None), db
     if page_type == PageType.EXPENSES:
         if token:
             from utils.tinkoff.fixed_time_import_expenses import resume_load_expenses
-            await resume_load_expenses(db)
+            await resume_load_expenses(db, token)
             return templates.TemplateResponse("tinkoff/success_login.html", {"request": request})
         redirect = redirect_by_token(request)
         if redirect:
