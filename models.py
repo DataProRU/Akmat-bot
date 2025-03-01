@@ -12,7 +12,9 @@ from sqlalchemy import (
     String,
     ForeignKey,
     TIMESTAMP,
-Date
+    Date,
+    func,
+    Time
 )
 from sqlalchemy import BigInteger
 from sqlalchemy.orm import relationship
@@ -281,3 +283,18 @@ class UserNotifications(Base):
 
     # Связь с таблицей Users
     user = relationship("Users", backref="notifications")
+
+
+class Schedule(Base):
+    __tablename__ = "tinkoff_schedule"
+
+    id = Column(Integer, primary_key=True, index=True)
+    export_type = Column(String, nullable=False)  # 'expenses' или 'full'
+    export_time = Column(Time, nullable=False)
+    created_at = Column(TIMESTAMP, server_default=func.now())
+
+
+# Модель для входных данных
+class ScheduleData(BaseModel):
+    expenses: str
+    full: str

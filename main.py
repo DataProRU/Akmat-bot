@@ -22,10 +22,11 @@ from routes.directory import (
 from routes.tinkoff import (
     auth_tinkoff,
     expenses,
-    general
+    general,
+    scheduler
 )
 
-from utils.tinkoff.fixed_time_import_expenses import start_scheduler
+from utils.tinkoff.scheduler_utils import start_scheduler
 
 
 from fastapi.staticfiles import StaticFiles
@@ -63,6 +64,7 @@ app.include_router(balon_expenses.router)
 app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)
 app.include_router(general.router)
+app.include_router(scheduler.router)
 
 app.include_router(bot.router)
 
