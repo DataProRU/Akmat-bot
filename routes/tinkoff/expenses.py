@@ -16,7 +16,7 @@ from routes.tinkoff.auth_tinkoff import get_browser, check_for_browser
 from routes.directory.tinkoff.expenses import get_expenses_from_db
 from routes.directory.tinkoff.errors import get_last_unreceived_error
 from routes.directory.tinkoff.temporary_codes import set_temporary_code
-from routes.directory.tinkoff.notifications import get_card_nums_for_transfer_notifications
+from routes.directory.tinkoff.notifications import get_chat_ids_for_transfer_notifications
 from routes.directory.tinkoff.scheduler import get_import_times
 from routes.directory.tinkoff.categories import (
     get_categories_from_db,
@@ -113,7 +113,7 @@ async def get_expenses(
 
     return generate_expense_response(request, expenses_data, 
                                      token is not None, 
-                                     str(chat_id) in get_card_nums_for_transfer_notifications(db),
+                                     str(chat_id) in get_chat_ids_for_transfer_notifications(db),
                                      get_import_times(db))
 
 
