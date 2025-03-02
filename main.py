@@ -23,7 +23,8 @@ from routes.tinkoff import (
     auth_tinkoff,
     expenses,
     general,
-    scheduler
+    scheduler,
+    browser_session
 )
 
 from utils.tinkoff.scheduler_utils import start_scheduler
@@ -65,6 +66,7 @@ app.include_router(auth_tinkoff.router)
 app.include_router(expenses.router)
 app.include_router(general.router)
 app.include_router(scheduler.router)
+app.include_router(browser_session.router)
 
 app.include_router(bot.router)
 
