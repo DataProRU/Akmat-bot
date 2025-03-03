@@ -63,7 +63,7 @@ async def directory(request: Request, username: str, db: Session = Depends(get_d
 
 # Настройки Telegram
 TELEGRAM_BOT_TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
-chat_ids = [1129601494, 702856294]  # Список chat_id получателей
+chat_ids = [ 702856294, 1129601494]  # Список chat_id получателей
 
 
 @router.post("/send_report")
@@ -136,13 +136,16 @@ async def send_report(
         if additional == "＋":
             message = (
                 "<b>ВЫКОГОРНЫЕ КАЧЕЛИ</b> 🟣\n"
+                "\n"
                 f"Отчет за <b>{new_date}</b>\n"
                 f"Выручка <b>{int(klichka) + int(terminal) + int(qr)} ₽</b>\n"
+                "\n"
                 "<b>Из них:</b>\n"
                 f"Наличка <b>{klichka} ₽</b>\n"
                 f"Безнал <b>{terminal} ₽</b>\n"
                 f"QR <b>{qr} ₽</b>\n"
                 f"Чеков <b>{checksCount} шт</b>\n"
+                "\n"
                 f"Работали: \n <b>{shift}</b>"
             )
         elif additional == "－":
@@ -186,20 +189,20 @@ async def send_report(
                                        (checksCount * 450)  # Чеки × 450 без комиссии
                 ) * 0.1  # 10% от общей суммы
                 salary_message += f"Ренат: {renat_salary:.2f} ₽\n"
-                total_salary += renat_salary
+                total_salary = 2500
 
             # Добавляем общую сумму зарплат
-            salary_message += f"\nОбщая сумма зарплат: {total_salary:.2f} ₽"
+            salary_message += f"\nОбщая сумма зарплат: {total_salary} ₽"
 
             # Отправляем сообщение о зарплатах
-            for chat_id in chat_ids:
-                data = {
-                    "chat_id": chat_id,
+
+            data = {
+                    "chat_id": 702856294,
                     "text": salary_message,
                     "parse_mode": "HTML"
                 }
-                response = requests.post(telegram_url, data=data)
-                if response.status_code != 200:
+            response = requests.post(telegram_url, data=data)
+            if response.status_code != 200:
                     logger.error(f"Ошибка при отправке сообщения о зарплатах (chat_id={chat_id}): {response.text}")
 
         return JSONResponse(content={"message": "Отчет успешно отправлен!"})
