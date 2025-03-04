@@ -14,7 +14,7 @@ BOT_API_URL = "https://axmat-bot-pavel-ershov-12.amvera.io/"
 AUTO_SAVE_MAILING_BOT_API_URL = f"{BOT_API_URL}tinkoff/auto-save_mailing/"
 AUTO_SAVE_ERROR_MAILING_BOT_API_URL = f"{BOT_API_URL}tinkoff/auto-save_error_mailing/"
 
-BOT_TOKEN = "7884988975:AAGn2L1NCqV50ZY4VMe4hOqMzZTd2gamzrI" #"8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
+BOT_TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
 BOT_SECRET_KEY = hashlib.sha256(BOT_TOKEN.encode()).digest()
 
 
