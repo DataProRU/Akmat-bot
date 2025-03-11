@@ -32,6 +32,11 @@ def get_period_from_default_range(period, timezone):
     if period == "day":
         start = now.replace(hour=0, minute=0, second=0)
         end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
+    elif period == "3days":
+        # Период в 3 дня: от текущего времени до 3 дней вперёд
+        start = now.replace(hour=0, minute=0, second=0) - timedelta(days=2)
+        end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
 
     elif period == "week":
         start = now - timedelta(days=now.weekday())

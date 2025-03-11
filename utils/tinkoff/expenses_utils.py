@@ -13,6 +13,7 @@ import aiofiles
 from playwright.async_api import Page
 import pytz
 from fuzzywuzzy import fuzz
+import chardet
 
 # Собственные модули
 import config as config
@@ -143,8 +144,25 @@ async def get_json_expenses_from_csv(file_path, categories_dict, target_timezone
     await asyncio.sleep(0.5)
 
     # Чтение CSV-файла
-    async with aiofiles.open(file_path, mode='r', encoding='windows-1251') as file:
-        reader = csv.DictReader(await file.readlines(), delimiter=';')
+    async with aiofiles.open(file_path, mode='rb') as file:
+        content = await file.read()
+            
+        # Автоматическое определение кодировки
+        detected_encoding = chardet.detect(content)['encoding']
+        decoded_content = content.decode(detected_encoding or 'utf-8', errors='replace')
+
+        # Разделяем содержимое на строки
+        lines = decoded_content.splitlines()
+        
+        # Читаем заголовки из первой строки
+        headers = [header.strip('"') for header in lines[0].strip().split(';')]
+        
+        reader = csv.DictReader(
+            lines[1:],
+            delimiter=';',
+            fieldnames=headers,
+            quotechar='"'
+        )
         
         transactions = []
         for row in reader:
