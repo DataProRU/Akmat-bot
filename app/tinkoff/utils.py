@@ -18,7 +18,7 @@ async def send_expenses_miniapp(chat_id: str):
 
     await send_miniapp(chat_id, 
                        "Ваши расходы.", 
-                       TINKOFF_EXPENSES_URL + f"?rangeStart={formatted_date}&rangeEnd={formatted_date}", 
+                       TINKOFF_EXPENSES_URL + f"?rangeStart={formatted_date}&rangeEnd={formatted_date}&show_all_expenses=true", 
                        "Открыть расходы")
     
 
@@ -31,7 +31,7 @@ async def send_daily_expenses_miniapp(chat_id: str):
 
     await send_miniapp(chat_id, 
                        "Автовыгрузка расходов завершена.", 
-                       TINKOFF_EXPENSES_URL + f"?rangeStart={formatted_date}&rangeEnd={formatted_date}", 
+                       TINKOFF_EXPENSES_URL + f"?rangeStart={formatted_date}&rangeEnd={formatted_date}&show_all_expenses=true", 
                        "Открыть расходы")
 
 
