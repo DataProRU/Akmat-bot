@@ -66,12 +66,12 @@
 
                     <div class="scheduler-menu" style="gap: 5px;">
                         <label class="side-menu-label" for="scheduler1">Первая автовыгрузка:</label>
-                        <input type="time" id="scheduler1" value="21:00">
+                        <input type="time" id="scheduler1" value="{{ first_import_time }}">
                     </div>
 
                     <div class="scheduler-menu" style="gap: 5px;">
                         <label class="side-menu-label" for="scheduler2">Вторая автовыгрузка:</label>
-                        <input type="time" id="scheduler2" value="00:00">
+                        <input type="time" id="scheduler2" value="{{ second_import_time }}">
                     </div>
 
                     <button onclick="saveSchedule()">Сохранить</button>
