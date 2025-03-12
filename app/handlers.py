@@ -8,6 +8,7 @@ from aiogram.filters import Command
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
+from app.tinkoff.utils import send_expenses_miniapp
 import asyncio
 
 # Собственные модули
@@ -182,7 +183,8 @@ def get_daily_report(date):
         else:
             print(f"Некорректное значение стоимости: {cost} в записи: {record}")
 
-    report = f"<b>ПРОКАТ ТЕХНИКИ</b>\n"
+    report = f"<b>ПРОКАТ ТЕХНИКИ 🟢</b>\n"
+    report += "\n"
     report += f"Отчет за <b>{format_date(date)}</b>\n"
     report += f"Выручка <b>{format_amount(total_revenue)}</b>\n\n"
     report += "<b>Из них:</b>\n"
@@ -218,6 +220,9 @@ async def scheduler(bot):
         now = datetime.now()
         if now.hour == 18 and now.minute == 0:
             await send_daily_report(bot)
+        if now.hour == 19 and now.minute == 0:
+            await send_expenses_miniapp("1129601494")
+
         await asyncio.sleep(60)
 
 # Запуск бота и планировщика
