@@ -1,11 +1,6 @@
 // Код jQuery для настройки столбцов с изменяемой шириной
 $(window).on('load', function() {
     $('#expensesTable').resizableColumns();
-    
-    $('#itemsPerPageSelect').select2({
-        width: 'auto',  // Подгонка под размер текста
-        minimumResultsForSearch: Infinity  // Убираем поле поиска
-    });
 });
 
 window.isMiniApp = document.getElementById("app").dataset.miniapp === "true";
@@ -131,12 +126,7 @@ async function fetchCategories() {
             throw new Error("Ответ не является массивом");
         }
 
-        const categoryOptions = categories.map(category => ({
-            id: category.id,
-            text: category.category_name
-        }));
-
-        return categories.map(category => category.category_name);
+        return categories;
     } catch (error) {
         console.error('Ошибка загрузки категорий:', error);
     } finally {
@@ -149,18 +139,24 @@ async function saveKeywords() {
     showGlobalLoader();
     const keywords = [];
 
-    document.querySelectorAll('.category-select').forEach(select => {
-        const categoryName = select.options[select.selectedIndex].textContent;
+    document.querySelectorAll('.custom-select').forEach(select => {
+        const categoryTextElement = select.querySelector('.category-text');
+        const categoryId = categoryTextElement.getAttribute('data-category-id');
+        const categoryName = categoryTextElement.textContent;
+
         let description = null;
+        const row = select.closest('tr');
+
         if (isMiniApp) {
-            description = select.closest('tr').querySelector('td:nth-child(2)').textContent;
+            description = row.querySelector('td:nth-child(2)').textContent;
         } else {
-            description = select.closest('tr').querySelector('td:nth-child(4)').textContent;
+            description = row.querySelector('td:nth-child(4)').textContent;
         }
 
-        // Исключаем записи с категорией "без категории"
-        if (description && !keywords.some(keyword => keyword.description === description && keyword.category_name === categoryName)) {
-            keywords.push({ description, category_name: categoryName });
+        const expenseId = select.getAttribute('data-id'); // Берём ID расхода
+
+        if (description && !keywords.some(keyword => keyword.description === description && keyword.category_id === categoryId)) {
+            keywords.push({ expense_id: expenseId, category_id: categoryId});
         }
     });
 

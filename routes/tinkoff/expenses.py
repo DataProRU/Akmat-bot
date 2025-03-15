@@ -5,7 +5,7 @@ import json
 import time
 
 # Сторонние библиотеки
-from fastapi import APIRouter, Depends, Query, Request, HTTPException
+from fastapi import APIRouter, Depends, Query, Request, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from typing import Optional
@@ -20,8 +20,7 @@ from routes.directory.tinkoff.notifications import get_chat_ids_for_transfer_not
 from routes.directory.tinkoff.scheduler import get_import_times
 from routes.directory.tinkoff.categories import (
     get_categories_from_db,
-    save_keyword_to_db,
-    remove_keyword_from_category
+    update_expense_category
 )
 from routes.directory.bot import get_card_number_by_chat_id
 
@@ -30,10 +29,11 @@ from utils.bot import check_miniapp_token
 from utils.tinkoff.expenses_utils import load_expenses_from_site
 from utils.tinkoff.time_utils import get_period_range
 from utils.tinkoff.browser_utils import PageType
+from utils.tinkoff.expenses_google_sheets import sync_expenses_to_sheet_no_id
 
 import config as config
 from database import Session
-from models import SaveKeywordsRequest, CategoryExpenses
+from models import SaveKeywordsRequest
 from auth import create_temp_token, verify_bot_token
 
 from dependencies import get_authenticated_user
@@ -224,36 +224,30 @@ def get_categories(db: Session = Depends(get_db)):
 
 
 @router.post("/tinkoff/expenses/keywords/")
-async def save_keywords(
-    request: SaveKeywordsRequest, 
+async def save_categories(
+    background_tasks: BackgroundTasks,
+    request: SaveKeywordsRequest,
     db: Session = Depends(get_db),
-    user: dict = Depends(get_authenticated_user), 
+    user: dict = Depends(get_authenticated_user),
     token: Optional[str] = Query(None)
 ):
     """
-    Эндпоинт для сохранения ключевых слов категорий.
+    Эндпоинт для обновления категории расходов (или её очистки).
     """
     if token:
-        # Запрос от бота
         if not check_miniapp_token(token):
             return
     else:
-        # Запрос от обычного пользователя
         if isinstance(user, RedirectResponse):
             return user  # Если пользователь не аутентифицирован
-    
+
     for keyword in request.keywords:
-        if keyword.category_name == "":
-            # Удаляем ключевое слово, если оно привязано к какой-либо категории
-            remove_keyword_from_category(db, keyword.description)
-        else:
-            # Ищем ID категории по названию
-            category = db.query(CategoryExpenses).filter(CategoryExpenses.title == keyword.category_name).first()
-            if category:
-                save_keyword_to_db(db, keyword.description, category.id)
-            else:
-                raise HTTPException(status_code=422, detail=f"Категория {keyword.category_name} не найдена")
-    return JSONResponse(content={"message": "Ключевые слова успешно сохранены"})
+        update_expense_category(db, keyword.expense_id, keyword.category_id)
+    
+    if token:
+        background_tasks.add_task(sync_expenses_to_sheet_no_id, db, "rolling26hours")
+
+    return JSONResponse(content={"message": "Категории успешно обновлены"})
 
 
 @router.post("/tinkoff/save_otp/")

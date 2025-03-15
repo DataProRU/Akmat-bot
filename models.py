@@ -67,6 +67,9 @@ class CategoryExpenses(Base):
     __tablename__ = "category_expenses"
     id = Column(Integer, primary_key=True)
     title = Column(Text)
+    color = Column(Text)
+ 
+    expenses = relationship("Expense", back_populates="category")
 
 
 class Commisions(Base):
@@ -188,8 +191,8 @@ class LoginResponse(BaseModel):
         use_enum_values = True
 
 class Keyword(BaseModel):
-    description: str
-    category_name: str
+    expense_id: str
+    category_id: Optional[str]
 
 class SaveKeywordsRequest(BaseModel):
     keywords: List[Keyword]
@@ -200,12 +203,12 @@ class SaveKeywordsRequest(BaseModel):
 #    id = Column(Integer, primary_key=True)
 #    title = Column(Text)
 
-class CategoryKeyword(Base):
-    __tablename__ = "tinkoff_category_expenses_keywords"
+# class CategoryKeyword(Base):
+#     __tablename__ = "tinkoff_category_expenses_keywords"
 
-    id = Column(Integer, primary_key=True)
-    keyword = Column(Text)
-    category_id = Column(Integer, ForeignKey("category_expenses.id"))
+#     id = Column(Integer, primary_key=True)
+#     keyword = Column(Text)
+#     category_id = Column(Integer, ForeignKey("category_expenses.id"))
 
 # Модель для таблицы расходов
 class Expense(Base):
@@ -216,6 +219,9 @@ class Expense(Base):
     card_number = Column(Text)
     amount = Column(Integer)
     description = Column(Text)
+    category_id = Column(Integer, ForeignKey("category_expenses.id"), nullable=True)
+ 
+    category = relationship("CategoryExpenses", back_populates="expenses")
 
 class TemporaryCode(Base):
     __tablename__ = 'tinkoff_temporary_code'

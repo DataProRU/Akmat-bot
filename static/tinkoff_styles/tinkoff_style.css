@@ -35,8 +35,16 @@ input {
     padding: 5px;
 }
 
-#date {
-    padding:10px;
-    background-color: #39D488;
+select {
+    padding: 5px;
     border-radius: 5px;
+    background-color: white;
+    border-color: gray;
+}
+
+.filtration-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
 }
