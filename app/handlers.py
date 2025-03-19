@@ -160,7 +160,7 @@ def get_daily_report(date):
             daily_records.append(record)
 
     if not daily_records:
-        return f"Нет данных за {date}"
+         return f"ПРОКАТ ТЕХНИКИ 🟢" + "\n" + "Отчёт за {date}" + "\n" + "Не работали❌"
 
     total_revenue = 0
     qr_revenue = 0
