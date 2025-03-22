@@ -1,7 +1,7 @@
 # /app/config.py
 
-BASE_URL = "https://flight-trip-pavel-ershov-12.amvera.io/"
-WEB_APP_URL = "https://web-app-ax-pavel-ershov-12.amvera.io/"
+BASE_URL = "https://flight-trip-axmat.ru/"
+WEB_APP_URL = "https://flight-trip-axmat.ru/"
 TOKEN = "7919291411:AAENTmsx7h0trc4ezowcqxX7LEyTn09WIWI"
 
 # Общие эндпоинты
