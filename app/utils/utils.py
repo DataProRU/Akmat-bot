@@ -92,7 +92,7 @@ ALLOWED_USERS = {
     "heytward": "Запись рейсов",
     "axm9t": "Запись рейсов",
     "Vladislav_Arkhipov": "Внести доход",
-    "qwert693126": "Качели",
+    "tokov17": "Качели",
     "Q5fantan": "Внести доход",
     "Pavel_Er": "Внести доход"
 }
