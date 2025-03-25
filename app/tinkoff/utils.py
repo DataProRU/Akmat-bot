@@ -22,7 +22,7 @@ async def send_expenses_miniapp(chat_id: str):
                        "Открыть расходы")
     
 
-async def send_daily_expenses_miniapp(chat_id: str):
+async def send_daily_expenses_miniapp(chat_id: str, today_date: str, total_amount: str):
     """
     Рассылает сообщения о проставлении статей после автосохранения расходов.
     """
@@ -30,7 +30,7 @@ async def send_daily_expenses_miniapp(chat_id: str):
     formatted_date = today.strftime("%Y-%m-%d")
 
     await send_miniapp(chat_id, 
-                       "Автовыгрузка расходов завершена.", 
+                       f"ВАШИ РАСХОДЫ ⚪️\n\nЗа {today_date}\n\nОбщая сумма: {total_amount}", 
                        TINKOFF_EXPENSES_URL + f"?rangeStart={formatted_date}&rangeEnd={formatted_date}&show_all_expenses=true", 
                        "Открыть расходы")
 

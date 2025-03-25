@@ -1,15 +1,13 @@
 # /server/routes/tinkoff.py
 
 # Стандартные модули Python
-from server.models import ChatIdsRequest
-from fastapi import FastAPI, Form, Request
+from server.models import ChatIdsRequest, SuccessAutoLoadRequest
 
 # Сторонние модули
 from fastapi import APIRouter
 
 # Собственные модули
 from app.tinkoff.utils import send_daily_expenses_miniapp, send_auto_save_expenses_error
-from fastapi.responses import HTMLResponse
 
 
 
@@ -17,14 +15,15 @@ router = APIRouter()
 
 
 @router.post("/tinkoff/auto-save_mailing/")
-async def auto_save_mailing(request: ChatIdsRequest):
+async def auto_save_mailing(request: SuccessAutoLoadRequest):
     """
     Рассылка сообщений с токенизированным URL для пользователей.
     """
-    chat_ids = request.chat_ids
+    notification_data = request.notification_data
+    today_date = request.today_date
     results = []
-    for chat_id in chat_ids:
-        results.append(await send_daily_expenses_miniapp(chat_id))
+    for chat_id, message in notification_data.items():
+        results.append(await send_daily_expenses_miniapp(chat_id, today_date, message))
 
     return {"results": results}
 
