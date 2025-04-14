@@ -207,7 +207,7 @@ def start():
 if __name__ == '__main__':
     try:
         gc = gspread.service_account(filename="credentials.json")
-        sht2 = gc.open_by_url("https://docs.google.com/spreadsheets/d/1-Y9Gg6bf9c6j8PhLEqSgjtFAXuX4uE9S1k00eNwMjrM/edit?usp=sharing")
+        sht2 = gc.open_by_url("https://docs.google.com/spreadsheets/d/1y6uuCApCSpoYhbS2_a7Drljnt5isM4nuOvyytJcETpI/edit?usp=sharing")
         worksheet = sht2.get_worksheet(0)
         start()
     except Exception as e:

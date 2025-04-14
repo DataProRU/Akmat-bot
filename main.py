@@ -29,6 +29,7 @@ from routes.tinkoff import (
 
 from utils.tinkoff.scheduler_utils import start_scheduler
 
+from utils.tinkoff.sync_google_category import start_inactivity_scheduler
 
 from fastapi.staticfiles import StaticFiles
 
@@ -74,5 +75,5 @@ app.include_router(bot.router)
 
 
 # Запуск планировщика для автозагрузки в отдельном потоке
-scheduler_thread = Thread(target=start_scheduler, daemon=True)
-scheduler_thread.start()
+Thread(target=start_scheduler, daemon=True).start()
+Thread(target=start_inactivity_scheduler, daemon=True).start()
