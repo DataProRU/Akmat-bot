@@ -447,28 +447,7 @@
 
             </style>
             <script>
-                // function setupClientSourceHandlers(context = document) {
-                //     const selects = context.querySelectorAll('.client_source');
-
-                //     selects.forEach(select => {
-                //         const container = select.closest('.duplicated-form').querySelector('.hotel_select_container');
-                    
-                //         function toggleHotelSelect() {
-                //             if (select.value === 'Отели') {
-                //                 container.classList.add('show');
-                //             } else {
-                //                 container.classList.remove('show');
-                //             }
-                //         }
-                    
-                //         // При первом запуске
-                //         toggleHotelSelect();
-                    
-                //         // При изменении
-                //         select.addEventListener('change', toggleHotelSelect);
-                //     });
-                // }
-
+                
                 function setupClientSourceHandlers(context = document) {
                     const selects = context.querySelectorAll ? context.querySelectorAll('.client_source') : [];
 
@@ -609,6 +588,7 @@
             const duplicatedForms = document.getElementById('duplicated-forms');
             const lastForm = duplicatedForms.lastElementChild.cloneNode(true);
 
+            // Сброс значений
             lastForm.querySelector('.equipment_type').value = "";
             lastForm.querySelector('.prepayment_amount').value = "";
             lastForm.querySelector('.prepayment').checked = false;
@@ -618,6 +598,10 @@
             lastForm.querySelector('.single-cost').textContent = 0;
             lastForm.querySelector('.prepayment-container').style.display = 'none';
             lastForm.querySelector('.discount').value = 0;
+
+            // Скрываем селектор отелей в новой форме
+            lastForm.querySelector('.hotel_select_container').classList.remove('show');
+            lastForm.querySelector('#hotel_list').value = "";
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete-button';
@@ -631,8 +615,12 @@
             lastForm.querySelector('.prepayment').addEventListener('change', function() {
                 togglePrepaymentAmount(this);
             });
-
+        
             duplicatedForms.appendChild(lastForm);
+            
+            // Инициализируем обработчики для новой формы
+            setupClientSourceHandlers(lastForm);
+            
             updateCost();
         }
 
