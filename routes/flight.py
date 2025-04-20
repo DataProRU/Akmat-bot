@@ -141,11 +141,9 @@ async def submit_income(data: IncomeData, db: Session = Depends(get_db)):
 
     for equipment in data.equipment_forms:
         # Формируем источник клиента
-        if equipment.client_source == "Отели" and equipment.hotel_list:
-            client_source = f"Отель - {equipment.hotel_list}"
-        else:
-            client_source = equipment.client_source
-
+        client_source = equipment.client_source
+        if equipment.hotel_list:  # Если есть отель, добавляем его к источнику
+            client_source += f" - {equipment.hotel_list}"
         equipment_message = (
             f"Дата: {data.date}\n"
             f"Номер рейса: {data.flight_number}\n"

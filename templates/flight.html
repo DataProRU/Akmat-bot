@@ -397,7 +397,7 @@
                     </select>
                     <div class="hotel_select_container">
                         <label for="hotel_list">Выберите отель:</label>
-                        <select id="hotel_list" name="hotel_list">
+                        <select id="hotel_list" name="hotel_list" class="hotel_list">
                             <option value="" disabled selected>Выберите отель</option>
                             <option value="Alean">Alean</option>
                             <option value="Gorski">Gorski</option>
@@ -624,51 +624,7 @@
             updateCost();
         }
 
-        // function duplicateForm() {
-        //     const duplicatedForms = document.getElementById('duplicated-forms');
-        //     const lastForm = duplicatedForms.lastElementChild.cloneNode(true);
-
-        //     const lastFormData = {
-        //         equipment_type: duplicatedForms.lastElementChild.querySelector('.equipment_type').value,
-        //         prepayment_amount: duplicatedForms.lastElementChild.querySelector('.prepayment_amount').value,
-        //         prepayment: duplicatedForms.lastElementChild.querySelector('.prepayment').checked,
-        //         payment_type: duplicatedForms.lastElementChild.querySelector('.payment_type').value,
-        //         client_source: duplicatedForms.lastElementChild.querySelector('.client_source').value,
-        //         comment: duplicatedForms.lastElementChild.querySelector('.comment').value
-                
-        //     };
-
-        //     lastForm.querySelector('.equipment_type').value = lastFormData.equipment_type;
-        //     lastForm.querySelector('.prepayment_amount').value = lastFormData.prepayment_amount;
-        //     lastForm.querySelector('.prepayment').checked = lastFormData.prepayment;
-        //     lastForm.querySelector('.payment_type').value = lastFormData.payment_type;
-        //     lastForm.querySelector('.client_source').value = lastFormData.client_source;
-        //     lastForm.querySelector('.comment').value = lastFormData.comment;
-
-        //     const prepaymentContainer = lastForm.querySelector('.prepayment-container');
-        //     if (lastFormData.prepayment) {
-        //         prepaymentContainer.style.display = 'block';
-        //     } else {
-        //         prepaymentContainer.style.display = 'none';
-        //     }
-
-        //     const deleteButton = document.createElement('button');
-        //     deleteButton.className = 'delete-button';
-        //     deleteButton.innerHTML = '×';
-        //     deleteButton.onclick = function () {
-        //         deleteForm(this);
-        //     };
-        //     lastForm.appendChild(deleteButton);
-
-        //     // Добавляем обработчик события для чекбокса предоплаты
-        //     lastForm.querySelector('.prepayment').addEventListener('change', function() {
-        //         togglePrepaymentAmount(this);
-        //     });
-
-        //     duplicatedForms.appendChild(lastForm);
-        //     updateCost();
-        // }
-
+        
 
         function duplicateForm() {
             const duplicatedForms = document.getElementById('duplicated-forms');
@@ -681,7 +637,6 @@
                 payment_type: duplicatedForms.lastElementChild.querySelector('.payment_type').value,
                 client_source: duplicatedForms.lastElementChild.querySelector('.client_source').value,
                 comment: duplicatedForms.lastElementChild.querySelector('.comment').value,
-                // Добавляем выбор отеля, если блок виден
                 hotel_list: duplicatedForms.lastElementChild.querySelector('.hotel_select_container.show') 
                     ? duplicatedForms.lastElementChild.querySelector('#hotel_list').value 
                     : ""
@@ -751,6 +706,7 @@
                     prepayment: form.querySelector(".prepayment").checked,
                     payment_type: form.querySelector(".payment_type").value,
                     client_source: form.querySelector(".client_source").value,
+                    hotel_list: form.querySelector("#hotel_list").value || null, // Добавлено это поле
                     comment: form.querySelector(".comment").value,
                     discount: parseFloat(form.querySelector('.discount').value) || 0,
                     cost: parseFloat(form.querySelector(".hidden-cost").value) || 0,
