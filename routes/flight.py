@@ -141,9 +141,10 @@ async def submit_income(data: IncomeData, db: Session = Depends(get_db)):
 
     for equipment in data.equipment_forms:
         # Формируем источник клиента
-        client_source = equipment.client_source
-        if equipment.hotel_list:  # Если есть отель, добавляем его к источнику
-            client_source += f" - {equipment.hotel_list}"
+        # client_source = equipment.client_source
+        if equipment.hotel_list:  
+            # client_source += f" - {equipment.hotel_list}"
+            equipment.comment += f" Отель - {equipment.hotel_list}"
         equipment_message = (
             f"Дата: {data.date}\n"
             f"Номер рейса: {data.flight_number}\n"
@@ -155,7 +156,7 @@ async def submit_income(data: IncomeData, db: Session = Depends(get_db)):
             f"Скидка: {equipment.discount}\n"
             f"Предоплата: {'Да' if equipment.prepayment else 'Нет'}\n"
             f"Тип оплаты: {equipment.payment_type}\n"
-            f"Источник клиента: {client_source}\n"  
+            f"Источник клиента: {equipment.client_source}\n"  
             f"Комментарий: {equipment.comment}\n"
             f"<b>Стоимость: {equipment.cost} руб.</b>\n"
         )
