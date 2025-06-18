@@ -44,6 +44,7 @@ async def send_expenses(message: Message):
     await send_expenses_miniapp(chat_id=message.chat.id)
     await send_auto_save_expenses_error(chat_id=message.chat.id)
 
+
 @router.callback_query(F.data == "send")
 async def process_send(callback_query: CallbackQuery):
     message_text = callback_query.message.text
@@ -58,22 +59,24 @@ async def process_send(callback_query: CallbackQuery):
             key, value = line.split(':', 1)
             data_dict[key.strip()] = value.strip()
 
-    # Преобразуем дату из формата "год-месяц-день" в "день-месяц-год"
+    # Преобразуем дату
     date_str = data_dict.get("Дата", "")
     try:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-        formatted_date = date_obj.strftime("%d-%m-%Y")
+        clean_date = date_str.replace('-', '.').replace('/', '.').replace(' ', '')
+        date_obj = datetime.strptime(clean_date, "%Y.%m.%d")
+        formatted_date = date_obj.strftime("%d.%m.%Y")
     except ValueError:
-        formatted_date = date_str
-
+        # Если не удалось распарсить, оставляем как есть
+        formatted_date = date_str.replace('-', '.').replace('/', '.')
     # Извлекаем текущий номер рейса
+
     current_flight_number = data_dict.get("Номер рейса", "")
 
     # Получаем последнюю строку из Google Таблицы
     last_row = sheet.get_all_values()[-1] if sheet.get_all_values() else []
     previous_flight_number = last_row[1] if len(last_row) > 1 else None
 
-    # Преобразуем сумму предоплаты и стоимость в целые числа
+    # Преобразуем суммы
     try:
         prepayment = int(float(data_dict.get("Сумма предоплаты", "0")))
     except ValueError:
@@ -89,9 +92,9 @@ async def process_send(callback_query: CallbackQuery):
     except ValueError:
         cost = 0
 
-    # Формируем список данных в нужном порядке для Google Таблицы
+    # Формируем данные для Google Таблицы
     other_data_row = [
-        "",  # Первая ячейка пуста, чтобы сдвинуть данные вправо
+        "",
         current_flight_number,
         data_dict.get("Маршрут", ""),
         data_dict.get("Машина", ""),
@@ -105,31 +108,60 @@ async def process_send(callback_query: CallbackQuery):
         "",
     ]
 
-    # Проверяем условие: текущий номер рейса равен 1, а предыдущий не равен 1
+    # Проверяем условие для новой даты
     if current_flight_number == "1" and previous_flight_number != "1":
         sheet.append_row([formatted_date], value_input_option="USER_ENTERED")
 
-    # Записываем остальные данные в таблицу
+    # Записываем данные в таблицу
     sheet.append_row(other_data_row, value_input_option="USER_ENTERED")
 
-    # Формируем финальное сообщение для пользователя
+    # Функция для замены #текст# на <b>текст</b>
+    def format_bold_text(text):
+        return text.replace("#", "<b>").replace("#", "</b>")
+
+    # Формируем финальное сообщение с HTML-разметкой
     formatted_message = (
         f"Дата: {formatted_date}\n"
-        f"Номер рейса: {data_dict.get('Номер рейса', '')}\n"
-        f"Инструктор: {data_dict.get('Инструктор', '')}\n"
-        f"Маршрут: {data_dict.get('Маршрут', '')}\n"
-        f"Техника: {data_dict.get('Машина', '')}\n"
-        f"Сумма предоплаты: {prepayment}\n"
-        f"Скидка: {data_dict.get('Скидка', '')}\n"
-        f"Предоплата: {data_dict.get('Предоплата', '')}\n"
-        f"Тип оплаты: {data_dict.get('Тип оплаты', '')}\n"
-        f"Источник клиента: {data_dict.get('Источник клиента', '')}\n"
-        f"Комментарий: {data_dict.get('Комментарий', '')}\n"
-        f"Стоимость: {cost}"
+        f"Номер рейса: {data_dict.get('Номер рейса', '')}\n\n"
+
+        f"Инструктор:\n#{data_dict.get('Инструктор', '')}#\n\n"
+
+        f"Маршрут:\n#{data_dict.get('Маршрут', '')}#\n\n"
+
+        f"Техника:\n#{data_dict.get('Машина', '')} - {cost}# ₽💳\n\n"
+
+        f"Предоплата в размере: {prepayment} ₽\n\n"
+
+        f"Размер скидки {discount} ₽\n\n"
+
+        f"Итоговая сумма {cost} ₽"
     )
 
-    # Отправляем сообщение пользователю
-    await callback_query.message.edit_text(f"Данные успешно отправлены в Google Таблицу!\n\n{formatted_message}")
+    def format_bold_text(text):
+        parts = []
+        while "#" in text:
+            before, rest = text.split("#", 1)
+            parts.append(before)
+            if "#" in rest:
+                bold, after = rest.split("#", 1)
+                parts.append(f"<b>{bold}</b>")
+                text = after
+            else:
+                parts.append(rest)
+                break
+        else:
+            parts.append(text)
+        return "".join(parts)
+
+    # Применяем форматирование только к тем частям, где есть решетки
+    formatted_message = format_bold_text(formatted_message)
+
+    # Отправляем сообщение
+    await callback_query.message.edit_text(
+        f"Вы внесли рейс ✅\n\n{formatted_message}",
+        parse_mode="HTML"
+    )
+
 
 @router.callback_query(F.data == "delete")
 async def process_delete(callback_query: CallbackQuery):
@@ -160,12 +192,13 @@ def get_daily_report(date):
             daily_records.append(record)
 
     if not daily_records:
-         return f"ПРОКАТ ТЕХНИКИ 🟢" + "\n" + "Отчёт за {date}" + "\n" + "Не работали❌"
+            return f"ПРОКАТ ТЕХНИКИ 🟢" + "\n" + "\n" + f"Отчёт за {date}" + "\n" + "\n" + "Не работали❌"
 
     total_revenue = 0
     qr_revenue = 0
     cash_revenue = 0
     transfer_revenue = 0
+    post_revenue = 0
     instructors = set()
 
     for record in daily_records:
@@ -179,6 +212,8 @@ def get_daily_report(date):
                 cash_revenue += cost_value
             elif record['Вид оплаты'] == 'Перевод':
                 transfer_revenue += cost_value
+            elif record['Вид оплаты'] == 'Постоплата':
+                post_revenue += cost_value
             instructors.add(record['Инструктор'])
         else:
             print(f"Некорректное значение стоимости: {cost} в записи: {record}")
@@ -194,6 +229,8 @@ def get_daily_report(date):
         report += f"Наличка <b>{format_amount(cash_revenue)}</b>\n"
     if transfer_revenue > 0:
         report += f"Перевод <b>{format_amount(transfer_revenue)}</b>\n"
+    if post_revenue > 0:
+        report += f"Постоплата <b>{format_amount(post_revenue)}</b>\n"
     report += "\n"
     report += "Инструктора:\n"
     report += "\n".join(f"<b>{instructor}</b>" for instructor in instructors)
@@ -206,7 +243,7 @@ async def send_daily_report(bot):
     report = get_daily_report(today)
 
     # Жестко заданные chat_id пользователей
-    chat_ids = [1129601494, 702856294]
+    chat_ids = [1129601494, 702856294, 981977795]
 
     for chat_id in chat_ids:
         try:
@@ -218,9 +255,9 @@ async def send_daily_report(bot):
 async def scheduler(bot):
     while True:
         now = datetime.now()
-        if now.hour == 18 and now.minute == 0:
+        if now.hour == 21 and now.minute == 0:
             await send_daily_report(bot)
-        if now.hour == 19 and now.minute == 0:
+        if now.hour == 22 and now.minute == 0:
             await send_expenses_miniapp("1129601494")
 
         await asyncio.sleep(60)
@@ -236,3 +273,5 @@ async def reply_keyboard(message: Message):
         await message.answer(text="Выберите действие:", reply_markup=markup)
     else:
         await message.answer(text="У вас нет доступа к специальным функциям.")
+
+

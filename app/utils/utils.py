@@ -92,9 +92,10 @@ ALLOWED_USERS = {
     "heytward": "Запись рейсов",
     "axm9t": "Запись рейсов",
     "Vladislav_Arkhipov": "Внести доход",
-    "tokov17": "Качели",
+    "bostibra": "Качели",
     "Q5fantan": "Внести доход",
-    "Pavel_Er": "Внести доход"
+    "Pavel_Er": "Внести доход",
+    "artemlvs": "Внести доход"
 }
 
 # Словарь для URL кнопок

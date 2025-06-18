@@ -2,8 +2,8 @@
 
 BASE_URL = "https://flight-trip-axmat.ru/"
 WEB_APP_URL = "https://flight-trip-axmat.ru/"
-TOKEN = "7919291411:AAENTmsx7h0trc4ezowcqxX7LEyTn09WIWI"
-
+TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
+#TOKEN = "5224014908:AAFJdlc4mmU8lGmFKfWA2f3onS_envLNKog"
 # Общие эндпоинты
 ADD_CHAT_ID_URL = f"{BASE_URL}bot/check_access/"
 
