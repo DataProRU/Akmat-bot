@@ -1,10 +1,11 @@
-# /app/config.py
+import os
+from dotenv import load_dotenv
 
-BASE_URL = "https://flight-trip-axmat.ru/"
-WEB_APP_URL = "https://flight-trip-axmat.ru/"
-TOKEN = "8125373869:AAFKywhECD_BqwUgaGvsQUpv_zSZeHiWDqI"
-#TOKEN = "5224014908:AAFJdlc4mmU8lGmFKfWA2f3onS_envLNKog"
-# Общие эндпоинты
+load_dotenv()
+
+BASE_URL = os.getenv('WEB_APP_URL')
+WEB_APP_URL = os.getenv('WEB_APP_URL')
+TOKEN = os.getenv('BOT_TOKEN')
 ADD_CHAT_ID_URL = f"{BASE_URL}bot/check_access/"
 
 # Эндпоинты для тинькофф

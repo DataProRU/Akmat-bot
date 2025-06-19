@@ -14,15 +14,19 @@ import asyncio
 # Собственные модули
 from app.tinkoff.utils import send_expenses_miniapp, send_auto_save_expenses_error
 from app.utils.utils import  get_income_keyboard, create_reply_markupButton
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 router = Router()
 
 # Инициализация Google Sheets
 try:
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("./app/credentials.json", scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv("CREDENTIALS_FILE"), scope)
     client = gspread.authorize(creds)
-    spreadsheet_id = "1-6f7th7KbGT7xsY5whhzbrUinwoOdDT6asqvMVAJBto"
+    spreadsheet_id = os.getenv("SPREADSHEET_ID")
     sheet = client.open_by_key(spreadsheet_id).sheet1
 except Exception as e:
     print(f"Ошибка при инициализации gspread: {str(e)}")

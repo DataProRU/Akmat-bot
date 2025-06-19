@@ -123,6 +123,9 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+app/certs.json
+app/client_secret_856858789582-vql6jp5nmqd9907o58cf35tog399pq1f.apps.googleusercontent.com.json
+
 # Environments
 .env
 .venv
@@ -131,6 +134,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+.idea
+
+bot.log
+bot_error.log
 
 # Spyder project settings
 .spyderproject
